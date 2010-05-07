@@ -1,0 +1,62 @@
+/* CSS Document */
+
+
+body{
+font-size:9px;
+}
+table{
+font-size:9px;
+}
+td,p,li,input,select {font-size:12px;}
+
+form {
+	FONT-SIZE: 12px;
+}
+A.a:link {
+	COLOR: #FFFFFF; TEXT-DECORATION: none
+}
+A.a:visited {
+	COLOR: #FFFFFF; TEXT-DECORATION: none
+}
+A.a:hover {
+	COLOR: #cc3300;
+	TEXT-DECORATION:underline;
+
+}
+A.a:active {
+	color: #cc3300;
+	text-decoration: underline;
+}
+A:link {
+	COLOR: #000000; TEXT-DECORATION: none
+}
+A:visited {
+	COLOR: #000000; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: #cc3300;
+	TEXT-DECORATION:underline;
+
+}
+A:active {
+	color: #cc3300;
+	text-decoration: underline;
+}
+
+
+
+.table {background-color: #888888;}
+.setuptable {background-color: #99a7bf;}
+.setuptable1 {background-color: #C0C0C0;}
+.caption {font-family: "宋体";font-size: 18px;color: #000000;}
+.title {font-family: "宋体";font-size: 12px;}
+.head {font-family: "宋体";font-size: 12px; background-color:#f1f1f1}
+.data {font-family: "宋体";font-size: 12px; }
+.sumdata {font-family: "宋体";font-size: 12px;color: #000000;background-color:#f1f1f1}
+.input{border:1 solid black;FONT-SIZE: 12px;  HEIGHT: 15px; }
+.textarea{border:1 solid black;FONT-SIZE: 12px; }
+
+.button{BACKGROUND:#336699;border:1 solid black; COLOR:#ffffff; FONT-SIZE:12px; HEIGHT: 15px;}
+.setupbutton{BACKGROUND:#336699;border:1 solid black; COLOR:#ffffff; FONT-SIZE:12px; HEIGHT: 15px;}
+.SETUPbutton1{BACKGROUND:#c0c0c0;border:1 solid black; COLOR:#000000; font-weight: bold;FONT-SIZE:12px; HEIGHT: 15px;}
+

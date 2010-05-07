@@ -1,0 +1,12 @@
+[PropertyInfo]
+msgNo,int,false,false,msgNo,msgNo,true,<default>
+createDate,java.util.Calendar,false,false,createDate,createDate,true,<default>
+fromUser,String,false,false,fromUser,fromUser,true,<default>
+toUser,String,false,false,toUser,toUser,true,<default>
+content,String,false,false,content,content,true,<default>
+readFlag,boolean,false,false,readFlag,readFlag,true,<default>
+[IconNames]
+
+
+
+

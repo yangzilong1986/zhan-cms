@@ -1,0 +1,40 @@
+
+关于自动生成代码的修改：
+
+1、 ResourceManager.java:
+		Object obj = initCtx.lookup( "CreditDB" );
+
+2、  AbstratDAO：    public void updateClob(Clob clob, String data) ：
+         //Writer clobWriter = ((oracle.sql.CLOB)clob).getCharacterOutputStream();
+         Writer clobWriter = ((weblogic.jdbc.vendor.oracle.OracleThinClob)clob).getCharacterOutputStream();
+
+3、   AbstratDAO：
+    public String getClobColumn(ResultSet rs, int columnIndex)
+        throws SQLException
+    {
+        try {
+            Clob clob = rs.getClob( columnIndex );
+            if (clob == null) {
+                return null;
+            }
+
+            String ret = "";
+            BufferedReader  br = new BufferedReader(clob.getCharacterStream());
+
+            if (br == null) {
+                return null;
+            } else {
+                ret = br.readLine();
+//                while (s != null) {
+//                    ret += s + "<br>";
+//                    s = br.readLine();
+//                }
+//                return ret.toString();
+                return ret;
+            }
+        }
+        catch (IOException e) {
+            throw new SQLException( "Failed to read CLOB column due to IOException: " + e.getMessage() );
+        }
+    }
+

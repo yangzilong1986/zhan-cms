@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4"
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+  http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+    <servlet>
+        <servlet-name>startupservlet</servlet-name>
+        <servlet-class>zt.cmsi.startup.startupServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>uploadservlet</servlet-name>
+        <servlet-class>zt.cms.cm.UploadServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>imageloadservlet</servlet-name>
+        <servlet-class>zt.cms.cm.servlet.ImageLoadServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>fileloadservlet</servlet-name>
+        <servlet-class>zt.cms.util.fileupdown.FileLoadServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>clusterserialnumber</servlet-name>
+        <servlet-class>zt.cms.pub.code.ClusterSerialNumberImpl</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>globalsetupchanged</servlet-name>
+        <servlet-class>zt.cms.pub.code.SCUserRoleBranchImpl</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>Session</servlet-name>
+        <jsp-file>/Session.jsp</jsp-file>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ExportExcel</servlet-name>
+        <servlet-class>zt.cms.fcsort.common.ExportExcel</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ExportExcelByTemplate</servlet-name>
+        <servlet-class>zt.cms.util.poiutil.ExportExcel</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>zt.cmsi.fc.UserServlet</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>uploadservlet</servlet-name>
+        <url-pattern>/uploadservlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>imageloadservlet</servlet-name>
+        <url-pattern>/systemdb2image.jpg</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>fileloadservlet</servlet-name>
+        <url-pattern>/file</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>clusterserialnumber</servlet-name>
+        <url-pattern>/clusterserialnumber</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>globalsetupchanged</servlet-name>
+        <url-pattern>/globalsetupchanged</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Session</servlet-name>
+        <url-pattern>/Session</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ExportExcel</servlet-name>
+        <url-pattern>/servlet/ExportExcel</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ExportExcelByTemplate</servlet-name>
+        <url-pattern>/excelByTmp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/servlet/UserServlet</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>app.jsp</welcome-file>
+        <!--<welcome-file>weihu.jsp</welcome-file>-->
+    </welcome-file-list>
+
+    <mime-mapping>
+        <extension>xml</extension>
+        <mime-type>text/xml</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>xsl</extension>
+        <mime-type>text/xml</mime-type>
+    </mime-mapping>
+</web-app>

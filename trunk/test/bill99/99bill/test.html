@@ -1,0 +1,80 @@
+
+
+
+
+
+
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en" >
+<html>
+	<head>
+		<title>使用快钱支付</title>
+		<meta http-equiv="content-type" content="text/html; charset=gb2312" >
+	</head>
+
+<BODY>
+
+	<div align="center">
+		<table width="259" border="0" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC" >
+			<tr bgcolor="#FFFFFF">
+				<td width="80">支付方式:</td>
+				<td >快钱[99bill]</td>
+			</tr>
+			<tr bgcolor="#FFFFFF">
+				<td >申请编号:</td>
+				<td >20090508173437</td>
+			</tr>
+			<tr bgcolor="#FFFFFF">
+				<td>定额扣款金额:</td>
+				<td>2</td>
+			</tr>
+			<tr bgcolor="#FFFFFF">
+				<td>支付人:</td>
+				<td>payerName</td>
+			</tr>
+			<tr bgcolor="#FFFFFF">
+				<td>商品名称:</td>
+				<td>productName</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+			</tr>
+	  </table>
+	</div>
+
+	<div align="center" style="font-size:12px;font-weight: bold;color:red;">
+		<form name="kqPay" action="http://www.99bill.com/bankdebit/serviceBinding.htm" method="post">
+			<input type="text" name="inputCharset" value="3"/>
+			<input type="text" name="bgUrl" value="http://www.yoursite.com/receive.jsp"/>
+			<input type="text" name="pageUrl" value=""/>
+			<input type="text" name="version" value="v2.0"/>
+			<input type="text" name="language" value="1"/>
+			<input type="text" name="signType" value="1"/>
+			<input type="text" name="signMsg" value="372867390A763B1D537C599C66F0D96C"/>
+			<input type="text" name="merchantAcctId" value="1001710038201"/>
+			<input type="text" name="payerName" value="payerName"/>
+			<input type="text" name="payerContactType" value=""/>
+			<input type="text" name="payerContact" value=""/>
+			<input type="text" name="requestId" value="20090508173437"/>
+			<input type="text" name="requestTime" value="20090508173437"/>
+			<input type="text" name="productName" value="productName"/>
+			<input type="text" name="productId" value=""/>
+			<input type="text" name="productDesc" value=""/>
+			<input type="text" name="ext1" value=""/>
+			<input type="text" name="ext2" value=""/>
+			<input type="text" name="onceOrNot" value="0"/>
+			<input type="text" name="debitAmount" value="2"/>
+			<input type="text" name="totalAmount" value=""/>
+			<input type="text" name="cycleAmount" value="6"/>
+			<input type="text" name="debitCycle" value="2"/>
+			<input type="text" name="debitTimes" value="1"/>
+			<input type="text" name="debitStartTime" value="20090508173437"/>
+			<input type="text" name="debitEndTime" value="20100508160154"/>扣款结束时间
+			<input type="text" name="debitCancelAllowed" value="Y"/>
+			<input type="submit" name="submit" value="提交到快钱">
+
+		</form>
+	</div>
+
+</BODY>
+</HTML>

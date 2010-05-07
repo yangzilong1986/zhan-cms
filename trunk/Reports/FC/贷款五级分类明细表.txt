@@ -1,0 +1,36 @@
+项目代号:R07031  项目名称:贷款五级分类明细表
+
+SELECT:
+ bmno||'&FCNO='||fcno,clientname,bal,cnlno,paydate,duedate,(select enudt from ptenuminfodetl where F.LoanType3 =enutp and enuid='LoanType3') LoanType3,(select enudt from ptenuminfodetl where F.CreditClass =enutp and enuid='CreditClass') creditclass,pastduedays,(select enudt from ptenuminfodetl where F.fcclass =enutp and enuid='LoanCat1') fcclass,(select enudt from ptenuminfodetl where F.loancat2=enutp and enuid='LoanCat2') loancat2,S.username firstresp
+FROM:
+ fcmain F,scuser S
+WHERE: 
+ fcclass in :status and loancat2 in :stt and LoanType3 in :stuu and S.username like '%:strdata_a%'
+
+//////WHERE1:
+ //////F.brhid =':brhid' and createdate>=':begindate' and createdate<=':enddate' and S.loginname=F.firstresp
+WHERE1:
+ F.brhid=':brhid' and createdate=':begindate' and S.loginname=F.firstresp
+
+无链接: 否  页记录数:20 
+
+//////选择条件:begindate,enddate,status=五级分类|select|-1+所有;1+正常;2+关注;3+次级;4+可疑;5+损失,stt=四级分类|select|-1+所有;1+正常;2+逾期;3+呆滞;4+呆账,stuu=贷款方式|select|-1+所有;100+信用;210+保证;220+抵押;230+质押,strdata_a=信贷员|text|:strdata_a
+
+选择条件:begindate=清分日期|text|:begindate,status=五级分类|select|-1+所有;1+正常;2+关注;3+次级;4+可疑;5+损失,stt=四级分类|select|-1+所有;1+正常;2+逾期;3+呆滞;4+呆账,stuu=贷款方式|select|-1+所有;100+信用;210+保证;220+抵押;230+质押,strdata_a=信贷员|text|:strdata_a
+
+总列数:11
+程序类别:清单程序
+链接程序:/fcworkbench/history_qf/history_qf_info.jsp?BMNO=
+新页显示:是
+
+列名称:借款人名称,贷款余额,借据号码,发放日期,到期日期,贷款方式,信用等级,逾期天数,贷款五级分类形态,贷款四级分类形态,信贷员
+大标题:贷款五级分类明细表
+左标题:名称::dispname
+
+//////中标题:日期: :begindate  - :enddate
+中标题:清分日期: :begindate
+右标题:单位:元
+
+数 据 列: 2    居 中 列: 3,4,5,6,7,9,10,11,13     右对齐列: 2,8
+
+数据取整: 否  取消千分: 否  万元显示: 否  0显示空: 否  合计上显: 否  

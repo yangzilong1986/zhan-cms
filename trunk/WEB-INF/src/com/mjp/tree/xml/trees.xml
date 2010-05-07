@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tree>
+<node id="001" text="好友组" isLeaf="false" parentId="0" index="1"></node>
+<node id="002" text="工作组" isLeaf="false" parentId="0" index="2"></node>
+<node id="001001" text="莫建坡" isLeaf="true" parentId="001" index="1"></node>
+<node id="001002" text="测试人" isLeaf="false" parentId="001" index="2"></node>
+<node id="001002001" text="AAA" isLeaf="true" parentId="001002" index="1"></node>
+<node id="002001" text="工作1" isLeaf="true" parentId="002" index="1"></node>
+<node id="002002" text="工作2" isLeaf="false" parentId="002" index="3"></node>
+<node id="002003" text="工作3" isLeaf="true" parentId="002" index="2"></node>
+<node id="002002001" text="工作2-1" isLeaf="true" parentId="002002" index="1"></node>
+<node id="002002002" text="工作2-3" isLeaf="true" parentId="002002" index="3"></node>
+<node id="002002003" text="工作2-2" isLeaf="false" parentId="002002" index="2"></node>
+<node id="002002003001" text="工作2-2-1" isLeaf="false" parentId="002002003" index="1"></node>
+<node id="002002003001001" text="工作2-2-2-1" isLeaf="true" parentId="002002003001" index="1"></node>
+<node id="002002003001002" text="工作2-2-2-2" isLeaf="true" parentId="002002003001" index="2"></node>
+</tree>

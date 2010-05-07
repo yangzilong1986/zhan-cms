@@ -1,0 +1,1 @@
+keytool -import -alias "alipay" -storepass 111111   -file alipay.cer -keystore cms.truststore.alipay

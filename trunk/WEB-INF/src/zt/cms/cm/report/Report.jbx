@@ -1,0 +1,16 @@
+[PropertyInfo]
+entityNo,String,false,false,EntityNo,EntityNo,true,<default>
+items,Map,false,false, , ,false,<default>
+printItems,Item[],false,false, , ,true,<default>
+reportDate,java.util.Calendar,false,false,reportDate,reportDate,true,<default>
+reportDate,String,false,false, , ,true,<default>
+reportName,String,false,false,reportName,reportName,true,<default>
+reportType,String,false,false,reportType,reportType,true,<default>
+reportTypeName,String,false,false, , ,true,<default>
+reportTypes,Map,false,false, , ,false,<default>
+values,boolean,false,false, , ,true,<default>
+[IconNames]
+
+
+
+
