@@ -1,0 +1,340 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>表格生成器</title>
+<link rel="stylesheet" type="text/css" href="web.css">
+<script language="JavaScript1.2">
+//******************************************************************************/
+/* Author	: ego_xu															|
+|* Data		: 2004-02-06														|
+|* Synopsis	: 表格生成器。														|
+//******************************************************************************/	
+
+	var tableResult	= "";	//显示输出结果
+	var strResult	= "";	//table预览（字串）输出，showTable（）；
+	var cols		= 0;	//限定列数
+	var rows		= 0;	//限定行数,判断在换行时！
+	var nowColNum	= 0;	//列数计数器
+	var nexRowColNum= 0;	//记录上一行已占当前行的列数，计算跨行次数
+	var nowRowNum	= 0;	//行数计数器
+	var rowNow		= 0;	//当前最大跨行数
+	var colNow		= 0;	//当前最大跨列数
+		
+/**
+ * 主函数===========================================================================================
+*/
+	function makeTable(){
+	
+		stringShow	= document.all.tableForm.stringShow.value;	//生成表格的字串，可用于修改正在生成的表格.
+		state		= document.all.tableForm.state.value;		//操作状态:占行/占列.
+		spanNum		= document.all.tableForm.spanNum.value;		//所跨行或列数,*将来添加判断是否为数字.
+		if (spanNum == "")
+		{
+			alert("span值不能为空");
+			return false;//终止JavaScript运行
+		}
+		element	= document.all.tableForm.elementInfo.value;	//单元格显示内容.
+		if (element == "")
+		{
+			alert("内容不能为空");
+			return false;
+		}
+		rc	= document.all.tableForm.rc.value;			//即跨行又跨列时的列数.
+		rows		= document.all.tableForm.rows.value;	//总行数
+		if (rows <=0){//整个表头结束,停止运行!
+			alert("恭喜您啊，您终于可以抽根烟了！^~^");
+			return false;
+		}
+		
+		if(stringShow !=""){	//不为空时的操作
+
+			if (stringShow != strResult){	//判断是否存在修改操作
+			
+				strResult = stringShow;	//将修改后的字串复值给strResult。
+							/*
+							state	：操作状态:占行/占列.
+							spanNum	：所跨行或列数,*将来添加判断是否为数字.
+							info	：单元格显示内容.
+							rc		：即跨行又跨列时的列数.
+							trEnd	：换行标志
+
+							需要重新复值。
+
+							*/
+
+
+				showTable(strResult);	//预览table效果
+				//	checkInfo();
+					
+			}else{
+
+				strResult = addTd(state,spanNum,element,rc);//添加单元格，行/列
+				showTable(strResult);						//预览table效果
+			
+			}
+		
+		}else{
+			
+			strResult = addTd(state,spanNum,element,rc);//添加单元格，行/列
+			showTable(strResult);						//预览table效果
+	
+		}
+		
+	}
+
+/**
+ * 子函数=============================================================================================
+*/
+
+/**
+ * 添加单元格
+*/
+	function addTd(state,spanNum,info,rc){
+
+		/*
+		state	：操作状态:占行/占列.
+		spanNum	：所跨行或列数,*将来添加判断是否为数字.
+		info	：单元格显示内容.
+		rc		：即跨行又跨列时的列数.
+		trEnd	：换行标志
+		*/
+		cols		= document.all.tableForm.cols.value;	//总列数
+		rows		= document.all.tableForm.rows.value;	//总行数
+
+		if (rc != ""){//即跨行又跨列情况
+
+//alert("生成表格，即跨行又跨列情况");
+			//"<td rowspan="+rowspan+" colspan="+colsp+" bgcolor=#FFFFFF>";
+			strResult += state +'='+spanNum+' colspan='+rc+'|';
+
+			nowColNum = parseInt(parseInt(nowColNum)+parseInt(rc));
+			nexRowColNum = parseInt(parseInt(nexRowColNum)+parseInt(rc));
+			document.all.tableForm.rc.value="";//跨列清零
+			document.all.tableForm.cb.checked=false;//是否跨列置否
+			document.all.rcshow.style.display='none';//隐藏
+
+		}else{//普通情况
+
+//alert("生成表格，普通情况");
+			//"<td rowspan="+rowspan+"  bgcolor=#FFFFFF>";
+			strResult += state +'='+spanNum+'|';
+
+			if (state == "rowspan" && spanNum>1){//对当前列数和占下一行列数进行计数。跨行情况
+				nowColNum = parseInt(parseInt(nowColNum)+1);
+				nexRowColNum = parseInt(parseInt(nexRowColNum)+1);
+			}else{	//跨列情况
+				nowColNum = parseInt(parseInt(nowColNum)+parseInt(spanNum));
+			}
+
+		}
+		
+		//tableResult +=rowtext+"</td>";
+		strResult +=info+',';
+//alert("nowColNum="+nowColNum+"|cols="+cols);
+
+		if (nowColNum == cols){//换行！并对行数进行计数
+			strResult +="||";
+			rows = parseInt(parseInt(rows)-1);
+			document.all.tableForm.rows.value=rows;
+			nowColNum = nexRowColNum;
+			nexRowColNum = 0;
+//alert("相等换行:此时ROWS="+rows);
+
+		}
+
+		return strResult;
+	}
+	
+/**
+ * 预览Table效果
+ * 输出字串
+*/
+	function showTable(result){
+//		result = checkInfo(result);
+		document.all.strShow.value=result;	//在文本域中输出字串
+//		tableResult = echoTable(result);	//根据字串生成HTML语句		
+		tableResult ="<table border=0 width=100% cellspacing=1 bgcolor=#808080>"+echoTable(result)+"</table>";
+
+		document.all.tableShow.innerHTML=tableResult;	//预览Table效果
+	}
+
+/**
+ * 字串生成HTML语句
+*/
+	function echoTable(string){
+		htmlTable	= "";	//
+		getString = string;	
+		//rowspan=1|1,rowspan=1|1,rowspan=1|1,||
+		if (getString.indexOf(",||") > 0){//复杂表rowspan=1|2.1,colspan=3|2.2,||
+			step1 = getString.split("||")
+
+			for (i=0;i<step1.length;i++){	//判断有几行，得到每一行的信息
+				step2 = step1[i].split(",");
+				htmlTable +="<tr bgcolor=#FFFFFF>";
+				
+				for(j=0;j<step2.length-1;j++){
+					step3 = step2[j].split("|");
+					htmlTable +='<td '+step3[0]+'>'+step3[1]+'</td>';
+				}
+
+			htmlTable +="</tr>";
+			}
+
+		}else{//普通表
+
+			step2 = getString.split(",");
+			htmlTable +='<tr bgcolor=#FFFFFF>';
+			for(i=0;i<step2.length-1 ;i++){
+				if(step2[i].indexOf("|") > 0){
+					step3 = step2[i].split("|");			
+					htmlTable +='<td>'+step3[1]+'</td>';
+				}else{
+					htmlTable +="<td>"+step2[i]+"</td>";
+				}
+			 }
+			htmlTable +='</tr>';
+		}
+
+		return htmlTable;
+	}
+
+	
+/**
+ * 检测字串合法性===============================================
+*
+	function checkInfo(ifo){	//编写中……
+	
+		
+		if (info.indexOf(",|")){	//1。检查是否换行
+				
+			//2。检查列数是否超出
+			
+			//3。检查行数是否超出
+		
+		
+		}else{	//第一行检查		
+			info = info.split(",");
+			if (info.length > cols){	//3。检查行数是否超出
+				alert("您已超出表格范围！");
+			}
+		}
+	}
+*/
+</script>
+</head>
+
+<body topmargin="5" leftmargin="2" bgcolor="#eeeeee">
+<table border="0" width="100%" id="table1" cellspacing="1" bgcolor="#808080" class=table>
+<form id=tableForm action='' method=post>
+	<tr>
+		<td bgcolor="#C0C0C0" align="right">表格总列数与总行数:</td>
+		<td bgcolor="#C0C0C0">
+          总列数:<input name=cols type="text" size="5" class=input onmouseover="this.select();">&nbsp; 总行数:<input name=rows type="text" size="5" class=input  onmouseover="this.select();"></td>
+	</tr>
+	<tr>
+		<td bgcolor="#FFFFFF" align="right">此单元格所占类别:</td>
+		<td bgcolor="#FFFFFF">
+          <input onclick="col.style.display='none',row.style.display='',state.value='rowspan'" name="radiobutton" type="radio"  checked value="1">占行
+          <input onclick="row.style.display='none',col.style.display='',state.value='colspan'" name="radiobutton" type="radio" value="2" >占列
+		  <input name=state id=state type=hidden value="rowspan">
+		  </td>
+	</tr>
+	<tr>
+		<td bgcolor="#FFFFFF" align=right>此单元格SPAN值:</td>
+		<td bgcolor="#FFFFFF">
+		<input name=spanNum type="text" size="2" class=input onmouseover="this.select();">
+		<font color="#FF0000">*是否即跨行又跨列</font><input name="cb" type="checkbox" onClick="if(cb.checked){
+		rc.disabled=false;
+		rcshow.style.display='';
+		radiobutton[0].checked=true;
+		state.value='rowspan';
+		col.style.display='none';
+		row.style.display='';
+		}else{
+		rc.disabled=true;
+		rcshow.style.display='none';
+		}">
+		</td>
+	</tr>
+	<tr id=rcshow  style="display='none'">
+	  <td bgcolor="#FFFFFF" align=right>列数：</td>
+      <td bgcolor="#FFFFFF"><input type="text" name="rc" id="rc" size="2" disabled class=input  onmouseover="this.select();"></td>
+	</tr>
+	<tr>
+	  <td bgcolor="#FFFFFF" align="right">单元格内容:</td>
+      <td bgcolor="#FFFFFF">
+		<input name=elementInfo type="text" size="20" class=input onmouseover="this.select();"></td>
+	</tr>
+	<tr>
+	  <td bgcolor="#FFFFFF">　</td>
+      <td bgcolor="#FFFFFF"> 
+	  <input id=row type=button class=button onClick="makeTable(this)"; value=增加行 style="DISPLAY: ">
+	  <input id=col type=button class=button onClick="makeTable(this)"; value=增加列 style="DISPLAY: none">
+	  &nbsp; &nbsp; &nbsp; <input type=button id=colNames class=button onclick="opener.top.frames[3].document.all.setup.colNames.value=strShow.value;window.close();" value='完 成'>
+	  <font color="#000080">&nbsp; </font>
+		<font color="#FF0000">*画完表格后，点击 </font>
+		<font color="#800000"><a href=# onclick="opener.top.frames[3].document.all.setup.colNames.value=strShow.value;window.close();">
+		<font color="#800000">&lt;完成&gt;</font></a></font><font color="#FF0000">即可 
+		<input name="button" type=button class=button onclick="showTable(strShow.value);" value='调试'>
+		</font></td>
+    </tr>
+	<tr>
+	  <td bgcolor="#FFFFFF" colspan="2" align=center>
+		<textarea id=strShow name="stringShow" rows="6" cols="80"  class=textarea></textarea></td>
+    </tr>
+</form>
+</table>
+<hr>
+<div id=tableShow>
+</div>
+<hr>
+
+<table id="tab1" width="100%"  border="0" cellspacing="1" cellpadding="1" class=table>
+  <tr bgcolor="#FFFFFF">
+    <td rowspan="3">1.1</td>
+    <td rowspan="2">1.2</td>
+    <td colspan="4">1.3</td>
+    <td colspan="3" rowspan="2">1.4</td>
+    <td rowspan="3">1.5</td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td>2.1</td>
+    <td colspan="3">2.2</td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td>3.1</td>
+    <td>3.2</td>
+    <td>3.3</td>
+    <td>3.4</td>
+    <td>3.5</td>
+    <td>3.6</td>
+    <td>3.7</td>
+    <td>3.8</td>
+  </tr>
+  <tr bgcolor="#CCCCCC">
+    <td height="5"></td>
+    <td height="3"></td>
+    <td height="3"></td>
+    <td height="3"></td>
+    <td height="3"></td>
+    <td height="3"></td>
+    <td height="3"></td>
+    <td height="3"></td>
+    <td height="3"></td>
+    <td height="3"></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td><font color="#FF0000">1</font></td>
+    <td><font color="#FF0000">2</font></td>
+    <td><font color="#FF0000">3</font></td>
+    <td><font color="#FF0000">4</font></td>
+    <td><font color="#FF0000">5</font></td>
+    <td><font color="#FF0000">6</font></td>
+    <td><font color="#FF0000">7</font></td>
+    <td><font color="#FF0000">8</font></td>
+    <td><font color="#FF0000">9</font></td>
+    <td><font color="#FF0000">10</font></td>
+  </tr>
+</table>
+</body>
+</html>

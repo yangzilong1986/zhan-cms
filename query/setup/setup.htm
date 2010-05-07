@@ -1,0 +1,720 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<title>There is will setup page</title>
+<link rel="stylesheet" type="text/css" href="web.css">
+<base target="_self">
+</head>
+
+<body topmargin="3" leftmargin="2" bgcolor="#C0C0C0">
+
+<table border="1" width="100%" class ='setuptable' >
+<form id=setup method="POST" action="disp.jsp" target='disp'>
+<!-- top页 -->
+<input type=hidden name='cmd' value='' >		<!-- 项目代号 -->
+<input type=hidden name='qryNo' value='' >		<!-- 项目代号 -->
+<input type=hidden name='qryName' value='' >		<!-- 项目名称 -->
+<!-- sql页 -->
+<input type=hidden name='sqlSelect' value=''>	<!-- SELECT: -->
+<input type=hidden name='sqlFrom' value=''>		<!-- FROM: -->
+<input type=hidden name='sqlWhere' value=''>	<!-- WHERE: -->
+<input type=hidden name='sqlWhere1' value=''>	<!-- WHERE1: -->
+<input type=hidden name='sqlGroup' value=''>	<!-- GROUP: -->
+<input type=hidden name='sqlOrder' value=''>	<!-- ORDER: -->
+<input type=hidden name='sqlKey' value=''>		<!-- 关键字: -->
+
+<input type=hidden name='total' value=''>		<!-- 关键字: -->
+<input type=hidden name='pageNo' value=''>		<!-- 关键字: -->
+
+<tr>
+ <td>
+	<table border="0"  width='100%' class=setuptabletable>
+      <tr>
+		<td >
+			无链接:
+			<input type="radio" value="0"  name="linkCol"   title='指明哪一列做为参数值,如果为0说明无链接' >是
+			<input  type="radio" value="1"  name="linkCol" checked  >否&nbsp;&nbsp;&nbsp;
+			页记录数:<input type="text" name="pageSize" size="5" value='10'  class=input title ='超过此数,程序将自动分页'>
+			 </td>
+			<td>
+				选择条件:<input type="text" name="qryParams" size="80"  class=input title='格式:显示名称|类型|值列表 ,如:dispMode=统计方式|radio|0 checked=统计；1=清单, 每个项目以逗号分割'>
+			</td>
+
+			<td rowspan="2" align=center>总列数:<input type="text" name="sqlParams" size="4" class=input title='用户最终看到的实际列数' value=''><br>
+			<input type="button"  onClick="makeArray()" value="&lt;&lt;配置预览&gt;&gt;" name="pre" class='setupbutton' align=right ></td>
+
+			</tr>
+			<tr>
+			<td >
+			程序类别:<input onclick="qrLi2.style.display='none',qrLi1.style.display=''" type="radio" value="0"  name="qryIsList" checked ><b>统计程序</b><input onclick="qrLi1.style.display='none',qrLi2.style.display=''"  type="radio" name="qryIsList" value="1"><b>清单程序</b></td>
+			<td>
+			<div id=qrLi1 style="display:''">
+			     清单编号:<input type="text" name="listNo" size="20" class=input title='最后要调用的清单的定义编号'>
+			</div>
+			<div id=qrLi2 style="display:'none'">
+				链接程序:<input type="text" name="linkUrl" size="20" class=input  title ='清单程序要调用的URL,如:a.jsp?id='>&nbsp;&nbsp;&nbsp;
+				新页显示:<input type="radio" name="linkNewPage" value="1" title ='调用的程序是否在新窗口下显示'>是<input type="radio" name="linkNewPage" value="0" checked >否
+			</div>
+				</td>
+
+			</tr>
+		</table>
+
+		</td>
+	</tr>
+
+	<tr>
+		<td>
+		<table border="0" width="100%" class=setuptable>
+		<tr>
+		<td colspan =3 >列名称:<input type='text' name='colNames' size='127'  class=input title='表格列的名称,以逗号分割'></td>
+		<td align=right> <input type="button" value="复杂表头帮助" name="B2" class='setupbutton' onclick="fopen();">&nbsp;</td>
+		</tr>
+		<tr>
+			<td>大标题:<input type="text" name="caption" size="60"  class=input></td>
+			<td>左标题:<input type="text" name="lTitle" size="20" class=input></td>
+			<td>中标题:<input type="text" name="mTitle" size="20" class=input></td>
+			<td>右标题:<input type="text" name="rTitle" size="20" class=input></td>
+		</tr>
+
+		</table>
+	</td>
+	</tr>
+
+	<tr>
+		<td>
+
+		<table border="0" width="100%" class=setuptable>
+		<tr><td>
+		</td></tr>
+		<tr>
+			<td >数 据 列:<input type="text" name="formatCols" size="18" class=input title='指明哪些列是数据列,以逗号分割 如3,4,5'></td>
+			<td>居 中 列:<input type="text" name="middleCols" size="18" class=input title='指明哪些列需要居中,以逗号分割 如3,4,5'></td>
+			<td>右对齐列:<input type="text" name="rightCols" size="18" class=input title='指明哪些列需要右对齐(数据列自动右对齐,不用指明),以逗号分割 如3,4,5'></td>
+			<td>不折行列:<input type="text" name="dataNoWraps" size="18" class=input title='指明哪些列不允许折行,以逗号分割 如3,4,5'></td>
+			<td>需合计列:<input type="text" name="sumCols" size="18" class=input title='指明哪些列需要合计,以逗号分割 如3,4,5'></td>
+		</tr>
+		<tr>
+			<td >数据取整:
+			<input type="radio" value="1"  name="dataIsInt"   title='数据是否不要小数' >是
+			<input  type="radio" value="0"  name="dataIsInt"  checked>否
+			</td>
+			<td >取消千分:
+			<input type="radio" value="1"  name="dataIsSplit" title='数据不用每三位加逗号'>是
+			<input type="radio" value="0"  name="dataIsSplit" checked >否
+			</td>
+			<td >万元显示:
+			<input type="radio" value="1"  name="dataDispWan" title='数据是否除以10000'>是
+			<input type="radio" value="0"  name="dataDispWan" checked >否
+			</td>
+			<td >0显示空:
+			<input type="radio" value="1"  name="zeroToSpace" title='数据为0时,是否不显示'>是
+			<input type="radio" value="0"  name="zeroToSpace"  checked>否
+			</td>
+			<td >合计上显:
+			<input type="radio" value="1"  name="sumIsTop"  title='合计数据是否显示在首行'>是
+			<input type="radio" value="0"  name="sumIsTop"  checked>否
+			</td>
+		</tr>
+
+		</table>
+	</td>
+	</tr>
+</form>
+</table>
+
+
+<script language=javascript>
+/***********************************************************************************
+|***********************************************************************************
+|* Author:Ego_xu
+|* Email:ego_xu@126.com
+|* QQ:100790716
+|* MSN:ego_xu@hotmail.com
+|***********************************************************************************
+|*
+|*   函数名        |      说明               |   CSS
+|*---------------------------------------------------------
+|* makeArray()     |  数据处理主函数         |  button
+|*                 |  qryParams的数据        |  input
+|*                 |  为HTML语句             |  table
+|*                 |                         |  caption
+|*                 |                         |  title
+|*                 |                         |  head
+|*                 |                         |  data
+|*                 |                         |  sumdata
+|*---------------------------------------------------------
+|* strToTable()    |  字串转换为表格函数     |  head
+|*---------------------------------------------------------
+|* sumData()       |  数据求和               |
+|*---------------------------------------------------------
+|* showTable()     |  预览Table效果          |
+|*---------------------------------------------------------
+|* orderNewArray() |  二位数组重排           |
+|*                 |  经典代码！             |
+|*---------------------------------------------------------
+|* formatData()    |  格式化数据             |
+|*                 |  1、先判断是否万元显示  |
+|*                 |  2、其他限制条件        |
+|*                 |  3、最后判断0显示空     |
+|*---------------------------------------------------------
+|* makeParams()    |  转换处理提交区         |  button
+|*                 |  qryParams的数据        |  input
+|*                 |  为HTML语句             |  table
+|*
+|*==================================================================================
+|* 公共变量区(替换区)
+*/
+	var rows;//总行数
+	var cols;//总列数
+	var data = new Array();//测试用数据
+	var sumIsTop;//合计上显,数据合计完毕后作判断
+	var dataIsInt;//数据取整:0,1
+	var dataIsSplit//取消千分
+	var dataDispWan;//万元显示
+	var zeroToSpace;//0显示空
+	var linkCol;
+
+	var qryNo;
+	var listNo;
+	var linkColName;
+
+/*==================================================================================
+* ||||||||||||||||||||||||||||||||||||||||||
+* |||||||||||主||函||数||部||分|||||||||||||
+* ||||||||||||||||||||||||||||||||||||||||||
+**==================================================================================
+*
+*   函数名    |    说明          |  CSS
+*-------------------------------------------
+* makeArray() |  数据处理主函数  |  button
+*             |  qryParams的数据 |  input
+*             |  为HTML语句      |  table
+*             |                  |  caption
+*             |                  |  title
+*             |                  |  head
+*             |                  |  data
+*             |                  |  sumdata
+*-------------------------------------------
+*/
+
+function makeArray(){
+//公共变量区
+
+rows		= 10;		//下级编号: -->
+cols		= document.all.setup.sqlParams.value;		//下级编号: -->
+if(cols==''){
+alert("请输入列数");
+//document.all.setup.sqlParams.select();
+document.all.setup.sqlParams.focus();
+
+return false;
+}
+
+if (document.all.setup.linkCol[1].checked){//参数列: -->
+	linkCol	= '1';//参数列:,1
+//	cols = parseInt(parseInt(cols)+1);
+}else{
+	linkCol	= '0';//参数列:,1
+}
+
+var dbdata='';
+	dbdata	= "9070106,县联社营业部||9070106,昌乐镇信贷部门||9070106,昌乐镇信贷部门||9070106,昌乐镇信贷部门||9070106,昌乐镇信贷部门||9070106,昌乐镇信贷部门||9070106,昌乐镇信贷部门||9070106,新昌影院分社||9070106,县尧沟信贷部门||9070106,昌乐南郝分社||";
+data1 = dbdata.split("||");
+
+	for ( i=0;i<rows;i++){
+		data[i] = new Array();
+		data2 = data1[i].split(",");
+
+	    for(j=0;j<cols+linkCol;j++){
+			if (j<2){
+			data[i][j] = data2[j];
+			}else{
+			data[i][j] = 12345;
+			}
+		}
+	}
+
+//提交付值
+qryParams	= document.all.setup.qryParams.value;	//选择条件: -->
+top.frames[2].document.all.detailTab.innerHTML = makeParams(qryParams)
+linkUrl		= document.all.setup.linkUrl.value;		//链接程序: -->
+linkNewPage	= document.all.setup.linkNewPage.value;	//新页显示: -->
+pageSize	= document.all.setup.pageSize.value;	//页记录数
+total		= document.all.setup.total.value;	//记录总条数
+pageNo		= document.all.setup.pageNo.value;
+//导航条设置
+tolPag = parseInt(parseInt(total)/parseInt(pageSize)+1);
+Nbar= "每页<input type='text' name='pageSize' size='3' value='"+pageSize+"' onChange='submitgo(0);' class='input' value="+pageSize+">条 | 共"+tolPag+"页/"+total+"条记录";
+Nbar+="&nbsp;<input type='button' value='首 页' onClick='alert(1);' class='button'>";
+Nbar+="&nbsp;<input type='button' value='上 页' onClick='alert("+parseInt(parseInt(pageNo)-1)+")' class='button'>";
+Nbar+="&nbsp;<input type='button' value='下 页' onClick='alert("+parseInt(parseInt(pageNo)+1) + ")' class='button'>";
+Nbar+="&nbsp;<input type='button' value='末 页' onClick='alert("+tolPag+ ")' class='button'>";
+Nbar+="&nbsp; 第<input type='text' size='3' name='pageNo' value='"+pageNo+"' class='input'>";
+Nbar+="页 <input type='button' value='确定' class='button'>";
+Nbar+="<input type='hidden' name='total' value='"+total+"'>";
+formatCols	= document.all.setup.formatCols.value;	//数据列
+middleCols	= document.all.setup.middleCols.value;	//居中列
+rightCols	= document.all.setup.rightCols.value;	//右对齐列 RIGHTCOLS
+dataNoWraps	= document.all.setup.dataNoWraps.value;	//不折行列 dataNoWraps
+sumCols		= document.all.setup.sumCols.value;		//合计列
+
+	if (document.all.setup.sumIsTop[0].checked){
+		sumIsTop	= '1';//数据取整:0,1
+	}else{
+		sumIsTop	= '0';//数据取整:0,1
+	}
+	if (document.all.setup.dataIsInt[0].checked){
+		dataIsInt	= '1';//数据取整:0,1
+	}else{
+		dataIsInt	= '0';//数据取整:0,1
+	}
+	if (document.all.setup.dataIsSplit[0].checked){
+		dataIsSplit= '1';//取消千分,1
+	}else{
+		dataIsSplit= '0';//取消千分,1
+	}
+	if (document.all.setup.dataDispWan[0].checked){
+		dataDispWan= '1';//万元显示,1
+	}else{
+		dataDispWan= '0';//万元显示,1
+	}
+	if (document.all.setup.zeroToSpace[0].checked){
+		zeroToSpace= '1';//0显示空,1
+	}else{
+		zeroToSpace= '0';//0显示空,1
+	}
+
+caption		= document.all.setup.caption.value;		//标题
+lTitle		= document.all.setup.lTitle.value;		//标题1:左子标题
+mTitle		= document.all.setup.mTitle.value;		//标题2:中子标题
+rTitle		= document.all.setup.rTitle.value;		//标题3:右子标题
+colNames	= document.all.setup.colNames.value;	//列名称:以逗号分割，显示
+var showArray0	= "";//showArray0:大表头、中表头、小表头
+var showArray1	= "";//提示“数据列”行显示数据
+var showArray2	= "";//数据部分显示数据
+var showArray3	= "";//合计部分显示数据
+var showArray4	= "";//导航条显示数据
+var ff	= new Array(cols);//数据列
+var mm	= new Array(cols);//居中列
+var rr	= new Array(cols);//右对齐列 RIGHTCOLS
+var dd	= new Array(cols);//不折行列 dataNoWraps
+var ss	= new Array(cols);//合计列
+forCols	= ","+formatCols+",";//数据列2,4
+midCols	= ","+middleCols+",";//居中列4
+rigCols	= ","+rightCols+",";//右对齐列2,3,4
+dataArps= ","+dataNoWraps+",";//不折行列2,3,4
+sumsCols= ","+sumCols+",";//合计列4
+
+	for (var colsI=1;colsI<=cols;colsI++){
+		if (forCols.indexOf(","+colsI+",")>=0){//数据列2,4
+			ff[colsI] = 1;
+		}
+		if (midCols.indexOf(","+colsI+",")>=0){//居中列4
+			mm[colsI] = 1;
+		}
+		if (rigCols.indexOf(","+colsI+",")>=0){//右对齐列2,3,4
+			rr[colsI] = 1;
+		}
+		if (dataArps.indexOf(","+colsI+",")>=0){//不折行列2,3,4
+			dd[colsI] = 1;
+			rr[colsI] = 1;
+		}
+		if (sumsCols.indexOf(","+colsI+",")>=0){//合计列4
+			ss[colsI] = 1;
+		}
+	}
+
+/*
+* 输出显示部分======================================================================
+*
+*   变量名  |  饱含部分  |  CSS
+*-----------------------------------
+* showArray0|   大表头   | caption
+*			|   中表头   | title
+*			|   列名称   | head
+*/
+
+showArray0 = '<TABLE class=table cellSpacing=1 cellPadding=1 width=100% border=0  align=center><TBODY>';
+showArray0 += "<tr bgcolor=#f1f1f1>";
+showArray0 += "<td bgcolor=#cecece align=center><font color=red>隐藏列</font></td>";
+showArray0 += "<td colspan="+cols+" align=center class=caption>"+caption+"</td></tr>";
+//中表头:单位名称:AAAAAA+日期+单位万元
+showArray0 += "<tr bgcolor=#f1f1f1>";
+showArray0 += "<td bgcolor=#cecece align=center><font color=cccccc>&nbsp;</font></td>";
+showArray0 += "<td colspan="+cols+">";
+showArray0 += "<table cellSpacing=0 cellPadding=0 width=100% border=0 class='table' ><tr class=title>";
+showArray0 += "<td width=33% class=title>"+lTitle+"</td>";
+showArray0 += "<td align=center class=title>"+mTitle+"</td>";
+showArray0 += "<td align=right width=33% class=title>"+rTitle+"</td>";
+showArray0 += "</tr></table></td></tr>";
+//列名称:strToTable();
+showArray0 += strToTable(colNames);
+
+/*
+* showArray1 :数据部分---------------------------------------------------------------
+*
+*   变量名  |  饱含部分        |  CSS
+*-----------------------------------
+* showArray1|  提示“参数列”行  |  data
+*
+*/
+
+showArray1 += "<tr bgcolor=#f1f1f1>";
+for (var colI=0;colI<=cols;colI++){
+	if (colI == 0){
+		showArray1 += "<td bgcolor=#cecece align=center nowrap class=head><font color=#999990>参数列</font></td>";
+	}else{
+		showArray1 += "<td align=center class=head><font color=red>"+colI+"</font></td>";
+	}
+}
+showArray1 += "</tr>";
+
+/*
+* showArray2:数据部分---------------------------------------------------------------
+*
+*   变量名  |  饱含部分  |  CSS
+*-----------------------------------
+* showArray2|  数据部分  |  data
+*
+*/
+if (linkCol == 0){//判断参数列是否有变化linkCol>0的情况：>0，则需要对数组进行重组
+	for (var i in data) data[i]=orderNewArray(data[i], cols);
+}
+
+for (var i=0; i<rows; i++){//行循环开始
+	if (linkCol > 0){
+		showArray2 += "<tr bgcolor=#FFFFFF class=data onclick=\"mClk('"+data[i][0]+","+data[i][1]+"');\" onmouseout=\"mOut(this);\" onmouseover=\"mOvr(this)\" >";
+	}else{
+		showArray2 += "<tr bgcolor=#FFFFFF class=data>";
+	}
+	for (var j=0; j<=cols; j++){//列循环开始
+		if (j == 0){//参数列,不作处理
+			showArray2 += "<td bgcolor=cecece align=center class=data><font color=#999990>"+data[i][j]+"</font></td>";
+		}else{//各种条件判断开始============================================================
+			var datas = "";	//单元格显示数据
+			var align = "";	//对齐方式
+			var nowrap = "";//不折行列
+			datas = data[i][j];
+			if (ff[j] == 1){//数据列,系统默认按照 #,##0.00格式输出，自动右对齐
+				align = "right";
+				datas = formatData(data[i][j]);
+			}
+			if (rr[j] == 1){//右对齐列
+				align = "right";
+			}
+			if (mm[j] == 1){//居中列,当此列为数据列，同时又为居中时，选居中。
+				align = "center";
+			}
+			if (dd[j] == 1){//不折行列
+				nowrap = "nowrap";
+			}
+			showArray2 += "<td class=data align="+align+"  "+nowrap+">"+datas+"</td>";
+		}
+	}//列循环结束
+	showArray2 += "</tr>";
+}//行循环结束
+
+
+/*
+* 数据求和显示:showArray3
+*
+*   变量名  |  饱含部分  |  CSS
+*-----------------------------------
+* showArray3|  求和部分  |  sumdata
+*
+*/
+
+showArray3 += "<tr bgcolor=#f1f1f1>";
+for (var coI=0;coI<=cols;coI++){
+	if (coI == 1){
+		showArray3 += "<td align=center  class=sumdata ><font color=red>合计</font></td>";
+	}else if (ss[coI] == 1){//合计列
+		if(ff[coI]==1){
+		var sumD = formatData(sumData(coI));
+		}else{
+		var sumD = sumData(coI);
+		}
+		showArray3 += "<td align=right class=sumdata ><font color=red>"+sumD+"</font></td>";
+	}else if (coI==0){
+		showArray3 += "<td bgcolor=#cecece align=center class=sumdata ><font color=cccccc>&nbsp;</font></td>";
+	}else{
+		showArray3 += "<td class=sumdata >&nbsp;</td>";
+	}
+}
+showArray3 += "</tr>";
+
+/*
+* showArray4:导航条
+*
+*   变量名  |  饱含部分  |  CSS
+*-----------------------------------
+* showArray4|   导航条   |  sumdata
+*
+*/
+
+showArray4 += "<tr bgcolor=#f1f1f1>";
+showArray4 += "<td bgcolor=#cecece align=center class=data ><font color=cccccc>隐藏列</font></td>";
+showArray4 += "<td colspan="+cols+">";
+showArray4 += "<table cellSpacing=0 cellPadding=0 width=100% border=0 class=table><tr>";
+showArray4 += "<form name='_table'  method='post' action=''>";
+showArray4 += "<td align=center>"+Nbar+"</td>";
+showArray4 += "</form></tr></table></td></tr></TBODY></table>";
+
+/*
+* 所有HTML数据innerHTNL到DIV处条
+*
+*   函数名    |  饱含部分  |  CSS
+*-----------------------------------
+* showTable() |  所有HTML  |
+*             |    数据    |
+*
+*/
+	showTable(showArray0,showArray1,showArray2,showArray3,showArray4);
+
+}//function makeArray()函数结束
+
+
+/*==================================================================================
+* ||||||||||||||||||||||||||||||||||||||||||
+* |||||||所||需||子||函||数|||||||||||||||||
+* ||||||||||||||||||||||||||||||||||||||||||
+**==================================================================================
+*
+*   函数名    |    说明          |  CSS
+*-------------------------------------------
+* makeParams()|  转换处理提交区  |  button
+*             |  qryParams的数据 |  input
+*             |  为HTML语句      |  table
+*/
+
+function makeParams(str){
+
+var resultStr = '<table class="table"  cellSpacing=1 cellPadding=1 width=100% border=0 >';
+
+	resultStr += "<tr bgcolor=#f1f1f1>";
+
+	if(str != ''){
+		resultStr +="<td nowrap>";
+		step1 = str.split(",");
+		for (var i=0;i<step1.length;i++){
+			if (step1[i].indexOf("=")>0){//非缺省状态
+				step2 = step1[i].split("=");
+				step3 = step2[1].split("|");
+				if (step3[1] == 'text'){// begindate=开始日期|text|:beginDate
+					resultStr += " "+step3[0]+":<input class='input' type=text name="+step2[0]+" size=10 value="+step3[2]+">";
+					if (step2[0] == 'begindate' ||step2[0] == 'enddate' ){
+						resultStr +="<input type='button' value='…' class='button' onclick='setday(this,document.getElementById(\""+step2[0]+"\"))'> ";
+					}
+				}
+				if (step3[1] == 'radio'){// dispdode=统计方式|radio|0 checked+统计;1+清单
+					step4 = step3[2].split(";");// 0+统计;1+清单
+					resultStr += " "+step3[0]+":";
+					for (var j=0;j<step4.length;j++){
+						resultStr += " <input type=radio name="+step2[0];
+						step5 = step4[j].split("+");
+						resultStr += " value="+step5[0]+">"+step5[1];
+					}
+				}
+				if (step3[1] == 'select'){// status=汇票状态|select|1+正常;3 selected+垫款;6+收回
+					resultStr += " "+step3[0]+"<select name="+step2[0]+" class=input>";
+					step4 = step3[2].split(";");
+					for (var j=0;j<step4.length;j++){
+						step5 = step4[j].split("+");
+						resultStr += "<option value="+step5[0]+">"+step5[1]+"</option>";
+					}
+					resultStr += "</select>";
+				}
+
+			}
+		}//for
+
+		resultStr += "</td>";
+		resultStr += '<td align=right><input type="button" value=" 检 索 "   class="button" onclick="submitgo(-1);">&nbsp;&nbsp;';
+
+	}else {
+		resultStr +="<td align=right>";
+	}
+
+	resultStr +='<input type="button" class="button"  value=" 打 印 "  onclick="printTable()">&nbsp;&nbsp;';
+	if (self.name =="123"){
+		resultStr +='<input type="button" class="button"  value=" 关 闭 "  onclick="self.close();">&nbsp;';
+	}else{
+		resultStr += '<input type="button" class="button"  value=" 退 出 "  onclick="document.location.href=\"../query.jsp\">&nbsp;';
+	}
+	resultStr +="</td></tr></table>";
+
+	return resultStr;
+}
+
+
+
+/*
+*   函数名    |    说明
+*----------------------------------------
+* formatData()|  格式化数据
+*             |  1、先判断是否万元显示
+*             |  2、其他限制条件
+*             |  3、最后判断0显示空
+*/
+
+function formatData(src){
+var fData = src;
+var point;
+	if (dataDispWan == "1"){//万元显示:0,1
+		fData = fData/10000;
+		fData=parseFloat(fData).toFixed(2);//格式为XXXXXXXX.XX
+	}
+	if (dataIsSplit == "0"){//取消千分:0,1
+		fData=parseFloat(fData).toFixed(2);//格式为XXXXXXXX.XX
+		point=fData.substr(fData.indexOf(".")+1,2);//取出小数点后的部分
+		fData=fData.substr(0,fData.length-3);//取出小数点前的部分
+
+		var re=/(\d+)(\d{3})/,fData=fData.toString();//插入千分符
+
+		while(re.test(fData))fData=fData.replace(re,"$1,$2");//插入千分符
+			fData=fData+"."+point;
+		}
+	if (dataIsInt == "1"){//数据取整:0,1
+//	alert(fData);
+		//if (fData.indexOf(",")>0){
+		//fData = fData.replace("",",");
+		//}
+		fData=parseFloat(fData).toFixed(2);//格式为XXXXXXXX.XX
+		point=fData.substr(fData.indexOf(".")+1,2);//取出小数点后的部分
+		point = parseInt("0."+point);//小数点部分四舍五入
+		fData = fData.split(".")[0];//格式为XX,XXX,XXX
+		var d = fData.substr(fData.length-1,1);
+		d = parseInt(d)+point;//数据最后一位与小数点四舍五入后的数相加
+		fData = fData.substr(0,fData.length-1)+d;//生成新数据
+
+		//var re=/(\d+)(\d{3})/,fData=fData.toString();//插入千分符
+
+		//while(re.test(fData))fData=fData.replace(re,"$1,$2");//插入千分符
+
+	}
+	if (zeroToSpace == "1"){//0显示空:0,1
+		if (fData == "0" || fData == "0.00") fData = "&nbsp;";
+	}
+	return fData;
+}
+
+/*
+*   函数名        |   说明
+*------------------------------
+* orderNewArray() |  二位数组重排
+*                 |  经典代码！
+*
+*/
+
+function orderNewArray(srcArray, index) {
+	var dest = new Array();
+	var tmp = srcArray[index];
+	delete srcArray[index];
+	srcArray.unshift(tmp);
+	for(var i in srcArray)dest.push(srcArray[i]);
+	return dest;
+}
+
+
+/*
+*   函数名    |      说明
+*------------------------------
+* showTable() |  预览Table效果
+*
+*/
+
+function showTable(str0,str1,str2,str3,str4) {
+var s = "";
+	if (sumIsTop == "1"){//合计上显
+		s = str0+str1+str3+str2+str4;
+	}else{
+		s = str0+str1+str2+str3+str4;
+	}
+	top.frames[2].document.all.help.style.display = 'none';
+	top.frames[2].document.all.show.innerHTML=s;//预览Table效果
+}
+
+
+/*
+*   函数名  |    说明
+*------------------------
+* sumData() |  数据求和
+*
+*/
+
+function sumData(src){
+var dataSum = 0;
+	for (i=0;i<rows;i++){
+		dataSum = dataSum + parseInt(data[i][src]);
+	}
+	return dataSum;
+}
+
+
+/*
+*   函数名     |         说明         |  CSS
+*----------------------------------------------
+* strToTable() |  字串转换为表格函数  |  head
+*
+*/
+
+function strToTable(str){
+
+		htmlTable	= "";	//
+		getString = str;
+		//rowspan=1|1,rowspan=1|1,rowspan=1|1,||
+		if (getString.indexOf(",||") > 0){//复杂表rowspan=1|2.1,colspan=3|2.2,||
+			step1 = getString.split("||")
+
+			for (i=0;i<step1.length-1;i++){	//判断有几行，得到每一行的信息
+				step2 = step1[i].split(",");
+				htmlTable +="<tr bgcolor=#f1f1f1 class=data><td bgcolor=#cecece align=center><font color=cccccc>&nbsp;</font></td>";
+
+				for(j=0;j<step2.length-1;j++){
+					step3 = step2[j].split("|");
+					htmlTable +='<td '+step3[0]+' align=center>'+step3[1]+'</td>';
+				}
+
+			htmlTable +="</tr>";
+			}
+
+
+		}else{//普通表
+
+			step2 = getString.split(",");
+			htmlTable +='<tr bgcolor=#f1f1f1 class=data><td bgcolor=#cecece align=center><font color=cccccc>&nbsp;</font></td>';
+			for(i=0;i<cols ;i++){
+				if (i<step2.length){
+
+				if(step2[i].indexOf("|") > 0){
+					step3 = step2[i].split("|");
+					htmlTable +='<td align=center>'+step3[1]+'</td>';
+				}else{
+					htmlTable +="<td align=center>"+step2[i]+"</td>";
+				}
+				}else{
+					htmlTable += "<td align=center>错误</td>";
+				}
+			}
+			htmlTable +='</tr>';
+		}
+
+	return htmlTable;
+}
+
+function fopen(){
+
+top.window.open("makeTable.htm","table","width=550 height=400 resizable=yes");
+
+}
+
+//结束!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//==================================================================================
+
+</script>
+
+</body>
+
+</html>

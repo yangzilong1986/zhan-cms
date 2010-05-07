@@ -1,0 +1,42 @@
+[PropertyInfo]
+appAmt,BigDecimal,false,false, , ,false,<default>
+appDate,Calendar,false,false, , ,false,<default>
+appEndDate,Calendar,false,false, , ,false,<default>
+appMonths,Integer,false,false, , ,false,<default>
+appStartDate,Calendar,false,false, , ,false,<default>
+bmTypeNo,Integer,false,false, , ,false,<default>
+clientMgr,String,false,false, , ,false,<default>
+clientNo,String,false,false, , ,false,<default>
+clientType,Integer,false,false, , ,false,<default>
+contractNo,String,false,false, , ,false,<default>
+curNo,String,false,false, , ,false,<default>
+eComDeptType,Integer,false,false, , ,false,<default>
+eComType,Integer,false,false, , ,false,<default>
+etpScopType,Integer,false,false, , ,false,<default>
+finalAmt,BigDecimal,false,false, , ,false,<default>
+finalAmt2,BigDecimal,false,false, , ,false,<default>
+finalCurNo,String,false,false, , ,false,<default>
+finalEndDate,Calendar,false,false, , ,false,<default>
+finalMonths,Integer,false,false, , ,false,<default>
+finalRate,BigDecimal,false,false, , ,false,<default>
+finalStartDate,Calendar,false,false, , ,false,<default>
+firstResp,String,false,false, , ,false,<default>
+firstRespPct,BigDecimal,false,false, , ,false,<default>
+ifRespLoan,Integer,false,false, , ,false,<default>
+interestType,Integer,false,false, , ,false,<default>
+loanCat3,Integer,false,false, , ,false,<default>
+loanPurpose,String,false,false, , ,false,<default>
+loanType3,Integer,false,false, , ,false,<default>
+loanType5,Integer,false,false, , ,false,<default>
+origAccNo,String,false,false, , ,false,<default>
+origBMNo,String,false,false, , ,false,<default>
+origDueBillNo,String,false,false, , ,false,<default>
+rate,BigDecimal,false,false, , ,false,<default>
+resultType,Integer,false,false, , ,false,<default>
+sContractNo,String,false,false, , ,false,<default>
+sectorCat1,Integer,false,false, , ,false,<default>
+[IconNames]
+
+
+
+

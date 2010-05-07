@@ -1,0 +1,66 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>SELECT</title>
+<link rel="stylesheet" type="text/css" href="web.css">
+
+<base target="disp">
+
+</head>
+
+<body topmargin="3" leftmargin="2" bgcolor="#C0C0C0">
+
+<form method="POST" action="disp.jsp" name='sql' target='disp'>
+<table width='100%' class='setuptable'  cellSpacing=1 cellPadding=0 align=center border=0>
+<tr >
+<td>SELECT:</td>
+<td colspan='6'>
+<input type ='text' name='sqlSelect' size='158' value='' title ='只写字段,如果加select ,程序将不组合SQL语句(可用于测试或其他简单的查询)' class=input></td>
+</tr>
+<tr>
+
+<td>FROM:</td><td><input type='text' name='sqlFrom' size='42' value=''  class=input></td>
+<td align=right >WHERE:</td><td ><input type =text name ='sqlWhere' size='40' value ='' class=input></td>
+
+<td  >WHERE1:</td>
+
+<td  ><input type =text name ='sqlWhere1' size ='54' value='' class=input></td>
+</tr>
+<tr>
+<td height="25">GROUP:</td><td height="25" >
+<input type =text name='sqlGroup' size='15' value ='' class=input>&nbsp;&nbsp;&nbsp; ORDER:<input type =text name ='sqlOrder' size ='15' value='' class=input></td>
+
+
+<td height="25" align=right >关键字:</td>
+
+
+<td height="25" >
+<input type =text name ='sqlKey' size='40' value =''title='最好不填,如果为统计,填brhid+统计字段名' class=input></td>
+
+
+<td  height="25">　</td>
+<td height="25" align=right>
+
+<input type="button" value="显示SQL语句" name="getSql" class='setupbutton' onclick="sqlmit('getSql');">
+<input type="button" value="&lt;&lt;实际显示&gt;&gt;" name="runSql" class='setupbutton' onclick="fopen();"/>&nbsp;&nbsp;</td>
+</tr>
+</table>
+<input type=hidden name=selectQryNo value=''>
+<input type ='hidden' name='cmd' value =''>
+</form>
+<script>
+function fopen(){
+val=document.sql.selectQryNo.value;
+var st="status=yes,toolbar=yes,menubar=no,location=no,scrollbars=yes,resizable=yes";
+top.window.open("../common/query.jsp?qryNo="+val,"123",st).focus();
+
+}
+function sqlmit(val){
+	document.sql.cmd.value=val;
+	document.sql.submit();
+}
+</script>
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+.listcontent {
+	font-size: 9pt;
+	padding: 2px;
+}
+.listcaption {
+	font-size: 9pt;
+	padding: 2px;
+	font-weight: bold;
+}
+
+
+a:link {
+	color: #000000;
+	text-decoration: none;
+}
+a:visited{
+	color: #000000;
+	text-decoration: none;
+}
+a:hover {
+	color: #990000;
+}
+a:active {
+	color: #000000;
+}
+
+a.unviewed2:link {
+	color: #FF0000;
+	text-decoration: none;
+}
+a.unviewed2:visited{
+	color: #FF0000;
+	text-decoration: none;
+}
+a.unviewed2:hover {
+	color: #FF0000;
+}
+a.unviewed2:active {
+	color: #FF0000;
+}
+
+.linebg2 {
+	background-image: url(images/tiao_004.jpg);
+	background-repeat: repeat-x;
+	background-position: top;
+}
+.linebg {
+	background-image: url(images/tiao_002.jpg);
+	background-repeat: repeat-x;
+	background-position: top;
+	padding-top: 1px;
+	margin: 1px;
+}
+
+.detailcontent {
+	font-size: 12pt;
+	padding: 2px;
+}
+
+.listcontent {
+	font-size: 9pt;
+}
+
+.detail_title {
+	font-size: 10pt;
+	font-weight: bold;
+}

@@ -1,0 +1,11 @@
+[PropertyInfo]
+itemName,String,false,false,itemName,itemName,true,<default>
+itemNo,int,false,false,itemNo,itemNo,true,<default>
+itemValue,double,false,false,itemValue,itemValue,true,<default>
+printNo,int,false,false,printNo,printNo,true,<default>
+report,Report,false,false, , ,true,<default>
+[IconNames]
+
+
+
+

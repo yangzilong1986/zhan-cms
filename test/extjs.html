@@ -1,0 +1,186 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+    <title>LayoutExt</title>
+    <!--加载ExtJs资源-->
+    <!--<script type="text/javascript" src="/js/jsloader.js"></script>-->
+    <!--<script type="text/javascript" src="/js/assets.js"></script>-->
+    <link rel="stylesheet" type="text/css" href="/js/ext/resources/css/ext-all.css"/>
+    <script type="text/javascript" src="/js/ext/adapter/ext/ext-base-debug.js">
+    </script>
+    <script type="text/javascript" src="/js/ext/ext-all-debug.js">
+    </script>
+    <!--我的js-->
+    <!--<script type="text/javascript" src="LayoutExt2.js">-->
+    <script type="text/javascript">
+
+
+        Ext.onReady(function() {
+            //设定布局器及面板
+
+
+            var layout;
+            var Pane = Ext.Panel;
+            var Border = Ext.Viewport;
+            //初始化Ext状态管理器，此类可返回用户在Cookie中的操作状态
+            Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+
+
+            //生成内部布局
+            var item1 = new Pane({
+                title: '选项1',
+                id:"item1menu"
+            });
+
+            var item2 = new Pane({
+                title: '选项2'
+            });
+
+            var item3 = new Pane({
+                title: '选项3',
+                items:[
+                    {
+                        html: '内容1'
+                    },
+                    {
+                        html: '内容2'
+                    }
+                ],
+                buttons:[
+                    {
+                        text: '测试按钮'
+                    }
+                ]
+            });
+            //表格
+            var grid = new Ext.grid.PropertyGrid({
+                title: '表格嵌套',
+                closable: true,
+                source:  {
+                    "(name)": "grid",
+                    "grouping": false,
+                    "autoFitColumns": true,
+                    "productionQuality": false,
+                    "created": new Date(Date.parse('03/18/2008')),
+                    "tested": false,
+                    "version": .01,
+                    "borderWidth": 1
+                }
+            });
+            layout = new Border({
+                layout: 'border',
+                items: [
+                    {
+                        region: 'west',
+                        title: 'west',
+                        //此布局采用折叠样式
+                        //layout: 'accordion',
+                        collapsible: true,
+                        width: 300,
+                        minWidth: 70,
+                        maxWidth: 500,
+                        split: true,
+                        //注入itme1 to 3
+                        items: [item1, item2, item3]
+                    },
+                    {
+                        region: 'center',
+                        title: 'center',
+                        layout:'fit',
+                        collapsible: true,
+                        split:true,
+                        margins:'0 0 0 0',
+                        //注入表格
+                        items:[grid]
+                    },
+                    {
+                        title: 'south',
+                        //是否同步收缩
+                        collapsible: true,
+                        //收缩方式
+                        collapseMode: 'mini',
+                        region: 'south',
+                        margins: '0 5 10 5',
+                        height: 100,
+                        split: true
+                    }
+                ]
+            });
+
+
+            var root = new Ext.tree.TreeNode({
+                id:"root",
+                text:"我是根"
+            });
+            root.appendChild(new Ext.tree.TreeNode({
+                id:"c1",
+                text:"我是子节点"
+            }));
+            var tree = new Ext.tree.TreePanel({
+                renderTo:"item1menu",
+                root:root,
+                width:200
+            });
+
+//            Ext.Msg.show({
+//                title:'Save Changes?',
+//                msg: 'You are closing a tab that has unsaved changes. Would you like to save your changes?',
+//                buttons: Ext.Msg.YESNOCANCEL,
+//                fn: function(btn, text) {
+//                    if (btn == 'yes') {
+//                        // process text value and close...
+//                        window.alert(btn.name);
+//                    }
+//                },
+//                animEl: 'elId',
+//                icon: Ext.MessageBox.QUESTION
+//            });
+
+        }
+                );
+
+
+    </script>
+    <!--样式-->
+    <style type="text/css">
+        html, body {
+            font: normal 12px verdana;
+            margin: 0;
+            padding: 0;
+            border: 0 none;
+            overflow: hidden;
+            height: 100%;
+        }
+    </style>
+
+
+</head>
+<!--<body>-->
+<!--<div id="north" class="x-layout-inactive-content">-->
+<!--北方-->
+<!--</div>-->
+<!--<div id="west" class="x-layout-inactive-content">-->
+<!--西方-->
+<!--</div>-->
+<!--<div id="east" class="x-layout-inactive-content">-->
+<!--东方-->
+<!--</div>-->
+<!--<div id="south" class="x-layout-inactive-content">-->
+<!--南方-->
+<!--</div>-->
+<!--<div id="center1" class="x-layout-inactive-content">-->
+<!--中央区域1-->
+<!--</div>-->
+<!--<div id="center2" class="x-layout-inactive-content">-->
+<!--中央区域2-->
+<!--</div>-->
+<!--</body>-->
+
+
+<body>
+<div id="center" class="x-layout-inactive-content"/>
+<div id="west" class="x-layout-inactive-content"/>
+<div id="south" class="x-layout-inactive-content"/>
+</body>
+
+</html>

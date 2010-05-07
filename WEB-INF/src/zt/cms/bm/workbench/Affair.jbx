@@ -1,0 +1,25 @@
+[PropertyInfo]
+actStatus,int,false,false,clientStatus,clientStatus,true,<default>
+actStatusName,String,false,false, , ,true,<default>
+BM_STATUS_GRANTED,int,false,false, , ,false,<default>
+bmActType,int,false,false,bmActType,bmActType,true,<default>
+bmActTypeName,String,false,false, , ,true,<default>
+bmNo,String,false,false,bmNo,bmNo,true,<default>
+bmTransNo,int,false,false,bmTransNo,bmTransNo,true,<default>
+brhId,String,false,false,brhId,brhId,true,<default>
+clientName,String,false,false,clientName,clientName,true,<default>
+createDate,java.util.Calendar,false,false,createDate,createDate,true,<default>
+createDateName,String,false,false, , ,true,<default>
+operator,String,false,false,operator,operator,true,<default>
+TRANS_STATUS_CANCELED,int,false,false, , ,false,<default>
+TRANS_STATUS_COMPLETED,int,false,false, , ,false,<default>
+TRANS_STATUS_EXECUTING,int,false,false, , ,false,<default>
+typeName,String,false,false,typeName,typeName,true,<default>
+typeNo,int,false,false,typeNo,typeNo,true,<default>
+viewed,boolean,false,false,viewed,viewed,true,<default>
+bmStatusNo,int,false,false,bmStatusNo,bmStatusNo,true,<default>
+[IconNames]
+
+
+
+

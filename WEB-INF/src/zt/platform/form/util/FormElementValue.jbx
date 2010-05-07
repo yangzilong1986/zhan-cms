@@ -1,0 +1,17 @@
+[PropertyInfo]
+disabled,boolean,false,false, , ,true,<default>
+isNull,boolean,false,false, , ,true,<default>
+isnull,boolean,false,false, , ,false,<default>
+readonly,boolean,false,false, , ,true,<default>
+type,int,false,false, , ,true,<default>
+value,List,false,false, , ,true,<default>
+valueArray,String[],false,false, , ,true,<default>
+valueFilter,java.util.Collection,false,false, , ,true,<default>
+values,List,false,false, , ,false,<default>
+visible,boolean,false,false, , ,true,<default>
+decimalDigits,int,false,false,decimalDigits,decimalDigits,true,<default>
+[IconNames]
+
+
+
+

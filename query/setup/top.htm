@@ -1,0 +1,61 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<title>SELECT</title>
+<link rel="stylesheet" type="text/css" href="web.css">
+
+
+
+</head>
+
+<body topmargin="3" leftmargin="2" bgcolor="#C0C0C0">
+
+<form method="POST" action="disp.jsp" name='qrySelect' target="disp">
+<table width='100%' class='setuptable'  cellSpacing=1 cellPadding=0 align=center border=0>
+<tr>
+<td>选择项目:<select size="1" name="selectQryNo" onchange="getNo(this.value);" class=input>
+
+</select></td>
+<td>项目代号</td><td><input type ='text' name='qryNo' value ='' size =10 maxlength =6  class=input></td>
+<td>项目名称</td><td><input type ='text' name='qryName' value ='' size =30 maxlength =50 class=input ></td>
+<td><input type="button" value="增加" name="cmdAdd"  onclick="commandmit('cmdAdd');" class='setupbutton'></td>
+<td><input type="button" value="修改" name="cmdChg"  onclick="commandmit('cmdChg');" class='setupbutton'></td>
+<td><input type="button" value="删除" name="cmdDel"  onclick="commandmit('cmdDel');" class='setupbutton'></td>
+</tr>
+</table>
+</form>
+<script language =javascript>
+
+function commandmit(val){
+
+	 var etop=document.qrySelect;
+	 var eset=top.frames[3].document.all.setup;
+	 var esql=top.frames[1].document.all.sql;
+	if ( val =="cmdAdd" ){
+		eset.qryNo.value = etop.qryNo.value;
+	}else{
+		eset.qryNo.value=etop.selectQryNo.value;
+	}
+
+
+	eset.qryName.value		=	etop.qryName.value;
+
+	eset.sqlSelect.value		=	esql.sqlSelect.value;
+	eset.sqlFrom.value		=	esql.sqlFrom.value;
+	eset.sqlWhere.value		=	esql.sqlWhere.value;
+	eset.sqlWhere1.value		=	esql.sqlWhere1.value;
+	eset.sqlGroup.value		=	esql.sqlGroup.value;
+	eset.sqlOrder.value		=	esql.sqlOrder.value;
+	eset.sqlKey.value		=	esql.sqlKey.value;
+
+	eset.cmd.value			=   	val;
+	 eset.submit();
+}
+function getNo(selectQryNo){
+    document.qrySelect.submit();
+}
+</script>
+</body>
+
+</html>
