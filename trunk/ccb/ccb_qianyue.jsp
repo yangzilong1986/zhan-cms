@@ -38,7 +38,7 @@
         String paygeteway = "https://ibsbjstar.ccb.com.cn/app/ccbMain?";
 
         String merchantid = "105370257320044";
-        String posid = "100000192";
+        String posid = "100001200";
         String branchid = "371000000";
         String authid =  request.getParameter("out_sign_no");    //¿Í»§Ç©Ô¼ºÅ
 

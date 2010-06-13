@@ -21,7 +21,7 @@
     <content url="file://$MODULE_DIR$/..">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.6" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library>
@@ -216,7 +216,7 @@
     <orderEntry type="library" name="apache-httpclient" level="project" />
     <orderEntry type="library" name="apache-mina" level="project" />
     <orderEntry type="library" name="xSocket" level="project" />
-    <orderEntry type="library" name="weblogic9" level="application" />
+    <orderEntry type="library" name="weblogic-10.3.1" level="application" />
   </component>
 </module>
 
