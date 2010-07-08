@@ -46,34 +46,43 @@ public class FDSysWHList extends FormActions {
                         "here a.gthtb_dwbh=b.xdkhzd_khbh " +
                         "and (a.gthtb_dwbh like 'GC%' or  a.gthtb_dwbh like 'GQ%' or  a.gthtb_dwbh like 'GSQ%' or  a.gthtb_dwbh like 'GT%' ) ";
 
-                RecordSet rs  = conn.executeQuery(sql);
+                RecordSet rs = conn.executeQuery(sql);
 
-                int count =0;
+                int count = 0;
                 msgs.add("<br>检查结果如下：");
                 while (rs.next()) {
                     String dwbh = rs.getString("gthtb_dwbh");
                     String actno = rs.getString("gthtb_tyckzh");
                     String htbh = rs.getString("gthtb_htbh");
+                    String khmc = rs.getString("xdkhzd_khmc");
 
+                    String promptStr = dwbh + " " + khmc + " "+ htbh + " " + actno;
                     if (dwbh.startsWith("GC")) {
                         if (!"801000026701041001".equals(actno)) {
                             count++;
-                            msgs.add("<br>"+count+":" +dwbh + " " + htbh + " " + actno);
+                            msgs.add("<br>" + count + ":" + promptStr);
                         }
-                    }else if(dwbh.startsWith("GQ")){
+                    } else if (dwbh.startsWith("GQ")) {
                         if (!"801000026701041001".equals(actno)) {
                             count++;
-                            msgs.add("<br>"+count+":" +dwbh + " " + htbh + " " + actno);
+                            msgs.add("<br>" + count + ":" + promptStr);
                         }
-                    }else if(dwbh.startsWith("GSQ")){
-                        if (!"801000026701041001".equals(actno)) {
+                    } else if (dwbh.startsWith("GSQ")) {
+                        if (!"801000026101041001".equals(actno)) {
                             count++;
-                            msgs.add("<br>"+count+":" +dwbh + " " + htbh + " " + actno);
+                            msgs.add("<br>" + count + ":" + promptStr);
                         }
-                    }else if(dwbh.startsWith("GT")){
-                        if (!"801000026701041001".equals(actno)) {
-                            count++;
-                            msgs.add("<br>"+count+":" +dwbh + " " + htbh + " " + actno);
+                    } else if (dwbh.startsWith("GT")) {
+                        if ("GT001".equals(dwbh)) {
+                            if (!"801000026701041001".equals(actno)) {
+                                count++;
+                                msgs.add("<br>" + count + ":" + promptStr);
+                            }
+                        } else {
+                            if (!"801000026101041001".equals(actno)) {
+                                count++;
+                                msgs.add("<br>" + count + ":" + promptStr);
+                            }
                         }
                     }
                 }
@@ -94,9 +103,8 @@ public class FDSysWHList extends FormActions {
             }
         }
         //设定帐号
-        if (button != null && (button.equals("SETWDCUTPAYSUCCESS")
-            || button.equals("SETWDCUTPAYFAIL"))) {
-            trigger(manager, "FDCUTPAYDETLPAGE", null);
+        if (button != null && (button.equals("PROCESSBUTTON"))) {
+            trigger(manager, "FDSYSWHLIST", null);
         }
 
         return 0;
