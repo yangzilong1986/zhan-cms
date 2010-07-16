@@ -57,7 +57,7 @@ Description: 个人消费分期付款申请书。
         ConnectionManager manager = ConnectionManager.getInstance();
         String sql1 = "", sql2 = "";
         if (!APPNO.equals("")) {
-            sql1 = "select c.CLIENTNO,c.BIRTHDAY,c.GENDER,c.NATIONALITY,c.MARRIAGESTATUS,c.HUKOUADDRESS,c.CURRENTADDRESS," +
+            sql1 = "select c.CLIENTNO,to_char(c.BIRTHDAY,'yyyyMMdd') BIRTHDAY,c.GENDER,c.NATIONALITY,c.MARRIAGESTATUS,c.HUKOUADDRESS,c.CURRENTADDRESS," +
                     "c.COMPANY,c.TITLE,c.QUALIFICATION,c.EDULEVEL,c.PHONE1,c.PHONE2," +
                     "c.PHONE3,c.NAME,c.CLIENTTYPE,c.DEGREETYPE,c.COMADDR,c.SERVFROM,c.RESIDENCEADR,c.HOUSINGSTS," +
                     "c.HEALTHSTATUS,c.MONTHLYPAY,c.BURDENSTATUS,c.EMPNO,c.SOCIALSECURITY,c.LIVEFROM,c.PC,c.COMPC,c.RESDPC,c.RESDADDR,c.EMAIL," +
@@ -67,14 +67,14 @@ Description: 个人消费分期付款申请书。
                     "m.CHANNEL,m.COMMNAME,m.COMMTYPE,m.ADDR,m.NUM,m.AMT,m.RECEIVEAMT,m.APPAMT,m.DIVID," +
                     "d.ACTOPENINGBANK,d.BANKACTNO,d.XY,d.XYR,d.DY,d.DYW,d.ZY,d.ZYW,d.BZ,d.BZR,d.CREDITTYPE,d.MONPAYAMT," +
                     "d.LINKMAN,d.LINKMANGENDER,d.LINKMANPHONE1,d.LINKMANPHONE2,d.APPRELATION,d.LINKMANADD,d.LINKMANCOMPANY,d.ACTOPENINGBANK_UD," +
-                    "a.IDTYPE,a.ID,a.APPDATE,a.APPTYPE,a.APPSTATUS,a.SID,a.ORDERNO,a.REQUESTTIME " +
+                    "a.IDTYPE,a.ID,to_char(a.APPDATE,'yyyyMMdd') as APPDATE,a.APPTYPE,a.APPSTATUS,a.SID,a.ORDERNO,a.REQUESTTIME " +
                     "from XFCLIENT c,XFAPPCOMM m,XFAPPADD d,XFAPP a " +
                     "left outer join XFCLIENT p on a.APPNO=p.APPNO and p.XFCLTP='2' " +
                     "where a.APPNO='" + APPNO + "' and a.APPNO=c.APPNO and c.XFCLTP='1' " +
                     "and a.APPNO=m.APPNO " +
                     "and a.APPNO=d.APPNO";
         } else if (!ID.equals("") && !IDTYPE.equals("")) {
-            sql1 = "select c.CLIENTNO,c.BIRTHDAY,c.GENDER,c.NATIONALITY,c.MARRIAGESTATUS,c.HUKOUADDRESS,c.CURRENTADDRESS," +
+            sql1 = "select c.CLIENTNO,to_char(c.BIRTHDAY,'yyyyMMdd') BIRTHDAY,c.GENDER,c.NATIONALITY,c.MARRIAGESTATUS,c.HUKOUADDRESS,c.CURRENTADDRESS," +
                     "c.COMPANY,c.TITLE,c.QUALIFICATION,c.EDULEVEL,c.PHONE1,c.PHONE2," +
                     "c.PHONE3,c.NAME,c.CLIENTTYPE,c.DEGREETYPE,c.COMADDR,c.SERVFROM,c.RESIDENCEADR,c.HOUSINGSTS," +
                     "c.HEALTHSTATUS,c.MONTHLYPAY,c.BURDENSTATUS,c.EMPNO,c.SOCIALSECURITY,c.LIVEFROM,c.PC,c.COMPC,c.RESDPC,c.RESDADDR,c.EMAIL," +
@@ -84,7 +84,7 @@ Description: 个人消费分期付款申请书。
                     "'' CHANNEL,'' COMMNAME,'' COMMTYPE,ADDR,'' NUM,'' AMT,'' RECEIVEAMT,'' APPAMT,'' DIVID," +
                     "d.ACTOPENINGBANK,d.BANKACTNO,'' XY,'' XYR,'' DY,'' DYW,'' ZY,'' ZYW,'' BZ,'' BZR,'' CREDITTYPE,'' MONPAYAMT," +
                     "d.LINKMAN,d.LINKMANGENDER,d.LINKMANPHONE1,d.LINKMANPHONE2,d.APPRELATION,d.LINKMANADD,d.LINKMANCOMPANY,d.ACTOPENINGBANK_UD," +
-                    "a.IDTYPE,a.ID,SYSDATE APPDATE,'' APPTYPE,'' APPSTATUS,'' SID,'' ORDERNO,'' REQUESTTIME " +
+                    "a.IDTYPE,a.ID,to_char(SYSDATE,'yyyyMMdd') APPDATE,'' APPTYPE,'' APPSTATUS,'' SID,'' ORDERNO,'' REQUESTTIME " +
                     "from CMINDVCLIENT c,XFAPPCOMM m,XFAPPADD d,XFAPP a " +
                     "left outer join XFCLIENT p on a.APPNO=p.APPNO and p.XFCLTP='2' " +
                     "where a.IDTYPE='" + IDTYPE + "' and a.ID='" + ID + "' and a.IDTYPE=c.IDTYPE and a.ID=c.ID " +
@@ -92,10 +92,10 @@ Description: 个人消费分期付款申请书。
                     "and a.APPNO=d.APPNO " +
                     "and rownum=1 order by a.APPNO desc";
 
-            sql2 = "select CLIENTNO,NAME,BIRTHDAY,GENDER,NATIONALITY,MARRIAGESTATUS,HUKOUADDRESS,CURRENTADDRESS," +
+            sql2 = "select CLIENTNO,NAME,to_char(BIRTHDAY,'yyyyMMdd') BIRTHDAY,GENDER,NATIONALITY,MARRIAGESTATUS,HUKOUADDRESS,CURRENTADDRESS," +
                     "COMPANY,TITLE,QUALIFICATION,EDULEVEL,PHONE1,PHONE2," +
                     "PHONE3,NAME,CLIENTTYPE,DEGREETYPE,COMADDR,SERVFROM,RESIDENCEADR,HOUSINGSTS," +
-                    "HEALTHSTATUS,MONTHLYPAY,BURDENSTATUS,EMPNO,SOCIALSECURITY,LIVEFROM,PC,COMPC,RESDPC,RESDADDR,EMAIL,ACTOPENINGBANK,BANKACTNO,SYSDATE APPDATE " +
+                    "HEALTHSTATUS,MONTHLYPAY,BURDENSTATUS,EMPNO,SOCIALSECURITY,LIVEFROM,PC,COMPC,RESDPC,RESDADDR,EMAIL,ACTOPENINGBANK,BANKACTNO,to_char(SYSDATE,'yyyyMMdd') APPDATE " +
                     "from CMINDVCLIENT " +
                     "where IDTYPE='" + IDTYPE + "' and ID='" + ID + "' and rownum=1 order by CLIENTNO desc";
         }
@@ -558,7 +558,8 @@ Description: 个人消费分期付款申请书。
                         out.print(APPDATE == null ? "" : APPDATE);
                     } else {
                 %><input type="text" <%=readonly_input%> name="APPDATE"
-                         value="<%=APPDATE==null?"":DBUtil.to_Date(APPDATE)%>"
+                         <%--value="<%=APPDATE==null?"":DBUtil.to_Date(APPDATE)%>"--%>
+                         value="<%=APPDATE==null?"":APPDATE%>"
                          class="page_form_text" style="width:63px">
                     <input type="button" value="…" class="page_form_refbutton" onClick="setday(this,winform.APPDATE)">
                     <%}%>
@@ -631,7 +632,8 @@ Description: 个人消费分期付款申请书。
 <tr class='page_form_tr'>
     <td class="page_form_title_td" nowrap>&nbsp;出生日期</td>
     <td class="page_form_td" nowrap><input type="text" <%=readonly_input%> name="BIRTHDAY"
-                                           value="<%=BIRTHDAY.equals("")?"":DBUtil.to_Date(BIRTHDAY)%>"
+                                           value="<%=BIRTHDAY.equals("")?"":BIRTHDAY%>"
+                                           <%--value="<%=BIRTHDAY.equals("")?"":DBUtil.to_Date(BIRTHDAY)%>"--%>
                                            class="page_form_text"></td>
     <td class="page_form_td" nowrap><input type="button" value="…" class="page_form_refbutton"
                                            onClick="setday(this,winform.BIRTHDAY)"></td>
@@ -1279,12 +1281,11 @@ Description: 个人消费分期付款申请书。
 </table>
 </body>
 
-<%--在线客服代码 168kf--%>
-<%--<script>document.write("<scr"+"ipt language=\"javascript\" src=\"http://im.168kf.com/kf.php?arg=hrsf&style=1&keyword="+escape(document.referrer)+"\"></scr"+"ipt>");</script>--%>
 
 <%--在线客服代码 365call-- 列表方式--%>
-<script type='text/javascript' src='http://chat2.365webcall.com/IMMe1.aspx?settings=mw7mNmXNNm6X7Xbz3Am600bPz3Am6wIbNz3AN6mm00&LL=0'></script>
-<%--在线客服代码 365call--  图标方式--%>
+<%--<script type='text/javascript' src='http://chat2.365webcall.com/IMMe1.aspx?settings=mw7mNmXNNm6X7Xbz3Am600bPz3Am6wIbNz3AN6mm00&LL=0'></script>--%>
+
+<%--在线客服代码 365call--  图标方式 不用--%>
 <%--<script type='text/javascript' src='http://chat2.365webcall.com/IMMe1.aspx?settings=mw7mNXXNNm6X7Xbz3Am600bPz3Am6wIbXz3A66mm0w&LL=0'></script>--%>
 
 

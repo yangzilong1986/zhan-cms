@@ -8,7 +8,7 @@
 //    String email = request.getParameter("email");
     String email = "abc@abc.com";
 //    String out_sign_no = request.getParameter("out_sign_no");
-    String out_sign_no = "ccb2010042300001";
+    String out_sign_no = "ccb0000000218";
 
 %>
 <em>

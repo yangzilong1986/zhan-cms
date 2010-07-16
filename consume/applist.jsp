@@ -67,7 +67,8 @@ Description:  消费信贷-个人消费分期付款申请列表。
     SID = (SID == null) ? "" : SID;
     if (count == 0 || !SID.equals("")) {
 %>
-<jsp:forward page="./application.jsp?goUrl=../app.jsp"/>
+<%--<jsp:forward page="application_start.jsp?goUrl=../app.jsp"/>--%>
+<jsp:forward page="application_preshow_shangcheng.jsp?goUrl=../app.jsp"/>
 <%
 } else {
     if (NAME.equals("") && crs.next()) {
@@ -78,7 +79,7 @@ Description:  消费信贷-个人消费分期付款申请列表。
 
 <html>
 <head>
-    <title>信贷管理</title>
+    <title>消费分期申请</title>
     <link href="../css/platform.css" rel="stylesheet" type="text/css">
     <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
     <style type="text/css">
@@ -91,7 +92,11 @@ Description:  消费信贷-个人消费分期付款申请列表。
     </style>
     <script language="JavaScript" type="text/JavaScript">
         function info(APPNO, NAME, IDTYPE, ID, PASSWORD, APPSTATUS) {
-            var url = "./application.jsp?APPNO=" + APPNO + "&NAME=" + NAME + "&IDTYPE=" + IDTYPE + "&ID=" + ID + "&PASSWORD=" + PASSWORD + "&APPSTATUS=" + APPSTATUS + "&showinfo=0";
+            var url = "./application_preshow.jsp?APPNO=" + APPNO + "&NAME=" + NAME + "&IDTYPE=" + IDTYPE + "&ID=" + ID + "&PASSWORD=" + PASSWORD + "&APPSTATUS=" + APPSTATUS + "&showinfo=0";
+            window.open(url, 'APPLICATION', 'left=0,top=0,height=700,width=870,toolbar=no,scrollbars=yes,resizable=yes');
+        }
+        function info_xiangxi(APPNO, NAME, IDTYPE, ID, PASSWORD, APPSTATUS) {
+            var url = "./application_start.jsp?APPNO=" + APPNO + "&NAME=" + NAME + "&IDTYPE=" + IDTYPE + "&ID=" + ID + "&PASSWORD=" + PASSWORD + "&APPSTATUS=" + APPSTATUS + "&showinfo=0";
             window.open(url, 'APPLICATION', 'left=0,top=0,height=700,width=870,toolbar=no,scrollbars=yes,resizable=yes');
         }
         function info1(NAME, IDTYPE, ID, PASSWORD) {
@@ -102,6 +107,8 @@ Description:  消费信贷-个人消费分期付款申请列表。
     <script language="javascript" type="text/JavaScript" src="/js/flippage.js"></script>
 </head>
 <body background="/images/checks_02.jpg">
+<br>
+<br>
 <form action="applist.jsp" name="form1" method="post">
     <input type="hidden" name="IDTYPE" value="<%=IDTYPE%>">
     <input type="hidden" name="ID" value="<%=ID%>">
@@ -190,7 +197,7 @@ Description:  消费信贷-个人消费分期付款申请列表。
                                                             </td>
                                                             <td nowrap class='list_form_td' align="center">
                                                                 <a class="list_edit_href"
-                                                                   href="javascript:info('<%=APPNO%>','<%=NAME%>','<%=IDTYPE%>','<%=ID%>','<%=PASSWORD.trim()%>','<%=APPSTATUS%>')">详细</a>
+                                                                   href="javascript:info_xiangxi('<%=APPNO%>','<%=NAME%>','<%=IDTYPE%>','<%=ID%>','<%=PASSWORD.trim()%>','<%=APPSTATUS%>')">详细</a>
                                                             </td>
                                                         </tr>
                                                         <%
@@ -271,16 +278,16 @@ Description:  消费信贷-个人消费分期付款申请列表。
                                     <td class='list_form_td' nowrap>
                                         <br>
 
-                                        <p align="left" style="font-size:10pt">&nbsp;&nbsp;&nbsp;&nbsp;非常感谢您选择海尔财务公司的分期付款业务。下面是您分期申请需要准备的材料:
-                                            <br><br>
+                                        <p align="left" style="font-size:10pt; color:#004080">&nbsp;&nbsp;&nbsp;&nbsp;【非常感谢您选择海尔财务公司的分期付款业务。下面是您分期申请需要准备的材料:】
+                                            <br>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* 身份证明复印件<strong>两份，并签字</strong>（第二代身份证请正反两面都复印）<br>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 员工卡复印件一份 （内部员工）<br>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* 消费分期付款申请书<strong>一份，签字</strong><br>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* 信用记录查询许可书<strong>一份，签字</strong><br>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* 建行还款账号<strong>签字</strong>复印件、支付宝或快钱账号截图的签字复印件<br><br>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;如有共同还款人参与，请另附：<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;【如有共同还款人参与，请另附：】<br>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、共同还款人的身份证件复印件<strong>两份，并签字</strong>（第二代身份证请正反两面都复印）<br>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、共同还款人的信用记录查询许可书<strong>一份，签字 </strong><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、共同还款人的信用记录查询许可书<strong>一份，签字 </strong><br><br>
                                         </p></td>
                                 </tr>
                             </table>
@@ -312,6 +319,8 @@ Description:  消费信贷-个人消费分期付款申请列表。
         </tr>
     </table>
 </form>
+<%--在线客服代码 365call-- 列表方式--%>
+<script type='text/javascript' src='http://chat2.365webcall.com/IMMe1.aspx?settings=mw7mNmXNNm6X7Xbz3Am600bPz3Am6wIbNz3AN6mm00&LL=0'></script>
 
 </body>
 </html>

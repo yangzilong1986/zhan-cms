@@ -31,7 +31,7 @@ Description: 消费信贷-个人消费分期付款申请书提交。
     this.onunload = function() {
         window.opener.location.reload();
     }
-        //-->
+    //-->
 </SCRIPT>
 <%
     request.setCharacterEncoding("GBK");
@@ -232,7 +232,7 @@ Description: 消费信贷-个人消费分期付款申请书提交。
         flag = flag.substring(0, flag.length() - 1);
         request.setAttribute("mess", flag);
 %>
-<jsp:forward page="./application.jsp"/>
+<jsp:forward page="application_start.jsp"/>
 <%
 } else {
 
@@ -282,7 +282,7 @@ Description: 消费信贷-个人消费分期付款申请书提交。
                 if (XFAPPNO == null || XFAPPNO.length() != 22) {
                     session.setAttribute("msg", "申请单号获取失败，请联系我们!");
 %>
-<jsp:forward page="./application.jsp"/>
+<jsp:forward page="application_start.jsp"/>
 <%
                 }
                 APPNO = XFAPPNO;
@@ -393,12 +393,17 @@ Description: 消费信贷-个人消费分期付款申请书提交。
         funcdel += "parent.opener.document.getElementById('print').className = 'page_button_active';";
         funcdel += "parent.opener.document.getElementById('print').disabled = false;";
         funcdel += "parent.opener.document.getElementById('APPNO').value='" + APPNO + "';";
-        funcdel += "parent.opener.document.getElementById('APPNO').value='" + APPNO + "';";
+//        funcdel += "parent.opener.document.getElementById('APPNO').value='" + APPNO + "';";
         funcdel += "parent.opener.document.getElementById('APPSTATUS').value='" + APPSTATUS + "';";
-        funcdel += "window.opener.document.getElementById('print').click();";
-        funcdel += "pageWinClose();";
+//        funcdel += "window.setTimeout('window.close()',5000);";
+        funcdel += "parent.opener.document.getElementById('print').click();";
+                funcdel += "pageWinClose();";
 
-        session.setAttribute("msg", "您的申请已提交成功，请在单击确定后，连接您的打印机，选择您的申请单打印并签署姓名，连同您的证明文件复印件一同寄送给我们，审核通过后我们将与您取得联系！");
+//        funcdel += "window.opener.document.getElementById('print').click();";
+//        funcdel += "pageWinClose();";
+//        funcdel += "window.close();";
+
+        session.setAttribute("msg", "您的申请已提交成功，请在单击确定后，连接您的打印机，<br>选择您的申请单打印并签署姓名，连同您的证明文件复印件<br>一同寄送给我们，审核通过后我们将与您取得联系！");
         session.setAttribute("funcdel", funcdel);
         session.setAttribute("isback", "0");
 
@@ -407,7 +412,7 @@ Description: 消费信贷-个人消费分期付款申请书提交。
 } else {
     session.setAttribute("msg", "提交信息失败!");
 %>
-<jsp:forward page="./application.jsp"/>
+<jsp:forward page="application_start.jsp"/>
 <%
         }
     }

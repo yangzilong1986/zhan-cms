@@ -46,6 +46,7 @@
 
     if (mysign.equals(request.getParameter("sign"))) {
         request.setCharacterEncoding("GBK");
+        
         out.println("显示反馈信息" + "</br>");
         out.println("商户代码:" + request.getParameter("merchent_id") + "</br>");
         out.println("授权标志:" + request.getParameter("accredit_flag") + "</br>");
