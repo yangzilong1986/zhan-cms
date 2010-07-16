@@ -75,7 +75,7 @@ public class XFAppList extends FormActions {
         } else if (button != null && button.equals(SessionAttributes.REQUEST_EDIT_BUTTON_VALUE)) {
             String CLICK_COLUMN_NAME = ctx.getParameter(SessionAttributes.CLICK_COLUMN_NAME);
             if (CLICK_COLUMN_NAME != null && CLICK_COLUMN_NAME.equals("operation")) {//œÍœ∏
-                ctx.setTarget("/consume/application.jsp");
+                ctx.setTarget("/consume/application_start.jsp");
             } else { //…Û≈˙
                // trigger(manager, "XFCONFIRMPAGE10", null);
                 trigger(manager, "XFCONTRACTLINK", null);

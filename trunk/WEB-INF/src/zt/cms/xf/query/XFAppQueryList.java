@@ -16,9 +16,6 @@ import zt.platform.form.util.FormInstance;
 
 import zt.platform.form.util.event.*;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 import zt.platform.form.util.SessionAttributes;
 import zt.platform.utils.Debug;
 
@@ -66,7 +63,7 @@ public class XFAppQueryList extends FormActions {
                 ctx.setAttribute("CONTRACTNO", contractno);
                 trigger(manager, "XFACTCUTPAYDETLQUERY", null);
             } else if (buttonname.equals("SHOWAPPBUTTON")) {
-                ctx.setTarget("/consume/application.jsp");
+                ctx.setTarget("/consume/application_start.jsp");
             } else if (buttonname.equals("DOPRECUTPAYJB")) {
 
                 //TODO：检查是否逾期 ：主帐单中未置逾期标志或已置逾期标志但已结清

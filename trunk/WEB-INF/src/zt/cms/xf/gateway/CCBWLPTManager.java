@@ -1,29 +1,18 @@
 package zt.cms.xf.gateway;
 
-import org.apache.mina.transport.socket.nio.NioSocketConnector;
-import org.apache.mina.transport.socket.SocketSessionConfig;
-import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
-import org.apache.mina.core.session.IoSession;
-import org.apache.mina.core.future.ReadFuture;
-import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dom4j.io.SAXReader;
 import org.dom4j.Document;
-import org.dom4j.Element;
 import org.dom4j.Node;
-import org.xsocket.connection.IBlockingConnection;
+import org.dom4j.io.SAXReader;
 import org.xsocket.connection.BlockingConnection;
-
-import java.net.InetSocketAddress;
-import java.net.InetAddress;
-import java.util.concurrent.TimeUnit;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
+import org.xsocket.connection.IBlockingConnection;
 import zt.cms.xf.common.dto.Xfactcutpaydetl;
 import zt.platform.utils.Debug;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.InetAddress;
 
 /**
  * 建行外联平台链接处理类.
@@ -52,12 +41,12 @@ public class CCBWLPTManager {
     private String key = "000000";
 
     //WLPT测试环境地址
-    private String strUrl = "192.168.91.46";
+    private String strUrl = "10.143.19.53";
 
     //SBS生产环境地址 TODO：加到配置文件中
 //    private static String strUrl = "192.168.91.5";
 
-    private int iPort = 9888;
+    private int iPort = 9999;
 
     //TODO：超时时间设置
 
@@ -147,7 +136,7 @@ public class CCBWLPTManager {
 
         return rtn;
     }
-
+/*
     public int processCCBWLPT(Xfactcutpaydetl xfactcutpaydetl, StringBuffer returnCode, StringBuffer returnMsg) {
 
         //默认返回值为-1 处理超时，需发起查询交易
@@ -174,11 +163,11 @@ public class CCBWLPTManager {
             // 接收
             ReadFuture readFuture = session.read();
             if (readFuture.awaitUninterruptibly(20, TimeUnit.SECONDS)) {
-                /*               String msg = (String) readFuture.getMessage();
+                *//*               String msg = (String) readFuture.getMessage();
                                msg += (String) readFuture.getMessage();
                                // TODO 处理消息
                                log.debug(msg);
-                */
+                *//*
 //                IoBuffer buf = (IoBuffer) readFuture.getMessage();
                 IoBuffer buf = (IoBuffer) readFuture.getMessage();
                 // Print out read buffer content.
@@ -222,6 +211,7 @@ public class CCBWLPTManager {
         return rtn;
     }
 
+ */
     //根据数据库记录生成发送报文（XML）
     private String getSendMessage(Xfactcutpaydetl detl) {
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE weblogic-web-app PUBLIC "-//BEA Systems, Inc.//DTD Web Application 8.1//EN" "http://www.bea.com/servers/wls810/dtd/weblogic810-web-jar.dtd">
-
 <weblogic-web-app>
 
   <session-descriptor>
@@ -26,7 +25,7 @@
   </jsp-descriptor>
 
   <container-descriptor>
-    <index-directory-enabled>true</index-directory-enabled>
+    <index-directory-enabled>false</index-directory-enabled>
     <servlet-reload-check-secs>-1</servlet-reload-check-secs>
     <session-monitoring-enabled>true</session-monitoring-enabled>
   </container-descriptor>
