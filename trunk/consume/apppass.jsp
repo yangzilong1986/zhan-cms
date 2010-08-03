@@ -46,7 +46,7 @@ Description: 个人消费分期客户密码修改。
     }
 } else {
     String readonly = "";
-    String submit = "class='page_button_active'";
+    String submit = "class='btn1_mouseout'";
     String title = "个人密码修改";
 %>
 <html>
@@ -58,17 +58,32 @@ Description: 个人消费分期客户密码修改。
         <!--
         body {
             margin-top: 5px;
+            margin-left:0px;
+            margin-right:0px;
         }
 
         -->
     </style>
 </head>
-<body background="../images/checks_02.jpg">
+<body>
+<div style="width:100%;">
+    <table height="42px" width="100%" border="0" align="left" cellpadding="2" cellspacing="2"
+          >
+        <tr align="left">
+            <td width="30%" style="BACKGROUND: url(../images/headlogo.JPG) no-repeat;"></td>
+
+        </tr>
+    </table>
+</div>
+<div class="navNo">
+</div>
+<div>
+<br>
 <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
     <tr class='page_form_tr'>
-        <td align="center" valign="middle">
-            <table height="325" border="2" align="center" cellpadding="2" cellspacing="2" bordercolor="#816A82"
-                   bgcolor="#E0E0D3">
+        <td valign="top">
+            <table height="325" border="0" align="center" cellpadding="2" cellspacing="2" bordercolor="#ffffff"
+                   bgcolor="#ffffff">
                 <tr align="left">
                     <td height="30" bgcolor="#A4AEB5"><img src="../images/form/xing1.jpg" align="absmiddle"> <font
                             size="2"
@@ -80,17 +95,17 @@ Description: 个人消费分期客户密码修改。
                         <table width="100%" height="100%" cellspacing="0" cellpadding="0" border="0">
                             <tr class='page_form_tr'>
                                 <td width="20">&nbsp;</td>
-                                <td align="center" valign="middle">
+                                <td align="center" valign="top">
                                     <script src='../js/main.js' type='text/javascript'></script>
                                     <script src='../js/check.js' type='text/javascript'></script>
                                     <script src='../js/checkID2.js' type='text/javascript'></script>
                                     <form id='winform' method='post' action='./apppass.jsp'>
 
-                                        <table class='page_form_table' id='page_form_table' width="100%">
+                                        <table class='page_form_regTable' id='page_form_table' width="100%">
                                             <col width="80"/>
                                             <col width="145"/>
                                             <tr class='page_form_tr'>
-                                                <td colspan="5" align="center" class="page_form_List_title">
+                                                <td colspan="5" align="center" class="title1">
                                                     密码修改
                                                 </td>
                                             </tr>
@@ -162,18 +177,18 @@ Description: 个人消费分期客户密码修改。
                         </table>
                     </td>
                 </tr>
-                <tr height="35" align="center" valign="middle">
+                <tr height="35" align="center" valign="top">
                     <td align="center">
                         <table border="0" cellspacing="0" cellpadding="0" width="538">
                             <tr class='page_form_tr'>
                                 <td nowrap align="center">
-                                    <table class='page_button_tbl'>
+                                    <table>
                                         <tr class='page_button_tbl_tr'>
-                                            <td class='page_button_tbl_td'><input type='button' <%=submit%> id='goback'
+                                            <td class='page_button_tbl_td'><input style="width:90px;" type='button' <%=submit%> id='goback'
                                                                                   name='goback'
                                                                                   value=' 返 回 '
                                                                                   onClick="history.go(-1)"></td>
-                                            <td class='page_button_tbl_td'><input type='button' <%=submit%> id='saveadd'
+                                            <td class='page_button_tbl_td'><input style="width:90px;" type='button' <%=submit%> id='saveadd'
                                                                                   name='save'
                                                                                   value=' 确 定 '
                                                                                   onClick="return Regvalid();"></td>
@@ -188,6 +203,7 @@ Description: 个人消费分期客户密码修改。
         </td>
     </tr>
 </table>
+</div>
 </body>
 </html>
 
