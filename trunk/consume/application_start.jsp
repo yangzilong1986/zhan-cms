@@ -347,7 +347,7 @@ Description: 个人消费分期付款申请书。
 
         String readonly = "";
         String readonly_input = "readonly";
-        String submit = "class='page_button_active'";
+        String submit = "class='btn1_mouseout'";
         String title = "个人消费分期付款申请书";
 
         if (ifErrClient) {
@@ -365,7 +365,9 @@ Description: 个人消费分期付款申请书。
     <style type="text/css">
         <!--
         body {
-            margin-top: 5px;
+            margin-top: 0px;
+            margin-left:0px;
+            margin-right:0px;
         }
 
         -->
@@ -497,11 +499,22 @@ Description: 个人消费分期付款申请书。
     }
 </style>
 
-<body background="../images/checks_02.jpg">
+<body>
+<div style="width:100%">
+<table height="42px" width="100%" border="0" align="left" cellpadding="2" cellspacing="2"
+          >
+        <tr align="left">
+            <td width="30%" style="BACKGROUND: url(../images/headlogo.JPG) no-repeat;"></td>
+
+        </tr>
+    </table>
+</div>
+<div class="navNo"></div>
+<br>
 <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
 <tr class='page_form_tr'>
 <td align="center" valign="middle">
-<table height="325" border="2" align="center" cellspacing="2" cellpadding="2" bordercolor="#816A82" bgcolor="#E0E0D3"
+<table height="325" border="0" align="center" cellspacing="0" cellpadding="0" bordercolor="#816A82" bgcolor="#ffffff"
        width="678">
 <tr align="left">
     <td height="30" bgcolor="#A4AEB5"><img src="../images/form/xing1.jpg" align="absmiddle"> <font size="2"
@@ -528,7 +541,7 @@ Description: 个人消费分期付款申请书。
 <%--<form id='winform' method='post' action='./application_save.jsp' target="_blank">--%>
 <form id='winform' method='post' action='./application_save.jsp'>
 <%--<OBJECT id=wb height=0 width=0 classid=CLSID:8856F961-340A-11D0-A96B-00C04FD705A2 name=wb></OBJECT>--%>
-<table class='page_form_table' id='page_form_table' width="638" cellspacing="1" cellpadding="0" border=0>
+<table class='page_form_regTable' id='page_form_table' width="638" cellspacing="1" cellpadding="0" border=0>
 <col width="69"/>
 <col width="110"/>
 <col width="160"/>
@@ -594,35 +607,35 @@ Description: 个人消费分期付款申请书。
 </tr>
 <tr class='page_form_tr'>
     <td rowspan="11" class="page_left_table_title" nowrap>申请人情况</td>
-    <td class="page_form_title_td" nowrap>&nbsp;姓&nbsp;&nbsp;名</td>
+    <td class="page_form_title_td" nowrap>&nbsp;姓&nbsp;&nbsp;名：</td>
     <td class="page_form_td" nowrap><input type="text" <%=readonly%> name="NAME"
                                            value="<%=NAME==null?"":NAME%>"
                                            class="page_form_text" maxlength="40"></td>
     <td class="page_form_td" nowrap>&nbsp;</td>
-    <td class="page_form_title_td" nowrap>&nbsp;性&nbsp;&nbsp;别</td>
+    <td class="page_form_title_td" nowrap>&nbsp;性&nbsp;&nbsp;别：</td>
     <td colspan="2" nowrap class="page_form_td"><%=level.radioHere("GENDER", "Gender", GENDER)%>
     </td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;手&nbsp;&nbsp;机</td>
+    <td class="page_form_title_td" nowrap>&nbsp;手&nbsp;&nbsp;机：</td>
     <td class="page_form_td" nowrap><input type="text" <%=readonly%> name="PHONE1"
                                            value="<%=PHONE1==null?"":PHONE1%>"
                                            class="page_form_text" maxlength="15"></td>
     <td class="page_form_td" nowrap>&nbsp;</td>
-    <td class="page_form_title_td" nowrap>&nbsp;员工卡号码</td>
+    <td class="page_form_title_td" nowrap>&nbsp;员工卡号码：</td>
     <td class="page_form_td" nowrap><input type="text" <%=readonly%> name="EMPNO"
                                            value="<%=EMPNO==null?"":EMPNO%>" class="page_form_text" maxlength="8"></td>
     <td class="page_form_td" nowrap>&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;身份证件名称</td>
+    <td class="page_form_title_td" nowrap>&nbsp;身份证件名称：</td>
     <td colspan="2" nowrap class="page_form_td">
         <%--<select name="IDTYPE" class="page_form_select">--%>
         <%--<option value='0'>身份证</option>--%>
         <%--</select>--%>
         <%=level.levelHere("IDTYPE", "IDType", IDTYPE)%>
     </td>
-    <td class="page_form_title_td" nowrap>&nbsp;证件号码</td>
+    <td class="page_form_title_td" nowrap>&nbsp;证件号码：</td>
     <td class="page_form_td" nowrap><input type="text" <%=readonly%> name="ID" id="ID"
                                            value="<%=ID==null?"":ID%>" class="page_form_text"
                                            onblur="if(checkIDCard(document.getElementById('IDTYPE'),this))getbirthday(this.value,'BIRTHDAY');"
@@ -630,32 +643,32 @@ Description: 个人消费分期付款申请书。
     <td class="page_form_td" nowrap>&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;出生日期</td>
+    <td class="page_form_title_td" nowrap>&nbsp;出生日期：</td>
     <td class="page_form_td" nowrap><input type="text" <%=readonly_input%> name="BIRTHDAY"
                                            value="<%=BIRTHDAY.equals("")?"":BIRTHDAY%>"
                                            <%--value="<%=BIRTHDAY.equals("")?"":DBUtil.to_Date(BIRTHDAY)%>"--%>
                                            class="page_form_text"></td>
     <td class="page_form_td" nowrap><input type="button" value="…" class="page_form_refbutton"
                                            onClick="setday(this,winform.BIRTHDAY)"></td>
-    <td class="page_form_title_td" nowrap>&nbsp;健康状况</td>
+    <td class="page_form_title_td" nowrap>&nbsp;健康状况：</td>
     <td colspan="2" nowrap class="page_form_td"><%=level.radioHere("HEALTHSTATUS", "HealthStatus", HEALTHSTATUS)%>
     </td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;婚姻状况</td>
+    <td class="page_form_title_td" nowrap>&nbsp;婚姻状况：</td>
     <td colspan="2" nowrap class="page_form_td"><%=level.radioHere("MARRIAGESTATUS", "MarriageStatus", MARRIAGESTATUS)%>
     </td>
-    <td class="page_form_title_td" nowrap>&nbsp;是否有子女</td>
+    <td class="page_form_title_td" nowrap>&nbsp;是否有子女：</td>
     <td colspan="2" nowrap class="page_form_td"><%=level.radioHere("BURDENSTATUS", "BurdenStatus", BURDENSTATUS)%>
     </td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;户籍所在地</td>
+    <td class="page_form_title_td" nowrap>&nbsp;户籍所在地：</td>
     <td colspan="5" class="page_form_td" nowrap><%=level.radioHere("RESIDENCEADR", "ResidenceADR", RESIDENCEADR)%>
     </td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;家庭住址</td>
+    <td class="page_form_title_td" nowrap>&nbsp;家庭住址：</td>
     <td colspan="4" class="page_form_td">
         <input type="text" <%=readonly%> name="CURRENTADDRESS"
                value="<%=CURRENTADDRESS==null?"":CURRENTADDRESS%>"
@@ -663,11 +676,11 @@ Description: 个人消费分期付款申请书。
     <td class="page_form_td" nowrap>&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;住宅邮编</td>
+    <td class="page_form_title_td" nowrap>&nbsp;住宅邮编：</td>
     <td colspan="2" class="page_form_td"><input type="text" <%=readonly%> name="PC"
                                                 value="<%=PC==null?"":PC%>"
                                                 class="page_form_text" maxlength="6"></td>
-    <td class="page_form_title_td" nowrap>&nbsp;电子邮箱</td>
+    <td class="page_form_title_td" nowrap>&nbsp;电子邮箱：</td>
     <td class="page_form_td">
         <input type="text" <%=readonly%> name="EMAIL"
                value="<%=EMAIL==null?"":EMAIL%>"
@@ -675,11 +688,11 @@ Description: 个人消费分期付款申请书。
     <td class="page_form_td" nowrap>&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;家庭电话</td>
+    <td class="page_form_title_td" nowrap>&nbsp;家庭电话：</td>
     <td colspan="2" class="page_form_td"><input type="text" <%=readonly%> name="PHONE2"
                                                 value="<%=PHONE2==null?"":PHONE2%>"
                                                 class="page_form_text" maxlength="15"></td>
-    <td class="page_form_title_td" nowrap>&nbsp;本地居住时间</td>
+    <td class="page_form_title_td" nowrap>&nbsp;本地居住时间：</td>
     <td class="page_form_td">
         <input type="text" <%=readonly%> name="LIVEFROM"
                value="<%=LIVEFROM==null?"":LIVEFROM%>"
@@ -687,12 +700,12 @@ Description: 个人消费分期付款申请书。
     <td class="page_form_td">年</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;受教育程度</td>
+    <td class="page_form_title_td" nowrap>&nbsp;受教育程度：</td>
     <td colspan="5" class="page_form_td" nowrap><%=level.radioHere("EDULEVEL", "EduLevel", EDULEVEL)%>
     </td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;职&nbsp;&nbsp;称</td>
+    <td class="page_form_title_td" nowrap>&nbsp;职&nbsp;&nbsp;称：</td>
     <td colspan="5" class="page_form_td"
         nowrap><%=level.radioHere("QUALIFICATION", "Qualification", QUALIFICATION)%>
     </td>
@@ -701,8 +714,8 @@ Description: 个人消费分期付款申请书。
     <td class="page_button_tbl_tr" colspan="7" height="5"></td>
 </tr>
 <tr class='page_form_tr'>
-    <td rowspan="8" class="page_left_table_title">工作资料</td>
-    <td class="page_form_title_td" nowrap>&nbsp;工作单位</td>
+    <td rowspan="8" class="page_left_table_title">工作资料：</td>
+    <td class="page_form_title_td" nowrap>&nbsp;工作单位：</td>
     <td colspan="4" class="page_form_td">
         <input type="text" <%=readonly%> name="COMPANY"
                value="<%=COMPANY==null?"":COMPANY%>"
@@ -711,13 +724,13 @@ Description: 个人消费分期付款申请书。
     <td class="page_form_td" nowrap>&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;单位电话</td>
+    <td class="page_form_title_td" nowrap>&nbsp;单位电话：</td>
     <td colspan="2" class="page_form_td">
         <input type="text" <%=readonly%> name="PHONE3"
                value="<%=PHONE3==null?"":PHONE3%>"
                class="page_form_text" maxlength="15">
     </td>
-    <td class="page_form_title_td" nowrap>&nbsp;单位邮编</td>
+    <td class="page_form_title_td" nowrap>&nbsp;单位邮编：</td>
     <td class="page_form_td">
         <input type="text" <%=readonly%> name="COMPC"
                value="<%=COMPC==null?"":COMPC%>"
@@ -726,7 +739,7 @@ Description: 个人消费分期付款申请书。
     <td class="page_form_td" nowrap>&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;单位地址</td>
+    <td class="page_form_title_td" nowrap>&nbsp;单位地址：</td>
     <td colspan="4" class="page_form_td">
         <input type="text" <%=readonly%> name="COMADDR"
                value="<%=COMADDR==null?"":COMADDR%>"
@@ -735,17 +748,17 @@ Description: 个人消费分期付款申请书。
     <td class="page_form_td" nowrap>&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;单位性质</td>
+    <td class="page_form_title_td" nowrap>&nbsp;单位性质：</td>
     <td colspan="5" class="page_form_td" nowrap><%=level.radioHere("CLIENTTYPE", "ClientType1", CLIENTTYPE)%>
     </td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;职&nbsp;&nbsp;务</td>
+    <td class="page_form_title_td" nowrap>&nbsp;职&nbsp;&nbsp;务：</td>
     <td colspan="5" class="page_form_td" nowrap><%=level.levelHere("TITLE", "Title", TITLE)%>
     </td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;现单位工作时间</td>
+    <td class="page_form_title_td" nowrap>&nbsp;现单位工作时间：</td>
     <td class="page_form_td">
         <input type="text" <%=readonly%> name="SERVFROM"
                value="<%=SERVFROM==null?"":SERVFROM%>"
@@ -753,7 +766,7 @@ Description: 个人消费分期付款申请书。
     <td colspan="4" class="page_form_td">年</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;个人月收入</td>
+    <td class="page_form_title_td" nowrap>&nbsp;个人月收入：</td>
     <td class="page_form_td">
         <input type="text" <%=readonly%> name="MONTHLYPAY"
                value="<%=MONTHLYPAY==null?"":MONTHLYPAY%>"
@@ -761,7 +774,7 @@ Description: 个人消费分期付款申请书。
     <td colspan="4" class="page_form_td">元</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;建立社会福利<br>&nbsp;保障制度情况</td>
+    <td class="page_form_title_td" nowrap>&nbsp;建立社会福利<br>&nbsp;保障制度情况：</td>
     <td colspan="5" class="page_form_td"
         nowrap><%=level.checkHere("SOCIALSECURITY", "SocialSecurity", SOCIALSECURITY)%>
     </td>
@@ -789,16 +802,16 @@ Description: 个人消费分期付款申请书。
             <COL width=13>
             <tr class='page_form_tr'>
                 <td rowspan="8" class="page_left_table_title" nowrap>配偶基本情况(仅在配偶为共同还款人情况下填列)</td>
-                <td class="page_form_title_td" nowrap>&nbsp;配偶姓名</td>
+                <td class="page_form_title_td" nowrap>&nbsp;配偶姓名：</td>
                 <td colspan="5" class="page_form_td" nowrap><input type="text" <%=readonly%> name="PNAME"
                                                                    value="<%=PNAME==null?"":PNAME%>"
                                                                    class="page_form_text" maxlength="40"></td>
             </tr>
             <tr class='page_form_tr'>
-                <td class="page_form_title_td" nowrap>&nbsp;配偶身份证件名称</td>
+                <td class="page_form_title_td" nowrap>配偶身份证件名称：</td>
                 <td class="page_form_td" colspan="2" nowrap><%=level.levelHere("PIDTYPE", "IDType", PIDTYPE)%>
                 </td>
-                <td class="page_form_title_td" nowrap>&nbsp;配偶证件号码</td>
+                <td class="page_form_title_td" nowrap>&nbsp;配偶证件号码：</td>
                 <td class="page_form_td">
                     <input type="text" <%=readonly%> name="PID" id="PID" value="<%=PID==null?"":PID%>"
                            onblur="if(this.value.Trim()!=''&&document.getElementById('PNAME').value.Trim()==''){alert('配偶姓名不能为空！');document.getElementById('PNAME').focus();}else checkIDCard(document.getElementById('PIDTYPE'),this);"
@@ -806,7 +819,7 @@ Description: 个人消费分期付款申请书。
                 <td class="page_form_td">&nbsp;</td>
             </tr>
             <tr class='page_form_tr'>
-                <td class="page_form_title_td" nowrap>&nbsp;工作单位</td>
+                <td class="page_form_title_td" nowrap>&nbsp;工作单位：</td>
                 <td colspan="4" class="page_form_td">
                     <input type="text" <%=readonly%> name="PCOMPANY"
                            value="<%=PCOMPANY==null?"":PCOMPANY%>"
@@ -814,7 +827,7 @@ Description: 个人消费分期付款申请书。
                 <td class="page_form_td">&nbsp;</td>
             </tr>
             <tr class='page_form_tr'>
-                <td class="page_form_title_td" nowrap>&nbsp;单位电话</td>
+                <td class="page_form_title_td" nowrap>&nbsp;单位电话：</td>
                 <td colspan="5" class="page_form_td">
                     <input type="text" <%=readonly%> name="PPHONE3"
                            value="<%=PPHONE3==null?"":PPHONE3%>"
@@ -822,24 +835,24 @@ Description: 个人消费分期付款申请书。
                 </td>
             </tr>
             <tr class='page_form_tr'>
-                <td class="page_form_title_td" nowrap>&nbsp;单位性质</td>
+                <td class="page_form_title_td" nowrap>&nbsp;单位性质：</td>
                 <td colspan="5" class="page_form_td"
                     nowrap><%=level.radioHere("PCLIENTTYPE", "ClientType1", PCLIENTTYPE)%>
                 </td>
             </tr>
             <tr class='page_form_tr'>
-                <td class="page_form_title_td" nowrap>&nbsp;职&nbsp;&nbsp;务</td>
+                <td class="page_form_title_td" nowrap>&nbsp;职&nbsp;&nbsp;务：</td>
                 <td colspan="5" class="page_form_td" nowrap><%=level.levelHere("PTITLE", "Title", PTITLE)%>
                 </td>
             </tr>
             <tr class='page_form_tr'>
-                <td class="page_form_title_td" nowrap>&nbsp;现单位工作时间</td>
+                <td class="page_form_title_td" nowrap>&nbsp;现单位工作时间：</td>
                 <td class="page_form_td">
                     <input type="text" <%=readonly%> name="PSERVFROM"
                            value="<%=PSERVFROM==null?"":PSERVFROM%>"
                            class="page_form_text" maxlength="20"></td>
                 <td class="page_form_td">年</td>
-                <td class="page_form_title_td" nowrap>&nbsp;本地居住时间</td>
+                <td class="page_form_title_td" nowrap>&nbsp;本地居住时间：</td>
                 <td class="page_form_td">
                     <input type="text" <%=readonly%> name="PLIVEFROM"
                            value="<%=PLIVEFROM==null?"":PLIVEFROM%>"
@@ -847,13 +860,13 @@ Description: 个人消费分期付款申请书。
                 <td class="page_form_td">年</td>
             </tr>
             <tr class='page_form_tr'>
-                <td class="page_form_title_td" nowrap>&nbsp;个人电话</td>
+                <td class="page_form_title_td" nowrap>&nbsp;个人电话：</td>
                 <td class="page_form_td">
                     <input type="text" <%=readonly%> name="PPHONE1"
                            value="<%=PPHONE1==null?"":PPHONE1%>"
                            class="page_form_text" maxlength="15"></td>
                 <td class="page_form_td">&nbsp;</td>
-                <td class="page_form_title_td" nowrap>&nbsp;个人月收入</td>
+                <td class="page_form_title_td" nowrap>&nbsp;个人月收入：</td>
                 <td class="page_form_td">
                     <input type="text" <%=readonly%> name="PMONTHLYPAY"
                            value="<%=PMONTHLYPAY==null?"":PMONTHLYPAY%>"
@@ -868,7 +881,7 @@ Description: 个人消费分期付款申请书。
 </tr>
 <tr class='page_form_tr'>
     <td rowspan="5" class="page_left_table_title">拟购商品情况</td>
-    <td class="page_form_title_td">&nbsp;销售单位（名称）</td>
+    <td class="page_form_title_td">销售单位（名称）：</td>
     <td colspan="4" class="page_form_td">
         <%--<input type="text" <%=readonly%> name="CHANNEL"--%>
         <%--value="<%=CHANNEL==null?"":CHANNEL%>"--%>
@@ -881,7 +894,7 @@ Description: 个人消费分期付款申请书。
     <td class="page_form_td" nowrap>&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td">&nbsp;拟购商品名称<br>&nbsp;及型号</td>
+    <td class="page_form_title_td">&nbsp;拟购商品名称<br>&nbsp;及型号：</td>
     <td colspan="4" class="page_form_td">
         <%--<input type="text" <%=readonly%> name="COMMNAME"--%>
         <%--value="<%=COMMNAME==null?"":COMMNAME%>"--%>
@@ -895,7 +908,7 @@ Description: 个人消费分期付款申请书。
     <td class="page_form_td" nowrap>&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;拟购商品使用地址</td>
+    <td class="page_form_title_td" nowrap>拟购商品使用地址：</td>
     <td colspan="4" class="page_form_td">
         <input type="text" <%=readonly%> name="ADDR"
                value="<%=ADDR==null?"":ADDR%>"
@@ -904,24 +917,24 @@ Description: 个人消费分期付款申请书。
     <td class="page_form_td" nowrap>&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;拟购商品数量</td>
+    <td class="page_form_title_td" nowrap>&nbsp;拟购商品数量：</td>
     <td class="page_form_td">
         <input type="text" <%=readonly%> name="NUM"
                value="<%=NUM==null?"":NUM%>"
                class="page_form_text" maxlength="10"></td>
     <td class="page_form_td">台/套</td>
-    <td class="page_form_title_td" nowrap>&nbsp;申请类型</td>
+    <td class="page_form_title_td" nowrap>&nbsp;申请类型：</td>
     <td colspan="2" class="page_form_td"><%=level.radioHere("APPTYPE", "AppType", APPTYPE)%>
     </td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;商品总金额</td>
+    <td class="page_form_title_td" nowrap>&nbsp;商品总金额：</td>
     <td class="page_form_td">
         <input type="text" <%=readonly%> name="AMT"
                value="<%=AMT==null?"":AMT%>"
                class="page_form_text" maxlength="12" onKeyUp="countAppAmt()"></td>
     <td class="page_form_td">元</td>
-    <td>&nbsp;首付款</td>
+    <td class="page_form_title_td">&nbsp;首付款：</td>
     <td class="page_form_td">
         <input type="text" <%=readonly%> name="RECEIVEAMT"
                value="<%=RECEIVEAMT==null?"":RECEIVEAMT%>"
@@ -934,30 +947,30 @@ Description: 个人消费分期付款申请书。
 </tr>
 <tr class='page_form_tr'>
     <td rowspan="3" class="page_left_table_title">申请分期情况</td>
-    <td class="page_form_title_td" nowrap>&nbsp;申请分期总金额￥</td>
+    <td class="page_form_title_td" nowrap>申请分期总金额￥：</td>
     <td class="page_form_td">
         <input type="text" <%=readonly_input%> name="APPAMT"
                value="<%=APPAMT==null?"":APPAMT%>"
                class="page_form_text" maxlength="15"></td>
     <td class="page_form_td">元</td>
-    <td class="page_form_title_td" nowrap>&nbsp;分期期限</td>
+    <td class="page_form_title_td" nowrap>&nbsp;分期期限：</td>
     <td colspan="2" nowrap class="page_form_td"><%=level.radioHere("DIVID", "Divid", DIVID)%>
     </td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;还款方式</td>
+    <td class="page_form_title_td" nowrap>&nbsp;还款方式：</td>
     <td colspan="5" nowrap class="page_form_td"><%=level.radioHere("ACTOPENINGBANK", "Bank4App", ACTOPENINGBANK)%>
     </td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;还款账号</td>
+    <td class="page_form_title_td" nowrap>&nbsp;还款账号：</td>
     <td class="page_form_td">
         <input type="text" <%=readonly%> name="BANKACTNO"
                value="<%=BANKACTNO==null?"":BANKACTNO%>"
                class="page_form_text" maxlength="30">
     </td>
     <td class="page_form_td">&nbsp;</td>
-    <td class="page_form_title_td" nowrap><span id="BANK_UD1" style="display:none">&nbsp;开户行名称</span></td>
+    <td class="page_form_title_td" nowrap><span id="BANK_UD1" style="display:none">&nbsp;开户行名称：</span></td>
     <td nowrap class="page_form_td"><input type="text" id="BANK_UD2" style="display:none" <%=readonly%>
                                            name="ACTOPENINGBANK_UD"
                                            value="<%=ACTOPENINGBANK_UD==null?"":ACTOPENINGBANK_UD%>"
@@ -967,7 +980,7 @@ Description: 个人消费分期付款申请书。
 </table>
 
 <div class="PageNext" id="HA2" style="display:none;">&nbsp;</div>
-<table class="page_form_table" width="650" cellspacing="1" cellpadding="0" border="0">
+<table class="page_form_regTable" width="650" cellspacing="1" cellpadding="0" border="0">
 <COL width=65>
 <COL width=110>
 <COL width=160>
@@ -1054,12 +1067,12 @@ Description: 个人消费分期付款申请书。
     <td rowspan="2" class="page_left_table_title">现有信用<br/>
         使用情况
     </td>
-    <td class="page_form_title_td" nowrap>&nbsp;信用种类</td>
+    <td class="page_form_title_td" nowrap>&nbsp;信用种类：</td>
     <td colspan="5" class="page_form_td" nowrap><%=level.checkHere("CREDITTYPE", "CreditType", CREDITTYPE)%>
     </td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;月均还款额</td>
+    <td class="page_form_title_td" nowrap>&nbsp;月均还款额：</td>
     <td class="page_form_td">
         <input type="text" <%=readonly%> name="MONPAYAMT"
                value="<%=MONPAYAMT==null?"":MONPAYAMT%>"
@@ -1074,7 +1087,7 @@ Description: 个人消费分期付款申请书。
     <td rowspan="2" class="page_left_table_title" nowrap>邮寄地址<br><span
             style="font-size:12px;font-weight:normal; color:red;">（信函、账单地址）</span>
     </td>
-    <td class="page_form_title_td" nowrap>&nbsp;邮寄地址</td>
+    <td class="page_form_title_td" nowrap>&nbsp;邮寄地址：</td>
     <td colspan="4" class="page_form_td" nowrap>
         <input type="text" <%=readonly%> name="RESDADDR"
                value="<%=RESDADDR==null?"":RESDADDR%>"
@@ -1083,7 +1096,7 @@ Description: 个人消费分期付款申请书。
     <td class="page_form_td" nowrap>&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;邮政编码</td>
+    <td class="page_form_title_td" nowrap>&nbsp;邮政编码：</td>
     <td colspan="4" class="page_form_td"><input type="text" <%=readonly%> name="RESDPC"
                                                 value="<%=RESDPC==null?"":RESDPC%>"
                                                 class="page_form_text" maxlength="6"></td>
@@ -1095,40 +1108,40 @@ Description: 个人消费分期付款申请书。
 </tr>
 <tr class='page_form_tr'>
     <td rowspan="5" class="page_left_table_title">第三联系人</td>
-    <td class="page_form_title_td" nowrap>&nbsp;姓&nbsp;&nbsp;名</td>
+    <td class="page_form_title_td" nowrap>&nbsp;姓&nbsp;&nbsp;名：</td>
     <td class="page_form_td">
         <input type="text" <%=readonly%> name="LINKMAN"
                value="<%=LINKMAN==null?"":LINKMAN%>"
                class="page_form_text" maxlength="40"
                onblur="checkLinkname('LINKMAN')"></td>
     <td class="page_form_td">&nbsp;</td>
-    <td class="page_form_title_td" nowrap>&nbsp;性&nbsp;&nbsp;别</td>
+    <td class="page_form_title_td" nowrap>&nbsp;性&nbsp;&nbsp;别：</td>
     <td colspan="2" nowrap class="page_form_td"><%=level.radioHere("LINKMANGENDER", "Gender", LINKMANGENDER)%>
     </td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;手&nbsp;&nbsp;机</td>
+    <td class="page_form_title_td" nowrap>&nbsp;手&nbsp;&nbsp;机：</td>
     <td class="page_form_td">
         <input type="text" <%=readonly%> name="LINKMANPHONE1"
                value="<%=LINKMANPHONE1==null?"":LINKMANPHONE1%>"
                class="page_form_text" maxlength="15"
                onblur="checkLinkPhone('LINKMANPHONE1');"></td>
     <td class="page_form_td">&nbsp;</td>
-    <td class="page_form_title_td" nowrap>&nbsp;固定电话</td>
+    <td class="page_form_title_td" nowrap>&nbsp;固定电话：</td>
     <td nowrap class="page_form_td"><input type="text" <%=readonly%> name="LINKMANPHONE2"
                                            value="<%=LINKMANPHONE2==null?"":LINKMANPHONE2%>"
                                            class="page_form_text" maxlength="15"></td>
     <td class="page_form_td">&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;与申请人关系</td>
+    <td class="page_form_title_td" nowrap>&nbsp;与申请人关系：</td>
     <td colspan="4" class="page_form_td">
         <%=level.radioHere("APPRELATION", "AppRelation", APPRELATION)%>
     </td>
     <td class="page_form_td" nowrap>&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;家庭地址</td>
+    <td class="page_form_title_td" nowrap>&nbsp;家庭地址：</td>
     <td colspan="4" class="page_form_td">
         <input type="text" <%=readonly%> name="LINKMANADD"
                value="<%=LINKMANADD==null?"":LINKMANADD%>"
@@ -1137,13 +1150,27 @@ Description: 个人消费分期付款申请书。
     <td class="page_form_td" nowrap>&nbsp;</td>
 </tr>
 <tr class='page_form_tr'>
-    <td class="page_form_title_td" nowrap>&nbsp;工作单位</td>
+    <td class="page_form_title_td" nowrap>&nbsp;工作单位：</td>
     <td colspan="4" class="page_form_td">
         <input type="text" <%=readonly%> name="LINKMANCOMPANY"
                value="<%=LINKMANCOMPANY==null?"":LINKMANCOMPANY%>"
                class="page_form_text" style="width:100%" maxlength="40">
     </td>
     <td class="page_form_td" nowrap>&nbsp;</td>
+</tr>
+<tr class='page_form_tr'>
+    <td class="page_left_table_title">合约</td>
+    <td class="page_form_title_td" nowrap>&nbsp;同意合约：</td>
+    <td class="page_form_td">
+        <input class="page_form_radio" type="radio" name="grpCon" id="radAgr" checked>同意
+        <input class="page_form_radio" type="radio" name="grpCon" id="radNoAgr">不同意
+    </td>
+    <td colspan="4">
+        <a onclick="window.open('application_preshow.jsp')">查看合约内容</a>
+    </td>
+</tr>
+<tr height="40px">
+    <td colspan="7">&nbsp;</td>
 </tr>
 <tr>
     <td colspan="7" bgcolor="#3366FF" style="margin:0; padding:0" width="100%">
@@ -1205,7 +1232,7 @@ Description: 个人消费分期付款申请书。
         <table border="0" cellspacing="0" cellpadding="0" width="538" class="Noprint">
             <tr class='page_form_tr'>
                 <td nowrap align="center">
-                    <table class='page_button_tbl'>
+                    <table bgcolor="#ffffff">
                         <tr class='page_button_tbl_tr'>
                             <%
                                 if (APPSTATUS.equals("") || APPSTATUS.equals(XFConf.APPSTATUS_TIJIAO)
@@ -1213,7 +1240,7 @@ Description: 个人消费分期付款申请书。
                             %>
                             <td class='page_button_tbl_td'><input type='button' <%=submit%> id='saveadd' name='save'
                                                                   value=' 提 交 ' onClick="return Regvalid();"></td>
-                            <td class='page_button_tbl_td'><input type='button' class='page_button_active' id='addfile'
+                            <td class='page_button_tbl_td'><input type='button' class='btn1_mouseout' id='addfile'
                                                                   name='addfile'
                                                                   value='上传附件'
                                                                   onClick="fileup('<%=XFAPPNO%>','<%=APPSTATUS%>');">
@@ -1240,10 +1267,10 @@ Description: 个人消费分期付款申请书。
                                     }
                                 }
                             %>
-                            <td class='page_button_tbl_td'><input type='button' class='page_button_active' id="print"
+                            <td class='page_button_tbl_td'><input type='button' class='btn1_mouseout' id="print"
                                                                   name='print'
                                                                   onclick="javascript:doPrint()" value=" 打 印 "></td>
-                            <td class='page_button_tbl_td'><input type='hidden' class='page_button_active'
+                            <td class='page_button_tbl_td'><input type='hidden' class='btn1_mouseout'
                                                                   name='button'
                                                                   value=' 关 闭 ' onClick="<%=closeClick%>"></td>
                             <%--<td class='page_button_tbl_td'><input type='button' class='page_button_active' name='button'--%>
