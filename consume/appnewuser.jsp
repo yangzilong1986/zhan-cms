@@ -28,8 +28,8 @@ Description: 个人消费分期客户注册。
 
     String readonly = "";
     String readonly_input = "readonly";
-    String submit = "class='page_button_active'";
-
+//    String submit = "class='page_button_active'";
+    String submit = "class='btn1_mouseout'";
     String title = "个人消费分期付款客户信息";
 %>
 <html>
@@ -41,109 +41,222 @@ Description: 个人消费分期客户注册。
         <!--
         body {
             margin-top: 5px;
+            margin-left:0px;
+            margin-right:0px;
         }
-
+        
         -->
     </style>
+    <script type="text/javascript">
+    function CharMode(ch){
+       if (ch>=48 && ch <=57) //数字
+        return 1;
+       if (ch>=65 && ch <=90) //大写字母
+        return 2;
+       if (ch>=97 && ch <=122) //小写
+        return 4;
+       else
+        return 8; //特殊字符
+    }
+
+    function bitTotal(num){
+       var modes=0;
+       for (i=0;i<4;i++){
+        if (num & 1) modes++;
+        num>>>=1;
+       }
+       return modes;
+    }
+
+    function checkStrong(pwd){ //返回密码的强度级别
+
+       if(pwd.length < 6)
+        return 0;
+       var Modes=0;
+       for (i=0;i<pwd.length;i++){
+        //测试每一个字符的类别并统计一共有多少种模式.
+        Modes |= CharMode(pwd.charCodeAt(i));
+       }
+       return bitTotal(Modes);
+    }
+
+    function pwStrength(pwd){
+       var O_color="#eeeeee";
+       var L_color="#FF0000";
+       var M_color="#FF9900";
+       var H_color="#33CC00";
+       if (pwd==null||pwd==''){
+           document.getElementById("pwdStrenTab").style.display = "none";
+           Lcolor=Mcolor=Hcolor=O_color;
+       }else {
+           document.getElementById("pwdStrenTab").style.display = "inline";
+        var S_level=checkStrong(pwd);
+        switch(S_level) {
+         case 0:
+          Lcolor=Mcolor=Hcolor=O_color;
+         case 1:
+          Lcolor=L_color;
+          Mcolor=Hcolor=O_color;
+          break;
+         case 2:
+          Lcolor=Mcolor=M_color;
+          Hcolor=O_color;
+          break;
+         default:
+          Lcolor=Mcolor=Hcolor=H_color;
+        }
+       }
+       document.getElementById("strength_L").style.background=Lcolor;
+       document.getElementById("strength_M").style.background=Mcolor;
+       document.getElementById("strength_H").style.background=Hcolor;
+       return;
+    }
+    </script>
+
 </head>
-<body background="../images/checks_02.jpg" onload="document.all.NAME.focus();">
-<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+<body onload="document.all.NAME.focus();">
+<div style="width:100%;">
+    <table height="42px" width="100%" border="0" align="left" cellpadding="2" cellspacing="2"
+          >
+        <tr align="left">
+            <td width="30%" style="BACKGROUND: url(../images/headlogo.JPG) no-repeat;"></td>
+
+        </tr>
+    </table>
+</div>
+<div class="navNo">
+</div>
+<div>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr class='page_form_tr'>
         <td align="center" valign="middle">
-            <table height="325" border="2" align="center" cellpadding="2" cellspacing="2" bordercolor="#816A82"
-                   bgcolor="#E0E0D3">
-                <tr align="left">
+            <table width="700px" border="0" align="center" cellpadding="2" cellspacing="2" bordercolor="#816A82"
+                   bgcolor="#ffffff">
+                 <tr align="left">
                     <td height="30" bgcolor="#A4AEB5"><img src="../images/form/xing1.jpg" align="absmiddle"> <font
                             size="2"
                             color="#FFFFFF"><b>海尔集团财务有限责任公司个人消费分期用户注册</b></font>
                         <img src="../images/form/xing1.jpg" align="absmiddle"></td>
                 </tr>
                 <tr align="center">
-                    <td height="260" valign="middle">
-                        <table width="100%" height="100%" cellspacing="0" cellpadding="0" border="0">
-                            <tr class='page_form_tr'>
-                                <td width="20">&nbsp;</td>
-                                <td align="center" valign="middle">
-                                    <script src='../js/main.js' type='text/javascript'></script>
-                                    <script src='../js/check.js' type='text/javascript'></script>
-                                    <script src='../js/checkID2.js' type='text/javascript'></script>
-                                    <form id='winform' method='post' action='./appuser.jsp'>
-                                        <table class='page_form_table' id='page_form_table' width="100%">
-                                            <col width="80"/>
-                                            <col width="145"/>
-                                            <tr class='page_form_tr'>
-                                                <td colspan="5" align="center" class="page_form_List_title">
-                                                    海尔集团财务有限责任公司个人消费分期用户注册
-                                                </td>
-                                            </tr>
-                                            <tr class='page_form_tr'>
-                                                <td class="page_button_tbl_tr" colspan="5" height="5"></td>
-                                            </tr>
+                    <td valign="middle">
+                        <script src='../js/main.js' type='text/javascript'></script>
+                        <script src='../js/check.js' type='text/javascript'></script>
+                        <script src='../js/checkID2.js' type='text/javascript'></script>
+                        <form id='winform' method='post' action='./appuser.jsp'>
+                            <table class='page_form_regTable' border="0" cellpadding="8" id='page_form_table' width="100%">
+                                <col width="100"/>
+                                <col width="150"/>
+                                <col width="300"/>
 
-                                            <tr class='page_form_tr'>
-                                                <td class="page_form_title_td" nowrap>姓&nbsp;&nbsp;名</td>
-                                                <td class="page_form_td" nowrap><input type="text" <%=readonly%>
-                                                                                       name="NAME"
-                                                                                       value="<%=NAME==null?"":NAME%>"
-                                                                                       class="page_form_text" maxlength="40"></td>
-                                            </tr>
-                                            <tr class='page_form_tr'>
-                                                <td class="page_form_title_td" nowrap>身份证件名称</td>
-                                                <td class="page_form_td" nowrap>
-                                                    <%--<select name="IDTYPE" class="page_form_select">--%>
-                                                        <%--<option value='0'>身份证</option>--%>
-                                                    <%--</select>--%>
-                                                    <%=level.levelHere("IDTYPE", "IDType", IDTYPE)%>
-                                                </td>
-                                            <tr class='page_form_tr'>
-                                                <td class="page_form_title_td" nowrap>证件号码</td>
-                                                <td class="page_form_td" nowrap><input type="text" <%=readonly%>
-                                                                                       name="ID" id="ID"
-                                                                                       value="<%=ID==null?"":ID%>"
-                                                                                       class="page_form_text" maxlength="18">
-                                                </td>
-                                            </tr>
-                                            <tr class='page_form_tr'>
-                                                <td class="page_form_title_td" nowrap>密&nbsp;&nbsp;码</td>
-                                                <td class="page_form_td" nowrap><input type="password" <%=readonly%>
-                                                                                       name="PASSWORD" id="PASSWORD"
-                                                                                       value="<%=PASSWORD==null?"":PASSWORD%>"
-                                                                                       class="page_form_text"
-                                                                                       onkeydown='if(event.keyCode==13) event.keyCode=9' maxlength="20">
-                                                </td>
-                                            </tr>
-                                            <tr class='page_form_tr'>
-                                                <td class="page_form_title_td" nowrap>密码确认</td>
-                                                <td class="page_form_td" nowrap><input type="password" <%=readonly%>
-                                                                                       name="PASSWORDR" id="PASSWORDR"
-                                                                                       value=""
-                                                                                       class="page_form_text"
-                                                                                       onkeydown='if(event.keyCode==13) document.getElementById("saveadd").focus();' maxlength="20">
-                                                </td>
-                                            </tr>
-                                            <tr class='page_form_tr'>
-                                                <td class="page_button_tbl_tr" colspan="5" height="5"></td>
-                                            </tr>
-                                        </table>
-                                    </form>
-                                </td>
-                                <td width="20">&nbsp;</td>
-                            </tr>
-                        </table>
+                                <tr class="title1">
+                                    <td colspan="3">
+                                        设置用户名
+                                    </td>
+                                </tr>
+                                <tr class="page_form_tr">
+                                    <td class="page_form_title_td" nowrap>姓&nbsp;&nbsp;名：</td>
+                                    <td class="page_form_td" nowrap><input type="text" <%=readonly%>
+                                                                           name="NAME"
+                                                                           value="<%=NAME==null?"":NAME%>"
+                                                                           class="page_form_text" maxlength="40"></td>
+                                    <td class="remarkCell">
+                                        最多可输入40个字符！
+                                    </td>
+
+                                </tr>
+                                 <tr class="title1">
+                                    <td colspan="3">
+                                        设置证件号
+                                    </td>
+                                </tr>
+                                <tr class='page_form_tr'>
+                                    <td class="page_form_title_td" nowrap>身份证件名称：</td>
+                                    <td class="page_form_td" nowrap>
+                                        <%--<select name="IDTYPE" class="page_form_select">--%>
+                                            <%--<option value='0'>身份证</option>--%>
+                                        <%--</select>--%>
+                                        <%=level.levelHere("IDTYPE", "IDType", IDTYPE)%>
+                                    </td>
+                                    <td class="remarkCell">
+                                        请选择你要输入的身份证明种类
+                                    </td>
+                                </tr>
+                                <tr class='page_form_tr'>
+                                    <td class="page_form_title_td" nowrap>证件号码：</td>
+                                    <td class="page_form_td" nowrap><input type="text" <%=readonly%>
+                                                                           name="ID" id="ID"
+                                                                           value="<%=ID==null?"":ID%>"
+                                                                           class="page_form_text" maxlength="18">
+                                    </td>
+                                    <td class="remarkCell">
+                                        请输入正确的身份信息
+                                    </td>
+
+                                </tr>
+                                 <tr class="title1">
+                                    <td colspan="3">
+                                        设置密码
+                                    </td>
+                                </tr>
+                                <tr class='page_form_tr'>
+                                    <td class="page_form_title_td" nowrap>密&nbsp;&nbsp;码：</td>
+                                    <td class="page_form_td" nowrap><input type="password" <%=readonly%>
+                                                                           name="PASSWORD" id="PASSWORD"
+                                                                           value="<%=PASSWORD==null?"":PASSWORD%>"
+                                                                           class="page_form_text"
+                                                                           onKeyUp=pwStrength(this.value) onBlur=pwStrength(this.value)
+                                                                           onkeydown='if(event.keyCode==13) event.keyCode=9' maxlength="20">
+
+                                    </td>
+                                    <td class="remarkCell">
+                                        为了账户安全，请您尽量使用英文字母、数字和字符的组合
+                                    </td>
+                                </tr>
+                                <tr id="pwdStrenTab" style='display:none;'>
+                                    <td>&nbsp;</td>
+                                    <td>
+                                        <table width="160px" border="0" cellspacing="0" cellpadding="0">
+                                        <tr align="center" bgcolor="#eeeeee">
+                                           <td width="33%" id="strength_L">弱</td>
+                                           <td width="33%" id="strength_M">中</td>
+                                           <td width="33%" id="strength_H">强</td>
+                                        </tr>
+                                    </table>
+                                    </td>
+                                </tr>
+                                <tr class='page_form_tr'>
+                                    <td class="page_form_title_td" nowrap>密码确认：</td>
+                                    <td class="page_form_td" nowrap><input type="password" <%=readonly%>
+                                                                           name="PASSWORDR" id="PASSWORDR"
+                                                                           value=""
+                                                                           class="page_form_text"
+                                                                           onkeydown='if(event.keyCode==13) document.getElementById("saveadd").focus();' maxlength="20">
+                                    </td>
+                                    <td class="remarkCell">
+                                        请再输入一遍您设置的密码
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
                     </td>
                 </tr>
-                <tr height="35" align="center" valign="middle">
+                <tr height="10px">
+                    <td style="border-bottom:#3366FF 1px solid;">&nbsp;</td>
+                </tr>
+                <tr height="30px" align="center" valign="top">
                     <td align="center">
                         <table border="0" cellspacing="0" cellpadding="0" width="538">
                             <tr class='page_form_tr'>
                                 <td nowrap align="center">
-                                    <table class='page_button_tbl'>
+                                    <table bgcolor="#ffffff">
                                         <tr class='page_button_tbl_tr'>
-                                            <td class='page_button_tbl_td'><input type='button' <%=submit%> id='goback'
+                                            <td class='page_button_tbl_td'><input style="width:90px;" type='button' <%=submit%> id='goback'
                                                                                   name='goback'
                                                                                   value=' 返 回 '
                                                                                   onClick="history.go(-1)"></td>
-                                            <td class='page_button_tbl_td'><input type='button' <%=submit%> id='saveadd'
+                                            <td class='page_button_tbl_td'><input style="width:90px;" type='button' <%=submit%> id='saveadd'
                                                                                   name='save'
                                                                                   value=' 下一步 '
                                                                                   onClick="return Regvalid();"></td>
@@ -163,6 +276,7 @@ Description: 个人消费分期客户注册。
         </td>
     </tr>
 </table>
+</div>
 </body>
 </html>
 
@@ -200,7 +314,7 @@ Description: 个人消费分期客户注册。
         }
         return true;
     }
-
+    //
 
     function Regvalid() {
         if (goSave()) {

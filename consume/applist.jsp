@@ -68,7 +68,7 @@ Description:  消费信贷-个人消费分期付款申请列表。
     if (count == 0 || !SID.equals("")) {
 %>
 <%--<jsp:forward page="application_start.jsp?goUrl=../app.jsp"/>--%>
-<jsp:forward page="application_preshow_shangcheng.jsp?goUrl=../app.jsp"/>
+<jsp:forward page="application_preshow.jsp?goUrl=../app.jsp"/>
 <%
 } else {
     if (NAME.equals("") && crs.next()) {
