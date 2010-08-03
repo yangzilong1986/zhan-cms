@@ -1,7 +1,42 @@
+
+/*
+haiyu add
+*/
+.navNo {
+    width:100%;
+	BACKGROUND: url(../images/nav_no.gif) repeat-x; WIDTH: 100%; LINE-HEIGHT: 15px;
+    HEIGHT: 15px;
+    margin-right:0px;
+    margin-left:0px;
+}
+
+.page_form_regTable{
+    font-family: "ËÎÌו", Courier New, Arial;
+    font-size: 12px;
+    color: #525152;
+}
+.btn1_mouseout {
+	border-style:none;
+	FONT-SIZE: 10pt;
+	background-image:url(../images/btnbg.gif);
+	CURSOR: hand;
+	COLOR: black;
+	height:26px;
+}
+.remarkCell{
+    color:red;font-size:10pt;
+}
+.title1{
+    font-size:12pt;font-weight:bold;
+    vertical-align:text-bottom;
+    height:50px;
+}
+
+
 .page_form_table {
     font-family: "ËÎÌו", Courier New, Arial;
     font-size: 12px;
-    color: #000000;
+    color: #525152;
     background-color: #F7F5EE;
     border-right-color: #F7F5EE;
     border-bottom-color: #F7F5EE;
@@ -20,13 +55,13 @@
 .page_form_table_slide {
     font-family: "ËÎÌו", Courier New, Arial;
     font-size: 12px;
-    color: #000000;
+    color: #525152;
     background-color: #F7F5EE;
     border:none;
 }
 
 .page_form_tr {
-
+    height:30px;
 }
 
 .page_form_td {
@@ -60,9 +95,9 @@
 }
 
 .page_form_title_td {
-    text-align: left;
+    text-align: right;
     font-weight: normal;
-    background-color: #F1F1F1;
+    background-color: #EFEBEF;
 }
 
 .page_form_refbutton {
@@ -89,10 +124,10 @@
     font-size: 12px;
     background-color: #FFFFFF;
     color: #000000;
-    border-top-color: #F7F5EE;
-    border-right-color: #F7F5EE;
-    border-bottom-color: #F7F5EE;
-    border-left-color: #F7F5EE;
+    border-top-color: #7B9EBD;
+    border-right-color: #7B9EBD;
+    border-bottom-color: #7B9EBD;
+    border-left-color: #7B9EBD;
     border-top-style: groove;
     border-top-width: thin;
     border-right-style: groove;
@@ -101,6 +136,7 @@
     border-bottom-width: thin;
     border-left-style: groove;
     border-left-width: thin;
+    
 }
 
 /*zhanrui*/
@@ -109,10 +145,10 @@
     font-size: 12px;
     background-color: #FFFFFF;
     color: #666666;
-    border-top-color: #F7F5EE;
-    border-right-color: #F7F5EE;
-    border-bottom-color: #F7F5EE;
-    border-left-color: #F7F5EE;
+    border-top-color: #7B9EBD;
+    border-right-color: #7B9EBD;
+    border-bottom-color: #7B9EBD;
+    border-left-color: #7B9EBD;
     border-top-style: groove;
     border-top-width: thin;
     border-right-style: groove;
@@ -138,7 +174,10 @@
 .page_form_text {
     background-color: #FFFFFF;
     color: #04010C;
-    border-top-color: #F7F5EE;
+    border:#7B9EBD 1px solid;
+    height:20px;
+    width: 160px;
+    /*border-top-color: #F7F5EE;
     border-right-color: #F7F5EE;
     border-bottom-color: #F7F5EE;
     border-left-color: #F7F5EE;
@@ -149,8 +188,7 @@
     border-top-width: thin;
     border-right-width: thin;
     border-bottom-width: thin;
-    border-left-width: thin;
-    width: 160px;
+    border-left-width: thin;*/
 }
 
 /*zhanrui*/
@@ -195,10 +233,11 @@
     width: 100%;
     background-color: #FFFFFF;
     color: #04010C;
-    border-top-color: #F7F5EE;
-    border-right-color: #F7F5EE;
-    border-bottom-color: #F7F5EE;
-    border-left-color: #F7F5EE;
+     border:#7B9EBD 1px solid;
+    /*border-top-color: #7B9EBD;
+    border-right-color: #7B9EBD;
+    border-bottom-color: #7B9EBD;
+    border-left-color: #7B9EBD;
     border-top-style: groove;
     border-right-style: groove;
     border-bottom-style: groove;
@@ -206,7 +245,7 @@
     border-top-width: thin;
     border-right-width: thin;
     border-bottom-width: thin;
-    border-left-width: thin;
+    border-left-width: thin;*/
 }
 
 .page_form_password {
@@ -708,10 +747,10 @@
 
 }
 
-body {
+/*body {
     margin-top: 5px;
     background-image: url(../images/checks_02.jpg);
-}
+}*/
 
 .error_message_li {
 
@@ -788,7 +827,7 @@ body {
     text-align: center;
     font-weight: bold;
 	color:#309;
-    background-color: #FDF8DF;
+    background-color: #FDF8DF;     /* FDF8DF DE0A0A*/
     border: 1px solid #CCCCCC;
 }
 
