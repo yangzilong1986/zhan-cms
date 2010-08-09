@@ -78,6 +78,16 @@
 
         -->
     </style>
+  
+    <%
+        String sid = (String)session.getAttribute("SID");
+        sid = (sid == null)?"":sid;
+        if (sid.equals("001")) {
+    %>
+      <jsp:forward page="application_preshow2.jsp"></jsp:forward>
+    <%
+        } else {
+    %>
   </head>
   <body>
   <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
@@ -584,4 +594,7 @@
     </tr>
 </table>
   </body>
+<%
+    }
+%>
 </html>
