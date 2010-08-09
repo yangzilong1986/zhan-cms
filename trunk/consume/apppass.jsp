@@ -53,6 +53,7 @@ Description: 个人消费分期客户密码修改。
 <head>
     <title>消费信贷</title>
     <link href="../css/platform.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../js/pwdCheck.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=GBK">
     <style type="text/css">
         <!--
@@ -117,13 +118,13 @@ Description: 个人消费分期客户密码修改。
                                             <input type="hidden" name="IDTYPE" value="<%=IDTYPE%>">
                                             <input type="hidden" name="ID" value="<%=ID%>">
                                             <tr class='page_form_tr'>
-                                                <td class="page_form_title_td" nowrap>姓&nbsp;&nbsp;名</td>
+                                                <td class="page_form_title_td" nowrap>姓&nbsp;&nbsp;名：</td>
                                                 <td class="page_form_td" nowrap><%=NAME == null ? "" : NAME%>
                                                 </td>
                                             </tr>
                                             <%} else {%>
                                             <tr class='page_form_tr'>
-                                                <td class="page_form_title_td" nowrap>身份证件名称</td>
+                                                <td class="page_form_title_td" nowrap>身份证件名称：</td>
                                                 <td class="page_form_td" nowrap><select name="IDTYPE"
                                                                                         class="page_form_select">
                                                     <option value='0'>身份证</option>
@@ -132,7 +133,7 @@ Description: 个人消费分期客户密码修改。
                                                 </td>
                                             </tr>
                                             <tr class='page_form_tr'>
-                                                <td class="page_form_title_td" nowrap>证件号码</td>
+                                                <td class="page_form_title_td" nowrap>证件号码：</td>
                                                 <td class="page_form_td" nowrap><input type="text" <%=readonly%>
                                                                                        name="ID" id="ID"
                                                                                        value="<%=ID==null?"":ID%>"
@@ -142,7 +143,7 @@ Description: 个人消费分期客户密码修改。
                                             </tr>
                                             <%}%>
                                             <tr class='page_form_tr'>
-                                                <td class="page_form_title_td" nowrap>原密码</td>
+                                                <td class="page_form_title_td" nowrap>原密码：</td>
                                                 <td class="page_form_td" nowrap><input type="password" <%=readonly%>
                                                                                        name="OLDPASSWORD"
                                                                                        id="OLDPASSWORD"
@@ -150,16 +151,31 @@ Description: 个人消费分期客户密码修改。
                                                                                        class="page_form_text">
                                                 </td>
                                             </tr>
+                                            
                                             <tr class='page_form_tr'>
-                                                <td class="page_form_title_td" nowrap>新密码</td>
+                                                <td class="page_form_title_td" nowrap>新密码：</td>
                                                 <td class="page_form_td" nowrap><input type="password" <%=readonly%>
                                                                                        name="PASSWORD" id="PASSWORD"
                                                                                        value=""
+                                                                                       onKeyUp=pwStrength(this.value) onBlur=pwStrength(this.value)
+                                                                                       onkeydown='if(event.keyCode==13) event.keyCode=9'
                                                                                        class="page_form_text">
                                                 </td>
                                             </tr>
+                                            <tr id="pwdStrenTab" style='display:none;'>
+                                                <td>&nbsp;</td>
+                                                <td>
+                                                    <table width="160px" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr align="center" bgcolor="#eeeeee">
+                                                       <td width="33%" id="strength_L">弱</td>
+                                                       <td width="33%" id="strength_M">中</td>
+                                                       <td width="33%" id="strength_H">强</td>
+                                                    </tr>
+                                                </table>
+                                                </td>
+                                            </tr>
                                             <tr class='page_form_tr'>
-                                                <td class="page_form_title_td" nowrap>密码确认</td>
+                                                <td class="page_form_title_td" nowrap>密码确认：</td>
                                                 <td class="page_form_td" nowrap><input type="password" <%=readonly%>
                                                                                        name="PASSWORDR" id="PASSWORDR"
                                                                                        value=""
@@ -167,7 +183,7 @@ Description: 个人消费分期客户密码修改。
                                                 </td>
                                             </tr>
                                             <tr class='page_form_tr'>
-                                                <td class="page_button_tbl_tr" colspan="5" height="5"></td>
+                                                <td class="page_button_tbl_tr" colspan="5" height="0"></td>
                                             </tr>
                                         </table>
                                     </form>
