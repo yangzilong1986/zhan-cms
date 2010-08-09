@@ -92,7 +92,9 @@ Description:  消费信贷-个人消费分期付款申请列表。
     </style>
     <script language="JavaScript" type="text/JavaScript">
         function info(APPNO, NAME, IDTYPE, ID, PASSWORD, APPSTATUS) {
-            var url = "./application_preshow.jsp?APPNO=" + APPNO + "&NAME=" + NAME + "&IDTYPE=" + IDTYPE + "&ID=" + ID + "&PASSWORD=" + PASSWORD + "&APPSTATUS=" + APPSTATUS + "&showinfo=0";
+            //haiyu 2010-08-09
+            var   url = "./application_start.jsp?NAME=" + NAME + "&IDTYPE=" + IDTYPE + "&ID=" + ID + "&PASSWORD=" + PASSWORD;
+//            var url = "./application_preshow.jsp?APPNO=" + APPNO + "&NAME=" + NAME + "&IDTYPE=" + IDTYPE + "&ID=" + ID + "&PASSWORD=" + PASSWORD + "&APPSTATUS=" + APPSTATUS + "&showinfo=0";
             window.open(url, 'APPLICATION', 'left=0,top=0,height=700,width=870,toolbar=no,scrollbars=yes,resizable=yes');
         }
         function info_xiangxi(APPNO, NAME, IDTYPE, ID, PASSWORD, APPSTATUS) {
