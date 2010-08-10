@@ -142,7 +142,8 @@
     </style>
     <script language="JavaScript" type="text/JavaScript">
         function info(APPNO, NAME, IDTYPE, ID, PASSWORD, APPSTATUS) {
-            var url = "./application.jsp?APPNO=" + APPNO + "&NAME=" + NAME + "&IDTYPE=" + IDTYPE + "&ID=" + ID + "&PASSWORD=" + PASSWORD + "&APPSTATUS=" + APPSTATUS + "&showinfo=0";
+//            var url = "./application.jsp?APPNO=" + APPNO + "&NAME=" + NAME + "&IDTYPE=" + IDTYPE + "&ID=" + ID + "&PASSWORD=" + PASSWORD + "&APPSTATUS=" + APPSTATUS + "&showinfo=0";
+            var url = "./application_start.jsp?APPNO=" + APPNO + "&NAME=" + NAME + "&IDTYPE=" + IDTYPE + "&ID=" + ID + "&PASSWORD=" + PASSWORD + "&APPSTATUS=" + APPSTATUS + "&showinfo=0";
             window.open(url, 'APPLICATION', 'left=0,top=0,height=700,width=870,toolbar=no,scrollbars=yes,resizable=yes');
         }
         function info1(NAME, IDTYPE, ID, PASSWORD) {
@@ -667,7 +668,7 @@
                                             <td class="style4">&nbsp;</td>
                                             <td class="list_form_button_td"><input type="button" name="a" class="style5"
                                                                                    value="同意（开始填写申请信息）"
-                                                                                   onclick="return req1();"></td>
+                                                                                   onclick="return req();"></td>
                                             <td class="style4">&nbsp;</td>
                                             <%--<script language="javascript" type="text/javascript">--%>
                                             <%--createFlipPage(<%=pn%><caption class="style4">, <%=ps%>, <%=rows%>, "applist.jsp?pn=", "form1");--%>
