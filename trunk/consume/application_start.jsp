@@ -347,7 +347,7 @@ Description: 个人消费分期付款申请书。
 
         String readonly = "";
         String readonly_input = "readonly";
-        String submit = "class='btn1_mouseout'";
+        String submit = "class='btn_2k3'";
         String title = "个人消费分期付款申请书";
 
         if (ifErrClient) {
@@ -1240,7 +1240,7 @@ Description: 个人消费分期付款申请书。
                             %>
                             <td class='page_button_tbl_td'><input type='button' <%=submit%> id='saveadd' name='save'
                                                                   value=' 提 交 ' onClick="return Regvalid();"></td>
-                            <td class='page_button_tbl_td'><input type='button' class='btn1_mouseout' id='addfile'
+                            <td class='page_button_tbl_td'><input type='button' class='btn_2k3' id='addfile'
                                                                   name='addfile'
                                                                   value='上传附件'
                                                                   onClick="fileup('<%=XFAPPNO%>','<%=APPSTATUS%>');">
@@ -1267,10 +1267,10 @@ Description: 个人消费分期付款申请书。
                                     }
                                 }
                             %>
-                            <td class='page_button_tbl_td'><input type='button' class='btn1_mouseout' id="print"
+                            <td class='page_button_tbl_td'><input type='button' class='btn_2k3' id="print"
                                                                   name='print'
                                                                   onclick="javascript:doPrint()" value=" 打 印 "></td>
-                            <td class='page_button_tbl_td'><input type='hidden' class='btn1_mouseout'
+                            <td class='page_button_tbl_td'><input type='hidden' class='btn_2k3'
                                                                   name='button'
                                                                   value=' 关 闭 ' onClick="<%=closeClick%>"></td>
                             <%--<td class='page_button_tbl_td'><input type='button' class='page_button_active' name='button'--%>

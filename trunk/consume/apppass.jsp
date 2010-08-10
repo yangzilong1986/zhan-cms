@@ -46,7 +46,7 @@ Description: 个人消费分期客户密码修改。
     }
 } else {
     String readonly = "";
-    String submit = "class='btn1_mouseout'";
+    String submit = "class='btn_2k3'";
     String title = "个人密码修改";
 %>
 <html>

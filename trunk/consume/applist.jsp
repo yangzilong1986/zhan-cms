@@ -239,30 +239,30 @@ Description:  消费信贷-个人消费分期付款申请列表。
                                         <table class='list_button_tbl'>
                                             <tr class="list_button_tbl_tr">
                                                 <td class="list_form_button_td"><input type='button' name='a'
-                                                                                       class='list_button_active'
+                                                                                       class='btn_2k3'
                                                                                        value='新申请'
                                                                                        onclick="return req();"></td>
                                                 <td class="list_form_button_td"><input type='button' name='a'
-                                                                                       class='list_button_active'
+                                                                                       class='btn_2k3'
                                                                                        value='修改个人信息'
                                                                                        onclick="return req1();"></td>
                                                 <td class="list_form_button_td"><input type='button' name='a'
-                                                                                       class='list_button_active'
+                                                                                       class='btn_2k3'
                                                                                        value='修改密码'
                                                                                        onclick="return req2();"></td>
                                                 <script language="javascript" type="text/javascript">
                                                     createFlipPage(<%=pn%>, <%=ps%>, <%=rows%>, "applist.jsp?pn=", "form1");
                                                 </script>
                                                 <td class="list_form_button_td"><input type='button' name='submit5'
-                                                                                       class='list_button_active'
+                                                                                       class='btn_2k3'
                                                                                        value=' 刷新 ' onClick="submit();">
                                                 </td>
                                                 <td class="list_form_button_td"><input type='submit' name='a'
-                                                                                       class='list_button_active'
+                                                                                       class='btn_2k3'
                                                                                        value=' 关闭 '
                                                                                        onclick="window.close();"></td>
                                                 <td class="list_form_button_td"><input type='button' name='a'
-                                                                                       class='list_button_active'
+                                                                                       class='btn_2k3'
                                                                                        value=' 返回 '
                                                                                        onclick="location='../app.jsp'">
                                                 </td>

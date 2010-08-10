@@ -29,7 +29,7 @@ Description: 个人消费分期客户注册。
     String readonly = "";
     String readonly_input = "readonly";
 //    String submit = "class='page_button_active'";
-    String submit = "class='btn1_mouseout'";
+    String submit = "class='btn_2k3'";
     String title = "个人消费分期付款客户信息";
 %>
 <html>
