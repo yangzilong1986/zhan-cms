@@ -157,7 +157,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td align="right"
-                                                        style="font-weight: bold; font-size: 12px; color:white">dµÇÂ¼¿ÚÁî£º
+                                                        style="font-weight: bold; font-size: 12px; color:white">µÇÂ¼¿ÚÁî£º
                                                     </td>
                                                     <td><input type='password' size=20 name=PASSWORD
                                                                title='µÇÂ¼¿ÚÁî' maxlength="20"

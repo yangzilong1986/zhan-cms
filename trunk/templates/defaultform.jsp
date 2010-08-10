@@ -41,8 +41,8 @@
         -->
     </style>
 </head>
-<body>
-<%--<body background="../images/checks_02.jpg">--%>
+<%--<body>--%>
+<body background="../images/bks.gif">
 <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td align="center" valign="middle">
