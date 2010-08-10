@@ -108,7 +108,7 @@ Description:  消费信贷-个人消费分期付款申请列表。
     </script>
     <script language="javascript" type="text/JavaScript" src="/js/flippage.js"></script>
 </head>
-<body background="/images/checks_02.jpg">
+<body>
 <br>
 <br>
 <form action="applist.jsp" name="form1" method="post">
