@@ -504,7 +504,7 @@ Description: 个人消费分期付款申请书。
 <table height="42px" width="100%" border="0" align="left" cellpadding="2" cellspacing="2"
           >
         <tr align="left">
-            <td width="30%" style="BACKGROUND: url(../images/headlogo.JPG) no-repeat;"></td>
+            <td width="30%" style="BACKGROUND: url(../images/top_logo.gif) no-repeat;"></td>
 
         </tr>
     </table>
