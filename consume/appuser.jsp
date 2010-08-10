@@ -151,7 +151,7 @@ Description: 个人消费分期客户注册。
         String readonly = "";
         String readonly_input = "readonly";
 //        String submit = "class='page_button_active'";
-        String submit = "class='btn1_mouseout'";
+        String submit = "class='btn_2k3'";
         String title = "个人消费分期付款客户信息";
 
 
@@ -433,7 +433,7 @@ Description: 个人消费分期客户注册。
                                                                   onClick="history.go(-1)"></td>
                             <td class='page_button_tbl_td'><input style="width:90px;" type='button' <%=submit%> id='saveadd' name='save'
                                                                   value=' 提 交 ' onClick="return Regvalid();"></td>
-                            <td class='page_button_tbl_td'><input type='button' style="width:90px;" class='btn1_mouseout' name='button'
+                            <td class='page_button_tbl_td'><input type='button' style="width:90px;" class='btn_2k3' name='button'
                                                                   value=' 关 闭 ' onClick="<%=closeClick%>"></td>
                         </tr>
                     </table>
