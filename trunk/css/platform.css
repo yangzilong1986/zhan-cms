@@ -139,7 +139,7 @@ haiyu add
     border-bottom-width: thin;
     border-left-style: groove;
     border-left-width: thin;
-    
+
 }
 
 /*zhanrui*/
@@ -161,6 +161,7 @@ haiyu add
     border-left-style: groove;
     border-left-width: thin;
 }
+
 .page_form_radio {
     border-color: #F7F5EE;
 }
@@ -175,12 +176,21 @@ haiyu add
 }
 
 .page_form_text {
+    BORDER-RIGHT: #ccc 1px solid;
+    BORDER-TOP: #ccc 1px solid;
+    BORDER-LEFT: #ccc 1px solid;
+    BORDER-BOTTOM: #ccc 1px solid;
+    PADDING-TOP: 2px;
+    PADDING-BOTTOM: 2px;
+    background-color: #FFFFFF;
+    height: 22px;
+    width: 160px;
+}
+
+.page_form_text_org {
     background-color: #FFFFFF;
     color: #04010C;
-    border:#7B9EBD 1px solid;
-    height:20px;
-    width: 160px;
-    /*border-top-color: #F7F5EE;
+    border-top-color: #F7F5EE;
     border-right-color: #F7F5EE;
     border-bottom-color: #F7F5EE;
     border-left-color: #F7F5EE;
@@ -191,11 +201,27 @@ haiyu add
     border-top-width: thin;
     border-right-width: thin;
     border-bottom-width: thin;
-    border-left-width: thin;*/
+    border-left-width: thin;
+    width: 160px;
 }
 
 /*zhanrui*/
 .page_form_text_readonly {
+    color: #666666;
+
+    BORDER-RIGHT: #ccc 1px solid;
+    BORDER-TOP: #ccc 1px solid;
+    BORDER-LEFT: #ccc 1px solid;
+    BORDER-BOTTOM: #ccc 1px solid;
+    PADDING-TOP: 2px;
+    PADDING-BOTTOM: 2px;
+    background-color: #FFFFFF;
+    height: 20px;
+    width: 160px;
+}
+
+/*zhanrui*/
+.page_form_text_readonly_org {
     background-color: #FFFFFF;
     color: #666666;
     border-top-color: #F7F5EE;
@@ -236,11 +262,10 @@ haiyu add
     width: 100%;
     background-color: #FFFFFF;
     color: #04010C;
-     border:#7B9EBD 1px solid;
-    /*border-top-color: #7B9EBD;
-    border-right-color: #7B9EBD;
-    border-bottom-color: #7B9EBD;
-    border-left-color: #7B9EBD;
+    border-top-color: #F7F5EE;
+    border-right-color: #F7F5EE;
+    border-bottom-color: #F7F5EE;
+    border-left-color: #F7F5EE;
     border-top-style: groove;
     border-right-style: groove;
     border-bottom-style: groove;
@@ -248,7 +273,7 @@ haiyu add
     border-top-width: thin;
     border-right-width: thin;
     border-bottom-width: thin;
-    border-left-width: thin;*/
+    border-left-width: thin;
 }
 
 .page_form_password {
@@ -750,10 +775,10 @@ haiyu add
 
 }
 
-/*body {
+body {
     margin-top: 5px;
-    background-image: url(../images/checks_02.jpg);
-}*/
+    background-image: url(../images/bks.gif);
+}
 
 .error_message_li {
 
@@ -829,11 +854,10 @@ haiyu add
     font-size: 12px;
     text-align: center;
     font-weight: bold;
-	color:#309;
-    background-color: #FDF8DF;     /* FDF8DF DE0A0A*/
+    color: #309;
+    background-color: #FDF8DF;
     border: 1px solid #CCCCCC;
 }
-
 
 A.link_gray:link {
     COLOR: #C8ADFE;
