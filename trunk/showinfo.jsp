@@ -152,12 +152,12 @@
                         <%
                             if (strIsBack == null || strIsBack.equals("1")) {
                         %>
-                        <input class="list_button_active" type="button" name="ok" value=" 上一步 "
+                        <input class="btn_2k3" type="button" name="ok" value=" 上一步 "
                                onClick="history.go(-1)">
                         <%
                             }
                         %>
-                        <input class="list_button_active" type="button" name="close" value=" 确 定 "
+                        <input class="btn_2k3" type="button" name="close" value=" 确 定 "
                                onClick="<%=closeClick%>">
                     </td>
                 </tr>
