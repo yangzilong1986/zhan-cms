@@ -97,6 +97,18 @@
                     //如果是文件对象
                     if (!item.isFormField()) {
                         filenm = FILETP + OPNO + "_" + item.getName().substring(item.getName().lastIndexOf("\\") + 1, item.getName().length());
+                        String  extnm = filenm.substring(filenm.length()-3,filenm.length());
+                        if (extnm.equalsIgnoreCase("jsp")
+                                ||extnm.equalsIgnoreCase("xls")
+                                ||extnm.equalsIgnoreCase("bat")
+                                ||extnm.equalsIgnoreCase("exe")
+                                ||extnm.equalsIgnoreCase("com")) {
+                            session.setAttribute("msg", "上传文件类型不在允许范围内！");
+                            session.setAttribute("isback", "0");
+                            session.setAttribute("goUrl", "./fileupdown/fileup.jsp?OPNO=" + OPNO + "&FILETP=APP");
+                            response.sendRedirect("../showinfo.jsp");
+                            return;
+                        }
 
                         //如果是文本文件，可以直接显示
                         //out.println(item.getString());
