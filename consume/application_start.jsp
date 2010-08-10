@@ -1166,7 +1166,7 @@ Description: 个人消费分期付款申请书。
         <input class="page_form_radio" type="radio" name="grpCon" id="radNoAgr">不同意
     </td>
     <td colspan="4" valign="bottom">
-        <a onclick="window.open('application_preshow1.jsp')" style="color:red;" href="#about:blank">查看合约内容</a>
+        <a onclick="window.open('/consume/application_preshow1.jsp')" style="color:red;" href="#about:blank">查看合约内容</a>
     </td>
 </tr>
 <tr height="40px">
