@@ -181,14 +181,14 @@ function MTMDisplayMenu() {
         MTMOutputString += '	var menuAppear = true;\n';
         MTMOutputString += '	function menuMove(){\n';
         MTMOutputString += '		if(menuAppear){\n';
-        MTMOutputString += '			parent.document.all("middle").cols="8,*";\n';
+        MTMOutputString += '			parent.document.all("middle").cols="9,*";\n';
         MTMOutputString += '			document.all("menuDiv").style.display="none";\n';
-        MTMOutputString += '			document.all("menuhandle").src="images/menu-images/button2.jpg";\n';
+        MTMOutputString += '			document.all("menuhandle").src="images/menu-images/splitter_r.gif";\n';
         MTMOutputString += '			menuAppear = false;\n';
         MTMOutputString += '		} else {\n';
-        MTMOutputString += '			parent.document.all("middle").cols="170,*";\n';
+        MTMOutputString += '			parent.document.all("middle").cols="180,*";\n';
         MTMOutputString += '			document.all("menuDiv").style.display="";\n';
-        MTMOutputString += '			document.all("menuhandle").src="images/menu-images/button1.jpg";\n';
+        MTMOutputString += '			document.all("menuhandle").src="images/menu-images/splitter_l.gif";\n';
         MTMOutputString += '			menuAppear = true;\n';
         MTMOutputString += '		}\n';
         MTMOutputString += '	}\n';
@@ -211,7 +211,7 @@ function MTMDisplayMenu() {
         MTMListItems(menu);
 
         //MTMDoc.writeln('<\/table>'+MTMFooter+'\n<\/body>\n<\/html>');
-        MTMDoc.writeln('<\/table>\n<\/div>\n</td><td align="right" width="8" background="images/menu-images/menu_border_right.jpg"><img id="menuhandle" src="images/menu-images/button1.jpg" onclick="menuMove()" style="cursor:hand;"/></td></tr></table>' + MTMFooter + '\n<\/body>\n<\/html>');
+        MTMDoc.writeln('<\/table>\n<\/div>\n</td><td align="right" width="9" background="images/menu-images/splitter_bg.gif"><img id="menuhandle" src="images/menu-images/splitter_l.gif" onclick="menuMove()" style="cursor:hand;"/></td></tr></table>' + MTMFooter + '\n<\/body>\n<\/html>');
         //MTMDoc.writeln('<\/table>\n</td></tr></table>'+MTMFooter+'\n<\/body>\n<\/html>');
         MTMDoc.close();
 
@@ -353,9 +353,9 @@ function MTMDisplayItem(item, last) {
         //               img = (last) ? "menu_corner_plus.gif" : "menu_tee_plus.gif";
         //          }
         if (item.expanded) {
-            img = (last) ? "HaveSub.gif" : "HaveSub.gif";
+            img = (last) ? "folderOpen.gif" : "folderOpen.gif";
         } else {
-            img = (last) ? "HaveSub.gif" : "HaveSub.gif";
+            img = (last) ? "folderClosed.gif" : "folderClosed.gif";
         }
     } else {
         img = (last) ? "menu_pixel.gif" : "menu_pixel.gif";
@@ -555,7 +555,7 @@ function MTMakeLink(thisItem, voidURL, addName, addTitle, clickEvent, mouseOverE
 // Noted by WangHaiLei: The function is used to transform the iamges to the same size and format.
 function MTMakeImage(thisImage) {
 
-    return('<img src="' + MTMUA.preHREF + MTMenuImageDirectory + thisImage + '" align="left" valign="middle" border="0" vspace="0" hspace="0" width="12" height="12">');
+    return('<img src="' + MTMUA.preHREF + MTMenuImageDirectory + thisImage + '" align="left" valign="middle" border="0" vspace="0" hspace="0" width="16" height="16">');
 }
 
 function MTMakeBackImage(thisImage) {
