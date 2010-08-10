@@ -37,7 +37,7 @@ public class CCBWLPTManager {
 //    private static String merchantAcctId = PropertyManager.getProperty("CCB_merchantAcctId");
 
     private String merchantAcctId = "105370257320044";
-    private String userId = "370200018079470-001";
+    private String userId = "370200018079469-001";
     private String key = "000000";
 
     //WLPT测试环境地址
@@ -238,12 +238,12 @@ public class CCBWLPTManager {
         message.append("<TX_INFO>");
         //授权号
         message.append("<AUTHID>");
-//        message.append(detl.getCustomerCode());
-        message.append("123456789");
+        message.append(detl.getCustomerCode());
+//        message.append("ccb0000000218");
         message.append("</AUTHID>");
         //定单号
         message.append("<ORDERID>");
-        //todo ?
+        //todo ?   订单号= 合同号+期数？
         message.append(detl.getJournalno());
         message.append("</ORDERID>");
         //一级行号
@@ -256,12 +256,12 @@ public class CCBWLPTManager {
         message.append("</CURCODE>");
         //交易金额
         message.append("<PAYMENT>");
-//        message.append(detl.getPaybackamt());
-        message.append("1.01");
+        message.append(detl.getPaybackamt());
+//        message.append("1.01");
         message.append("</PAYMENT>");
         //网银柜台编号
         message.append("<POSID>");
-        message.append("100000192");
+        message.append("100001200");
         message.append("</POSID>");
         //备注
         message.append("<REM1>");
