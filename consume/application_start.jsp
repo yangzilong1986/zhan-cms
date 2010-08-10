@@ -1535,6 +1535,11 @@ function Regvalid() {//提交
         if (e[i].checked)bank = e[i].value;
     }
     if (goSave(bank)) {
+         //协议同意判断       haiyu add 2010-08-10
+        if(!(document.getElementById("radAgr").checked)) {
+            alert("您必须同意合约内容才能提交！");
+            return false;
+        }
         //第三方支付新窗口控制
         //if (bank == "801" || bank == "802")document.forms[0].target = "_blank";
 
