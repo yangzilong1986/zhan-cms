@@ -54,7 +54,7 @@ Description:  添加客户直接关闭浏览器处理。
 </script>
 <frameset rows="80,*,15" cols="*" frameborder="NO" border="0" framespacing="0">
     <frame src="top.jsp" name="topFrame" scrolling="NO" noresize onload>
-    <frameset id="middle" scrolling="NO" rows="*" cols="170,*" framespacing="0" frameborder="NO" border="0">
+    <frameset id="middle" scrolling="NO" rows="*" cols="180,*" framespacing="0" frameborder="NO" border="0">
         <frameset rows="0,*" framespacing="0" frameborder="NO" border="0">
             <frame id="menupage" src="userMenu.jsp" name="code" scrolling="no">
             <frame id="menutemp" src="left.html" name="leftFrame" scrolling="no">
