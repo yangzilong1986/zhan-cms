@@ -70,10 +70,10 @@ Description: 个人消费分期客户注册。
             <table width="700px" border="0" align="center" cellpadding="2" cellspacing="2" bordercolor="#816A82"
                    bgcolor="#ffffff">
                  <tr align="left">
-                    <td height="30" bgcolor="#A4AEB5"><img src="../images/form/xing1.jpg" align="absmiddle"> <font
-                            size="2"
-                            color="#FFFFFF"><b>海尔集团财务有限责任公司个人消费分期用户注册</b></font>
-                        <img src="../images/form/xing1.jpg" align="absmiddle"></td>
+                    <td height="30" bgcolor="#A4AEB5">
+                        <img  src="../images/form/formtile1.gif" style="margin-left:2px;" height="22px" width="22px" align="absmiddle">
+                        <font size="2" color="#FFFFFF"><b>海尔集团财务有限责任公司个人消费分期用户注册</b></font>
+                    </td>
                 </tr>
                 <tr align="center">
                     <td valign="middle">

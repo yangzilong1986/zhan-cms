@@ -517,9 +517,10 @@ Description: 个人消费分期付款申请书。
 <table height="325" border="0" align="center" cellspacing="0" cellpadding="0" bordercolor="#816A82" bgcolor="#ffffff"
        width="678">
 <tr align="left">
-    <td height="30" bgcolor="#A4AEB5"><img src="../images/form/xing1.jpg" align="absmiddle"> <font size="2"
-                                                                                                   color="#FFFFFF"><b>海尔集团财务有限责任公司个人消费分期付款申请书</b></font>
-        <img src="../images/form/xing1.jpg" align="absmiddle"></td>
+    <td height="30" bgcolor="#A4AEB5">
+        <img src="../images/form/formtile1.gif" style="margin-left:4px;" height="22px" width="22px" align="absmiddle"> 
+        <font size="2"color="#FFFFFF"><b>海尔集团财务有限责任公司个人消费分期付款申请书</b></font>
+        </td>
 </tr>
 <tr align="center">
 <td height="260" valign="middle">
@@ -970,7 +971,7 @@ Description: 个人消费分期付款申请书。
                class="page_form_text" maxlength="30">
     </td>
     <td class="page_form_td">&nbsp;</td>
-    <td class="page_form_title_td" nowrap><span id="BANK_UD1" style="display:none">&nbsp;开户行名称：</span></td>
+    <td style="display:none;" class="page_form_title_td" nowrap><span id="BANK_UD1">&nbsp;开户行名称：</span></td>
     <td nowrap class="page_form_td"><input type="text" id="BANK_UD2" style="display:none" <%=readonly%>
                                            name="ACTOPENINGBANK_UD"
                                            value="<%=ACTOPENINGBANK_UD==null?"":ACTOPENINGBANK_UD%>"
@@ -1247,7 +1248,8 @@ Description: 个人消费分期付款申请书。
                             </td>
                             <%
                                 }
-                                if (um != null && APPSTATUS.equals(XFConf.APPSTATUS_TIJIAO)) {
+                                //haiyu 2010-08-11 删除 ： um != null && 
+                                if (APPSTATUS.equals(XFConf.APPSTATUS_TIJIAO)) {
                             %>
                             <td class='page_button_tbl_td'><input type='button' <%=submit%> id='savedel' name='save'
                                                                   value=' 作 废 ' onClick="return Regvalid1();"></td>
@@ -1328,8 +1330,10 @@ function setBankRadio(str) {
         if (e[i].checked) {
             inputObjpreObj(obj2).innerText = " " + e[i].parentNode.innerText + "帐号：";
             if (e[i].value == '901') {
-                getObject("BANK_UD1").style.display = "block";
+                //haiyu 2010-08-11 for 修改cell背景色
+//                getObject("BANK_UD1").style.display = "block";
                 getObject("BANK_UD2").style.display = "block";
+                getObject('BANK_UD1').parentNode.display = "block";
             }
         }
 
@@ -1356,10 +1360,9 @@ document.getElementById("PC").onblur = function() {
 }
 
 document.body.onload = function() {
+
     setBankRadio("ACTOPENINGBANK");
-
     listCheck("CREDITTYPE", 0);
-
     //getRESDADDR();
     //getRESDPC();
 }
@@ -1368,13 +1371,17 @@ function reSetActnoText(str) {
     var obj1 = getElement();
     var obj2 = document.getElementsByName(str);
     if (obj1.value == '901') {
-        getObject("BANK_UD1").style.display = "block";
+        //haiyu 2010-08-11 for 修改cell背景色
+//        getObject("BANK_UD1").style.display = "block";
         getObject("BANK_UD2").style.display = "block";
+         getObject('BANK_UD1').parentNode.style.display = "block";
     } else {
-        getObject("BANK_UD1").style.display = "none";
+        //haiyu 2010-08-11 for 修改cell背景色
+//        getObject("BANK_UD1").style.display = "none";
         getObject("BANK_UD2").style.display = "none";
+         getObject('BANK_UD1').parentNode.style.display = "none";
     }
-    inputObjpreObj(obj2).innerText = " " + obj1.parentNode.innerText + "帐号";
+    inputObjpreObj(obj2).innerText = " " + obj1.parentNode.innerText + "帐号：";
 }
 
 //同步家庭住址和邮寄地址

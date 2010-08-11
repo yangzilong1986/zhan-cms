@@ -123,10 +123,10 @@ Description:  消费信贷-个人消费分期付款申请列表。
                        bordercolor="#816A82"
                        bgcolor="#E0E0D3">
                     <tr align="left">
-                        <td height="30" bgcolor="#A4AEB5"><img src="../images/form/xing1.jpg" align="absmiddle"> <font
-                                size="2"
-                                color="#FFFFFF"><b>客户申请信息</b></font> <img src="../images/form/xing1.jpg"
-                                                                          align="absmiddle"></td>
+                        <td height="30" bgcolor="#A4AEB5">
+                            <img  src="../images/form/formtile1.gif" height="22px" width="22px" align="absmiddle">
+                            <font size="2" color="#FFFFFF"><b>客户申请信息</b></font>
+                        </td>
                     </tr>
                     <tr align="center" class='page_form_tr'>
                         <td height="260" valign="middle">
