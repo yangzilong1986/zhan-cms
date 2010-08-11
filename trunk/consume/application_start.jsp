@@ -1326,7 +1326,7 @@ function setBankRadio(str) {
     var obj2 = document.getElementsByName("BANKACTNO");
     for (var i = 0; i < e.length; i++) {
         if (e[i].checked) {
-            inputObjpreObj(obj2).innerText = " " + e[i].parentNode.innerText + "ÕÊºÅ";
+            inputObjpreObj(obj2).innerText = " " + e[i].parentNode.innerText + "ÕÊºÅ£º";
             if (e[i].value == '901') {
                 getObject("BANK_UD1").style.display = "block";
                 getObject("BANK_UD2").style.display = "block";
