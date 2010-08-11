@@ -126,7 +126,7 @@
         -->
     </style>
 </head>
-<body background="<%=rooturl%>/images/checks_02.jpg">
+<body>
 <table width="400" height="300" border="" align="center" bordercolorlight="#336699" bordercolordark="#336699"
        bgcolor="#9DBBD9" onKeyDown="pressKeyDown(event.keyCode);">
     <tr>
