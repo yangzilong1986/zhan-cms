@@ -221,7 +221,7 @@ Description: 消费信贷-个人消费分期付款申请书提交。
 
     if (IDTYPE.equals("") || ID.equals("")) {
         session.setAttribute("msg", "没有发现传送入的参数！");
-        response.sendRedirect("../showinfo.jsp");
+        response.sendRedirect("showinfo.jsp");
     }
 
     boolean temp = false;
@@ -411,7 +411,7 @@ Description: 消费信贷-个人消费分期付款申请书提交。
         session.setAttribute("funcdel", funcdel);
         session.setAttribute("isback", "0");
 
-        response.sendRedirect("/showinfo.jsp");
+        response.sendRedirect("showinfo.jsp");
     }
 } else {
     session.setAttribute("msg", "提交信息失败!");
