@@ -44,10 +44,10 @@ Description: 个人消费分期付款信用评分表。
     UserManager um = (UserManager) session.getAttribute(SystemAttributeNames.USER_INFO_NAME);
     if (um == null) {
         session.setAttribute("msg", "长时间未操作，系统登陆超时，请重新登陆！");
-        response.sendRedirect("../showinfo.jsp");
+        response.sendRedirect("showinfo.jsp");
     } else if (APPNO == null) {
         session.setAttribute("msg", "没有发现传送入的参数！");
-        response.sendRedirect("../showinfo.jsp");
+        response.sendRedirect("showinfo.jsp");
     } else {
 
         APPNO = (APPNO == null) ? "" : APPNO.trim();
