@@ -404,9 +404,11 @@ Description: 消费信贷-个人消费分期付款申请书提交。
 //        funcdel += "window.close();";
         //haiyu add 作废判断 2010-08-11
         if (!APPNO.equals("") && APPACTFLAG.equals("3")) {//作废
-            session.setAttribute("msg", "作废申请已提交成功，请在单击确定后，连接您的打印机，<br>选择您的申请单打印并签署姓名，连同您的证明文件复印件<br>一同寄送给我们，审核通过后我们将与您取得联系！");
+//            session.setAttribute("msg", "作废申请已提交成功，请在单击确定后，连接您的打印机，<br>选择您的申请单打印并签署姓名，连同您的证明文件复印件<br>一同寄送给我们，审核通过后我们将与您取得联系！");
+            session.setAttribute("msg", "作废申请已提交成功，请在单击确定后，连接您的打印机，选择您的申请单打印并签署姓名，连同您的证明文件复印件一同寄送给我们，审核通过后我们将与您取得联系！");
         } else {
-            session.setAttribute("msg", "您的申请已提交成功，请在单击确定后，连接您的打印机，<br>选择您的申请单打印并签署姓名，连同您的证明文件复印件<br>一同寄送给我们，审核通过后我们将与您取得联系！");
+//            session.setAttribute("msg", "您的申请已提交成功，请在单击确定后，连接您的打印机，<br>选择您的申请单打印并签署姓名，连同您的证明文件复印件<br>一同寄送给我们，审核通过后我们将与您取得联系！");
+            session.setAttribute("msg", "您的申请已提交成功，请在单击确定后，连接您的打印机，选择您的申请单打印并签署姓名，连同您的证明文件复印件一同寄送给我们，审核通过后我们将与您取得联系！");
         }
         session.setAttribute("funcdel", funcdel);
         session.setAttribute("isback", "0");
