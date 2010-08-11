@@ -518,7 +518,7 @@ Description: 个人消费分期付款申请书。
        width="678">
 <tr align="left">
     <td height="30" bgcolor="#A4AEB5">
-        <img src="../images/form/formtile1.gif" style="margin-left:4px;" height="22px" width="22px" align="absmiddle"> 
+        <img src="../images/form/formtile1.gif" style="margin-left:4px;" height="22px" width="22px" align="absmiddle">
         <font size="2"color="#FFFFFF"><b>海尔集团财务有限责任公司个人消费分期付款申请书</b></font>
         </td>
 </tr>
@@ -1563,6 +1563,7 @@ function Regvalid() {//提交
 
 function Regvalid1() {//作废
     if (confirm("确实要作废申请单？")) {
+        document.forms[0].target = "_blank";
         document.all.APPACTFLAG.value = "3";
         document.forms[0].action = "/consume/application_save.jsp";
         document.forms[0].submit();
