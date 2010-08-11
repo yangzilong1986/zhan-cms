@@ -96,10 +96,14 @@
             <table height="325" width="860" border="2" align="center" cellpadding="2" cellspacing="2"
                    bordercolor="#816A82" bgcolor="#E0E0D3">
                 <tr align="left">
-                    <td height="30" bgcolor="#A4AEB5"><span class="style4"><img src="../images/form/xing1.jpg"
-                                                                                align="absmiddle"></span> <b><span
-                            style="font-size: 12.0pt; line-height: 125%; font-family: 宋体">消费分期付款合约内容</span></b> <span
-                            class="style4"> <img src="../images/form/xing1.jpg" align="absmiddle"></span></td>
+                    <td height="30" bgcolor="#A4AEB5">
+                        <span class="style4">
+                            <img src="../images/form/formtile1.gif" height="22px" width="22px" align="absmiddle">
+                        </span>
+                        <b>
+                            <span style="font-size: 12.0pt; line-height: 125%; font-family: 宋体">消费分期付款合约内容</span>
+                        </b>
+                    </td>
                 </tr>
                 <tr align="center" class="page_form_tr">
                     <td height="260" valign="middle">

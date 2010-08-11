@@ -86,10 +86,11 @@ Description: 个人消费分期客户密码修改。
             <table height="325" border="0" align="center" cellpadding="2" cellspacing="2" bordercolor="#ffffff"
                    bgcolor="#ffffff">
                 <tr align="left">
-                    <td height="30" bgcolor="#A4AEB5"><img src="../images/form/xing1.jpg" align="absmiddle"> <font
+                    <td height="30" bgcolor="#A4AEB5">
+                        <img src="../images/form/formtile1.gif" style="margin-left:2px;" height="22px" width="22px" align="absmiddle"> <font
                             size="2"
                             color="#FFFFFF"><b>海尔集团财务有限责任公司个人消费分期客户密码修改</b></font>
-                        <img src="../images/form/xing1.jpg" align="absmiddle"></td>
+                    </td>
                 </tr>
                 <tr align="center">
                     <td height="260" valign="middle">
