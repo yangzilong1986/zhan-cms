@@ -23,14 +23,7 @@ haiyu add
     font-size: 12px;
     color: #525152;
 }
-.btn1_mouseout {
-	border-style:none;
-	FONT-SIZE: 10pt;
-	background-image:url(../images/btnbg.gif);
-	CURSOR: hand;
-	COLOR: black;
-	height:26px;
-}
+
 .remarkCell{
     color:red;font-size:10pt;
 }
