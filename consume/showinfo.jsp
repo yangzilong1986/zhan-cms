@@ -134,11 +134,11 @@
             <table width="100%">
                 
                 <tr align="left">
-                        <td height="30" bgcolor="#A4AEB5">
-                            <img  src="../images/form/formtile1.gif" height="22px" width="22px" align="absmiddle">
-                            <font size="2" color="#FFFFFF"><b>[<%=strTitle%>]</b></font>
-                        </td>
-                    </tr>
+                    <td height="30" bgcolor="#A4AEB5">
+                        <img  src="../images/form/formtile1.gif" height="22px" width="22px" align="absmiddle">
+                        <font size="2" color="#FFFFFF"><b>[<%=strTitle%>]</b></font>
+                    </td>
+                </tr>
             </table>
             <table width="100%" height="200" class='page_form_table'>
                 <tr class='page_form_tr'>
