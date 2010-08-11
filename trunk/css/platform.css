@@ -259,12 +259,18 @@ haiyu modify  10-08-10
     border-left-width: thin;
     text-align: right;
 }
-
+/*
+haiyu modify 2010-08-11
+*/
 .page_form_textfield {
     width: 100%;
     background-color: #FFFFFF;
     color: #04010C;
-    border-top-color: #F7F5EE;
+    BORDER-RIGHT: #ccc 1px solid;
+    BORDER-TOP: #ccc 1px solid;
+    BORDER-LEFT: #ccc 1px solid;
+    BORDER-BOTTOM: #ccc 1px solid;
+    /*border-top-color: #F7F5EE;
     border-right-color: #F7F5EE;
     border-bottom-color: #F7F5EE;
     border-left-color: #F7F5EE;
@@ -275,7 +281,7 @@ haiyu modify  10-08-10
     border-top-width: thin;
     border-right-width: thin;
     border-bottom-width: thin;
-    border-left-width: thin;
+    border-left-width: thin;   */
 }
 
 .page_form_password {
