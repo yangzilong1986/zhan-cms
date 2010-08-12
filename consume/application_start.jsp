@@ -438,7 +438,7 @@ Description: 个人消费分期付款申请书。
         if (confirm(str + str2)) {
             getObject("HT" + 2).style.display = "none";
             getObject("HA" + 1).style.display = "block";
-            getObject("HA" + 2).style.display = "block";
+//            getObject("HA" + 2).style.display = "block";   haiyu del 2010-08-12
             //getObject("HA" + 3).style.display = "block";
             //getObject("HA" + 4).style.display = "block";
             getObject("HA" + 5).style.display = "block";
@@ -980,7 +980,7 @@ Description: 个人消费分期付款申请书。
 </tr>
 </table>
 
-<div class="PageNext" id="HA2" style="display:none;">&nbsp;</div>
+<%--haiyu del 2010-08-12 <div class="PageNext" id="HA2" style="display:none;">&nbsp;</div>--%>
 <table class="page_form_regTable" width="650" cellspacing="1" cellpadding="0" border="0">
 <COL width=65>
 <COL width=110>
