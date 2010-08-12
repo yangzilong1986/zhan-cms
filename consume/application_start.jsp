@@ -1161,13 +1161,13 @@ Description: 个人消费分期付款申请书。
 </tr>
 <tr class='page_form_tr'>
     <td class="page_left_table_title">合约</td>
-    <td class="page_form_title_td" nowrap valign="bottom">&nbsp;同意合约：</td>
-    <td class="page_form_td" valign="bottom">
+    <td class="page_form_title_td" nowrap valign="middle">&nbsp;同意合约：</td>
+    <td class="page_form_td" valign="middle">
         <input class="page_form_radio" type="radio" name="grpCon" id="radAgr" checked>同意
         <input class="page_form_radio" type="radio" name="grpCon" id="radNoAgr">不同意
     </td>
-    <td colspan="4" valign="bottom">
-        <a onclick="window.open('/consume/application_preshow1.jsp')" style="color:red;" href="#about:blank">查看合约内容</a>
+    <td colspan="4" valign="middle">
+        <a onclick="window.open('/consume/application_preshow1.jsp')"  href="#about:blank">查看合约内容</a>
     </td>
 </tr>
 <tr height="40px">
