@@ -35,7 +35,7 @@ function popUpWindow(URLStr, left, top, width, height)
 
 </head>
 
-<body>
+<body background="../images/bks.gif">
 <table width="100%" height="100%" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
     <td align="center" valign="middle"><table width="530" border="0" align="center" cellpadding="0" cellspacing="0">
