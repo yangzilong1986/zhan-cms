@@ -62,6 +62,8 @@ public class XFIFCCBDetlPage extends FormActions {
 
         instance.getFormBean().getElement("SENDREQUESTBTN").setComponetTp(6);
         instance.getFormBean().getElement("SENDQUERYBTN").setComponetTp(6);
+        instance.getFormBean().getElement("RESETDETLSTATUSBTN").setComponetTp(6);
+
         Xfifbankdetl bankdetl;
         try {
             XfifbankdetlDao detldao = XfifbankdetlDaoFactory.create();
@@ -70,6 +72,7 @@ public class XFIFCCBDetlPage extends FormActions {
             Debug.debug(e);
             return -1;
         }
+
 
         if ((bankdetl.getStatus().equals(XFWithHoldStatus.SEND_PENDING))
                 || (bankdetl.getStatus().equals(XFWithHoldStatus.SEND_FAILD))
@@ -83,6 +86,10 @@ public class XFIFCCBDetlPage extends FormActions {
 
             //TODO:
             instance.getFormBean().getElement("SENDQUERYBTN").setComponetTp(15);
+        }
+
+        if (bankdetl.getStatus().equals(XFWithHoldStatus.QUERY_FAILD)) {
+            instance.getFormBean().getElement("RESETDETLSTATUSBTN").setComponetTp(15);
         }
 
         return 0;
@@ -181,6 +188,27 @@ public class XFIFCCBDetlPage extends FormActions {
                 return -1;
             }
         }
+
+        //20100813  zhanrui  加入查询失败情况下重置 本次批号下所有明细数据状态 的功能，便于重新发起代扣
+        if (button != null && button.equals("RESETDETLSTATUSBTN")) {
+
+            int count = changeXFCutpayDetlRecordsStatus(XFBillStatus.BILLSTATUS_CHECKED);
+            if (count > 0) {
+                msgs.add("状态已重置！共处理 " + count + "笔扣款记录，请查询结果。");
+            } else {
+                msgs.add("状态重置处理失败 ,请通知系统管理人员。");
+            }
+
+            logger.info(msgs.getAllMessages());
+            ctx.setRequestAtrribute("msg", msgs.getAllMessages());
+            ctx.setRequestAtrribute("flag", "1");
+            ctx.setRequestAtrribute("isback", "0");
+            ctx.setTarget("/showinfo.jsp");
+            instance.setReadonly(true);
+            return 0;
+        }
+
+
         return 0;
     }
 
