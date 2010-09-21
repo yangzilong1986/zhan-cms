@@ -46,6 +46,7 @@ public class DatabaseAgent {
         String enabledOfUser = null;
         String passwd = null;
         int statusOfUser = 0;
+        int errorLogin = 0;
         String SQL_GetBasicOfUser = "SELECT * " +
                 "FROM ptuser " +
                 "WHERE username = '" + userName + "'";
@@ -67,6 +68,7 @@ public class DatabaseAgent {
             passwd = rs.getString("passwd");
             passwd = (passwd == null ? null : passwd.trim());
             statusOfUser = rs.getInt("status");
+            errorLogin = rs.getInt("errorlogin");
         }
         catch (Exception ex) {
             logger.info(DBUtil.fromDB(ex.getMessage()));
@@ -83,6 +85,7 @@ public class DatabaseAgent {
         basicInfo.put("emai", emailOfUser);
         basicInfo.put("enab", enabledOfUser);
         basicInfo.put("pswd", passwd);
+        basicInfo.put("errorlogin", errorLogin);
         return basicInfo;
     }
 
@@ -124,6 +127,38 @@ public class DatabaseAgent {
         }
 
         return userIdOfUser;
+    }
+
+    /**
+     * zhanrui  20100919 临时增加错误登录次数处理
+     * @param username
+     * @return
+     * @throws Exception
+     */
+   public void updateErrorLogin(String username)  {
+
+        String SQL_GetUserIdOfUser = "" +
+                "update ptuser u set errorlogin = errorlogin + 1 " +
+                "WHERE username='" + username + "'";
+
+        String userIdOfUser = null;
+        ConnectionManager cm = null;
+        DatabaseConnection dc = null;
+        RecordSet rs = null;
+
+        try {
+            cm = ConnectionManager.getInstance();
+            dc = cm.getConnection();
+            int rtn = dc.executeUpdate(SQL_GetUserIdOfUser);
+            //TODO
+            cm.releaseConnection(dc);
+        }
+        catch (Exception ex) {
+            //TODO
+            System.err.println("... ");
+        }
+
+//        return userIdOfUser;
     }
 
     /**

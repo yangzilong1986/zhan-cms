@@ -4,21 +4,24 @@ package zt.platform.form.control.impl;
  * @version 1.0
  */
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import zt.platform.form.config.SystemAttributeNames;
 import zt.platform.form.control.ActionController;
 import zt.platform.form.control.ServiceProxy;
 import zt.platform.form.control.SessionContext;
 import zt.platform.form.util.SessionAttributes;
-import zt.platform.form.config.SystemAttributeNames;
 import zt.platform.user.UserManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.logging.Logger;
 
 public class SeviceProxyHttpImpl
         implements ServiceProxy {
-    private static Logger logger = Logger.getLogger("zt.platform.form.control.impl.SeviceProxyHttpImpl");
+//    private static Logger logger = Logger.getLogger("zt.platform.form.control.impl.SeviceProxyHttpImpl");
+    private Log logger = LogFactory.getLog(this.getClass());
+
     private String title;
     private String head;
     private String body;
@@ -202,6 +205,8 @@ public class SeviceProxyHttpImpl
             ctx.setTarget("/showinfo.jsp");
             ctx.forward();
             return;
+        }else{
+            logger.info("用户:" + um.getUserName() +" 进入交易处理["+ formid+"]");
         }
 
     }
