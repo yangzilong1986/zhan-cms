@@ -13,7 +13,7 @@
                          <%
                               UserManager um = (UserManager)session.getAttribute(SystemAttributeNames.USER_INFO_NAME);
                               if ( um != null )
-                              	um.logout();
+                              	um.logout(um.getUser().getUsername());
                               session.removeAttribute(SystemAttributeNames.USER_INFO_NAME);
                          %>
                          <jsp:forward page="login.jsp"/>

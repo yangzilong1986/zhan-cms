@@ -40,6 +40,10 @@ public class LogControl {
         }
     }
 
+    public boolean checkErrorLoginOverflow(String userid) {
+        return false;
+
+    }
     public boolean checkIfLogged(String userid, PageContext pageContext) {
         if (this.disableMLogin == false) return false;
         if (System.currentTimeMillis() - this.timenow > 4000) this.refresh(pageContext);

@@ -40,8 +40,8 @@ public class CCBWLPTManager {
     private String userId = "370200018079469-001";
     private String key = "000000";
 
-    //WLPT测试环境地址
-    private String strUrl = "10.143.19.53";
+    //todo WLPT测试环境地址
+    private String strUrl = "127.0.0.1";
 
     //SBS生产环境地址 TODO：加到配置文件中
 //    private static String strUrl = "192.168.91.5";

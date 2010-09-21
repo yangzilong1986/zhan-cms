@@ -11,21 +11,24 @@ package zt.platform.user;
  */
 
 import com.ebis.encrypt.EncryptData;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.security.auth.login.LoginException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 //public class UserManager
 
 //    implements Serializable,HttpSessionBindingListener {
+
 public class UserManager
         implements Serializable {
 
-    private static Logger logger = Logger.getLogger("zt.platform.user.UserManager");
+//    private static Logger logger = Logger.getLogger("zt.platform.user.UserManager");
+    private Log logger = LogFactory.getLog(this.getClass());
     private String username = null; //username从login(username, password)中得到
     private String userid = null;
     private String[] roles = new String[]{};
@@ -102,30 +105,40 @@ public class UserManager
      * 3.初始化资源列表
      * 4.取得用户的菜单
      */
-    public boolean login(String username, String password) throws LoginException {
+    public int login(String username, String password) throws LoginException {
         database = new DatabaseAgent();
         Map basicInfo = null;
-        isLogin = false;
+        int loginStatus = -1;
 
         try {
 
             String userEnabled = null;
             int userStatus = 0;
+            int errorLogin = 0;
             //检查该用户是否存在
             basicInfo = database.getBasicOfUser(username);
             if (basicInfo == null) {
-                return false;
+                logger.info("user [" + username + "]不存在！");
+                return 0;
             }
             //检查该用户的status，enable属性
             userEnabled = basicInfo.get("enab").toString();
             userStatus = ((Integer) basicInfo.get("stat")).intValue();
             if ((userStatus == 1) || (userEnabled.equals("0"))) {
-                return false;
+                logger.info("user [" + username + "]未启用！");
+                return -1;
             }
+            errorLogin = ((Integer) basicInfo.get("errorlogin")).intValue();
+            if (errorLogin > 5) {
+                logger.info("user [" + username + "]登录错误次数超限！");
+                return -3;
+            }
+
+
         }
         catch (Exception ex) {
-            logger.severe("user login exception:" + ex.getMessage());
-            return false;
+            logger.error("user login exception:" + ex.getMessage());
+            return -100;
         }
 
         // 检查密码
@@ -133,7 +146,9 @@ public class UserManager
         String passwordGave = new String(enda.enPasswd(password.getBytes()));
         String passwordWant = (String) basicInfo.get("pswd");
         if (passwordWant == null || !passwordWant.equals(passwordGave)) {
-            return false;
+            database.updateErrorLogin(username);
+            logger.info("user [" + username + "]密码输入错误！");
+            return -2;
         } else {
 
 //      try {
@@ -151,6 +166,8 @@ public class UserManager
 //      }
 
             isLogin = true;
+            //logger.info(username + "用户登录系统...");
+            loginStatus = 1;
         }
 
         // 取得该用户的所有角色。
@@ -158,7 +175,7 @@ public class UserManager
             roles = database.getRoleIdsOfUser(username);
         }
         catch (Exception ex) {
-            logger.severe("load user roles exception:" + ex.getMessage());
+            logger.error("load user roles exception:" + ex.getMessage());
         }
 
         // 初始化资源列表。
@@ -166,7 +183,7 @@ public class UserManager
             resources = new Resources(username);
         }
         catch (Exception ex) {
-            logger.severe("load user resources exception:" + ex.getMessage());
+            logger.error("load user resources exception:" + ex.getMessage());
         }
 
         // 初始化菜单。
@@ -175,7 +192,7 @@ public class UserManager
             this.xmlString = mb.generateStream(username);
         }
         catch (Exception ex) {
-            logger.severe("init user menus exception:" + ex.getMessage());
+            logger.error("init user menus exception:" + ex.getMessage());
         }
 
         // 初始化用户，基本属性。
@@ -183,11 +200,11 @@ public class UserManager
             user = new User(username);
         }
         catch (Exception ex) {
-            logger.severe("init user object exception:" + ex.getMessage());
+            logger.error("init user object exception:" + ex.getMessage());
         }
 
         logger.info("user [ " + username + " ] Loged in!");
-        return isLogin;
+        return loginStatus;
     }
 
     /**
@@ -224,7 +241,7 @@ public class UserManager
      *
      * @roseuid 3F80BD150276
      */
-    public void logout() throws LoginException {
+    public void logout(String username) throws LoginException {
         isLogin = false;
         resources = null;
         user = null;
@@ -232,7 +249,7 @@ public class UserManager
         roles = null;
         mb = null;
         xmlString = null;
-        System.out.println("user [ " + username + " ] loged out!");
+        logger.info("user [ " + username + " ] loged out!");
         username = null;
     }
 
