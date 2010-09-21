@@ -65,10 +65,11 @@ public class FDSysWHList extends FormActions {
                 String sql = "select gthtb_htbh,gthtb_dwbh,xdkhzd_khmc,gthtb_qsrq,gthtb_dqrq,gthtb_htje,gthtb_tyckzh,gthtb_htnm " +
                         "from gthtb@haier_shengchan a,xdkhzd@haier_shengchan b " +
                         " where a.gthtb_dwbh=b.xdkhzd_khbh " +
-                        " and (a.gthtb_dwbh like 'GC%' or  a.gthtb_dwbh like 'GQ%' or  a.gthtb_dwbh like 'GSQ%' or  a.gthtb_dwbh like 'GT%' ) " +
+                        " and (a.gthtb_htbh like 'GC%' or  a.gthtb_htbh like 'GQ%' or  a.gthtb_htbh like 'GSQ%' or  a.gthtb_htbh like 'GT%' ) " +
                         " and (a.gthtb_htbh != 'GQ20090405' and a.gthtb_htbh != 'GQ20090728') " +
                         " and a.gthtb_tyckzh='801000026101041001' ";
 
+                logger.info("SQL="+ sql);
                 RecordSet rs = conn.executeQuery(sql);
 
                 int count = 0;
@@ -80,6 +81,11 @@ public class FDSysWHList extends FormActions {
                     String khmc = rs.getString("xdkhzd_khmc");
 
                     String promptStr = dwbh + " " + khmc + " " + htbh + " " + actno;
+
+                    count++;
+                    msgs.add("<br>" + count + ":" + promptStr);
+
+                    /*
                     if (dwbh.startsWith("GC")) {
                         if (!"801000026701041001".equals(actno)) {
                             count++;
@@ -108,6 +114,7 @@ public class FDSysWHList extends FormActions {
                             }
                         }
                     }
+                    */
                 }
                 if (count == 0) {
                     msgs.add("<br>Œ¥∑¢œ÷’ ∫≈¥ÌŒÛ£°");
