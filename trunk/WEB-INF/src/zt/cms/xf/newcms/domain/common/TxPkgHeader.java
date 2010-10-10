@@ -1,4 +1,4 @@
-package zt.cms.xf.gateway.test.httpclienttest;
+package zt.cms.xf.newcms.domain.common;
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,12 +10,13 @@ package zt.cms.xf.gateway.test.httpclienttest;
 
 /*
     名称	标签名	长度	说明
-    报文类型	stdmsgtype             	4	0100 查询类请求
-    0200 交易类请求
+    报文类型	stdmsgtype             	4
+        0100 查询类请求
+        0200 交易类请求
     交易码	std400trcd	6	发起方交易码
-    发起方必填
-    100101-还款记录查询
-    100102—还款结果返回
+        发起方必填
+        100101-还款记录查询
+        100102—还款结果返回
     处理代码	stdprocode	6	不填写
     发起方标志	std400aqid	1	1-网银
     2-消费信贷
