@@ -2,14 +2,12 @@ package zt.cms.xf.newcms.controllers;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import zt.cms.xf.newcms.domain.T100101.T100101Request;
-import zt.cms.xf.newcms.domain.T100101.T100101Response;
+import zt.cms.xf.gateway.NewCmsManager;
+import zt.cms.xf.newcms.domain.T100101.*;
+import zt.cms.xf.newcms.domain.T100102.T100102RequestList;
+import zt.cms.xf.newcms.domain.T100102.T100102RequestRecord;
+
+import java.util.List;
 
 
 /**
@@ -22,7 +20,10 @@ import zt.cms.xf.newcms.domain.T100101.T100101Response;
 public class T100101CTL {
 
     public final static void main(String[] args) throws Exception {
-        HttpClient httpclient = new DefaultHttpClient();
+
+        T100101CTL ctl = new T100101CTL();
+        ctl.start();
+/*        HttpClient httpclient = new DefaultHttpClient();
 
         HttpPost httppost = new HttpPost("http://10.143.19.106:10002/LoanSysPortal/CMSServlet");
 
@@ -67,7 +68,74 @@ public class T100101CTL {
         System.out.println(response);
 
 
-        httpclient.getConnectionManager().shutdown();
+        httpclient.getConnectionManager().shutdown();*/
     }
 
+    public void start(){
+        XStream xstream = new XStream(new DomDriver());
+        xstream.processAnnotations(T100101Request.class);
+        xstream.processAnnotations(T100101Response.class);
+
+
+        T100101Request request = new T100101Request();
+
+        request.initHeader("0100","100101","3");
+
+        //查询 房贷/消费信贷（1/2） 数据
+        request.setStdcxlx("1");
+
+/*
+        T100101RequestRecord reqRecord = new T100101RequestRecord();
+        //查询 房贷/消费信贷（1/2） 数据
+        reqRecord.setStdcxlx("2");
+
+        T100101RequestList reqList = new T100101RequestList();
+        reqList.add(reqRecord);
+        request.setBody(reqList);
+*/
+
+
+        String strXml = "<?xml version=\"1.0\" encoding=\"GBK\"?>" + "\n" + xstream.toXML(request);
+        System.out.println(strXml);
+
+        //发送请求
+        NewCmsManager ncm =  new NewCmsManager();
+        String responseBody =  ncm.doPostXml(strXml);
+
+        T100101Response response = (T100101Response) xstream.fromXML(responseBody);
+
+        uploadCutpayResultBatch(response.getBody().getContent());
+
+    }
+
+    /**
+     * 向信贷服务器批量上传银行扣款结果
+     */
+    private void  uploadCutpayResultBatch(List<T100101ResponseRecord> records) {
+
+        int count=0;
+
+        //List<T100102RequestRecord> recordsT012 = new ArrayList();
+        T100102RequestList t012 = new T100102RequestList();
+
+        for (T100101ResponseRecord record :records){
+            System.out.println(record.getStdjjh()+ " " + record.getStdqch() + " " + record.getStdkhmc()+ " " + record.getStdjhhkr());
+            count++;
+
+            T100102RequestRecord recordT102 = new T100102RequestRecord();
+            recordT102.setStdjjh(record.getStdjjh());
+            recordT102.setStdqch(record.getStdqch());
+            recordT102.setStdjhkkr(record.getStdjhhkr());
+            //1-成功 2-失败
+            recordT102.setStdkkjg("2");
+
+            t012.add(recordT102);
+        }
+
+        T100102CTL ctlT102 = new T100102CTL();
+        ctlT102.start(t012);
+
+        System.out.println("========"+count);
+
+    }
 }
