@@ -1,6 +1,6 @@
 package zt.cms.xf.newcms.domain.T201002;
 
-import zt.cms.xf.newcms.domain.common.TxPkgHeader;
+import zt.cms.xf.newcms.domain.common.MsgHeader;
 
 /**
  * 4.3.2.	分期还款申请查询
@@ -18,14 +18,14 @@ import zt.cms.xf.newcms.domain.common.TxPkgHeader;
  * To change this template use File | Settings | File Templates.
  */
 public class T201002Request {
-    private TxPkgHeader head;
+    private MsgHeader head;
     private String stdsqdh;
 
-    public TxPkgHeader getHead() {
+    public MsgHeader getHead() {
         return head;
     }
 
-    public void setHead(TxPkgHeader head) {
+    public void setHead(MsgHeader head) {
         this.head = head;
     }
 

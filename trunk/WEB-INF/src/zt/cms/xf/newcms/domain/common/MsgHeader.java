@@ -1,5 +1,8 @@
 package zt.cms.xf.newcms.domain.common;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by IntelliJ IDEA.
  * User: zhanrui
@@ -42,7 +45,7 @@ package zt.cms.xf.newcms.domain.common;
     重复次数	std400acur	2	00
 
  */
-public class TxPkgHeader {
+public class MsgHeader {
     String stdmsgtype = "";
     String std400trcd = "";
     String stdprocode = "";
@@ -66,7 +69,23 @@ public class TxPkgHeader {
     String std400mgid = "";
     String std400acur = "00";
 
+    /**
+     * 初始化报文头信息
+     * @param txntype  交易类型
+     * @param txncode  交易代码
+     * @param txnsrc  发起方
+     */
+    public void initHeader(String txntype,String txncode,String txnsrc){
+        this.stdmsgtype = txntype;
+        this.std400trcd = txncode;
+        this.std400aqid = txnsrc;
+        this.std400tlno = "koukuan";
+        this.stdlocdate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        this.stdloctime = new SimpleDateFormat("hhmmss").format(new Date());
 
+        //TODO 前台流水号
+        //this.stdtermtrc = "000001";
+    }
     public String getStdmsgtype() {
         return stdmsgtype;
     }

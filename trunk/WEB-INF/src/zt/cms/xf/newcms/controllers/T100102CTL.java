@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import zt.cms.xf.gateway.NewCmsManager;
 import zt.cms.xf.newcms.domain.T100102.T100102Request;
 import zt.cms.xf.newcms.domain.T100102.T100102RequestList;
 import zt.cms.xf.newcms.domain.T100102.T100102RequestRecord;
@@ -92,6 +93,52 @@ public class T100102CTL {
 
 
         httpclient.getConnectionManager().shutdown();
+    }
+
+
+    public void start(T100102RequestList requestBody) {
+        XStream xstream = new XStream(new DomDriver());
+        xstream.processAnnotations(T100102Request.class);
+        xstream.processAnnotations(T100102Response.class);
+
+
+        T100102Request request = new T100102Request();
+        request.initHeader("0200", "100102", "3");
+
+        //包体处理
+        //T100102RequestList requestBody = new T100102RequestList();
+        T100102RequestRecord record = new T100102RequestRecord();
+        record.setStdjjh("111112");
+        record.setStdqch("1");
+        record.setStdjhkkr("20100802");
+        record.setStdkkjg("1");
+        requestBody.add(record);
+
+        record = new T100102RequestRecord();
+        record.setStdjjh("111112");
+        record.setStdqch("2");
+        record.setStdjhkkr("20100802");
+        record.setStdkkjg("1");
+        requestBody.add(record);
+
+        //组包
+        request.setBody(requestBody);
+
+
+        String strXml = "<?xml version=\"1.0\" encoding=\"GBK\"?>" + "\n" + xstream.toXML(request);
+
+        //发送请求
+        String responseBody = null;
+        try {
+            NewCmsManager ncm = new NewCmsManager();
+            responseBody = ncm.doPostXml(strXml);
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        T100102Response response = (T100102Response) xstream.fromXML(responseBody);
+
+        System.out.println(response);
     }
 
 }
