@@ -17,6 +17,7 @@ public class T100101ResponseRecord {
     String   stdhkbj;
     String   stdhklx;
     String   stdjhhkr;
+    String   stdhth;
 
     public String getStdjjh() {
         return stdjjh;
@@ -88,5 +89,13 @@ public class T100101ResponseRecord {
 
     public void setStdjhhkr(String stdjhhkr) {
         this.stdjhhkr = stdjhhkr;
+    }
+
+    public String getStdhth() {
+        return stdhth;
+    }
+
+    public void setStdhth(String stdhth) {
+        this.stdhth = stdhth;
     }
 }

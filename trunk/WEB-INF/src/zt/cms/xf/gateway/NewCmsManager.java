@@ -25,33 +25,47 @@ public class NewCmsManager {
     private String serverUrl = "http://10.143.19.106:10002/LoanSysPortal/CMSServlet";
     private Log logger = LogFactory.getLog(this.getClass());
 
+    private HttpClient httpclient = null;
+    private HttpPost httppost = null;
 
+    public NewCmsManager() {
+        logger.info("初始化新信贷接口网关。");
+
+        try {
+            httpclient = new DefaultHttpClient();
+            //请求超时
+            httpclient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 5000*5);
+            //读取超时
+            httpclient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 60000 * 5);
+            httppost = new HttpPost(serverUrl);
+
+            httppost.getURI();
+        } catch (Exception e) {
+            logger.error("初始化新信贷接口网关错误!", e);
+            //TODO  close conn
+            httpclient.getConnectionManager().shutdown();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void close() {
+
+    }
 
     public String doPostXml(String xmlStr) {
 
         logger.info("发送报文： " + xmlStr);
 
         String responseBody = null;
-        HttpClient httpclient = null;
 
         try {
-            httpclient = new DefaultHttpClient();
-            //请求超时
-            httpclient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 5000);
-            //读取超时
-            httpclient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 60000*5);
-            HttpPost httppost = new HttpPost(serverUrl);
-
-            httppost.getURI();
-
 
             StringEntity xmlSE = new StringEntity(xmlStr, "GBK");
             httppost.setEntity(xmlSE);
 
-
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
-            responseBody = null;
-
+            //responseBody = null;
+            
             responseBody = httpclient.execute(httppost, responseHandler);
         } catch (UnsupportedEncodingException e) {
             logger.error("报文格式转换错误", e);
@@ -59,10 +73,11 @@ public class NewCmsManager {
         } catch (IOException e) {
             logger.error("通讯错误!", e);
             throw new RuntimeException(e);
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("通讯错误!", e);
             throw new RuntimeException(e);
         } finally {
+            //TODO  close conn
         }
 
         logger.info("接收报文： " + responseBody);

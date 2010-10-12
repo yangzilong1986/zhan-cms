@@ -2,6 +2,8 @@ package zt.cms.xf.newcms.controllers;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
@@ -20,7 +22,8 @@ import zt.cms.xf.newcms.domain.T100101.T100101Response;
  * To change this template use File | Settings | File Templates.
  */
 public class T201002CTL {
-
+    private Log logger = LogFactory.getLog(this.getClass());
+       
     public final static void main(String[] args) throws Exception {
         HttpClient httpclient = new DefaultHttpClient();
 

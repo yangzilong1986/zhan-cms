@@ -2,11 +2,16 @@ package zt.cms.xf.newcms.controllers;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import zt.cms.xf.gateway.NewCmsManager;
-import zt.cms.xf.newcms.domain.T100101.*;
+import zt.cms.xf.newcms.domain.T100101.T100101Request;
+import zt.cms.xf.newcms.domain.T100101.T100101Response;
+import zt.cms.xf.newcms.domain.T100101.T100101ResponseRecord;
 import zt.cms.xf.newcms.domain.T100102.T100102RequestList;
 import zt.cms.xf.newcms.domain.T100102.T100102RequestRecord;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,107 +24,123 @@ import java.util.List;
  */
 public class T100101CTL {
 
+    private Log logger = LogFactory.getLog(this.getClass());
+
     public final static void main(String[] args) throws Exception {
 
         T100101CTL ctl = new T100101CTL();
         ctl.start();
-/*        HttpClient httpclient = new DefaultHttpClient();
 
-        HttpPost httppost = new HttpPost("http://10.143.19.106:10002/LoanSysPortal/CMSServlet");
-
-        // Execute HTTP request
-        System.out.println("executing request " + httppost.getURI());
-
-        XStream xstream = new XStream(new DomDriver());
-        xstream.processAnnotations(T100101Request.class);
-        xstream.processAnnotations(T100101Response.class);
-
-
-        T100101Request request = new T100101Request();
-        //查询类交易
-        request.setStdmsgtype("0100");
-        //交易码
-        request.setStd400trcd("100101");
-
-        request.setStd400aqid("3");
-        request.setStd400tlno("teller");
-
-        request.setStdlocdate("20101010");
-        request.setStdloctime("153000");
-
-        request.setStdtermtrc("1");
-
-        String strXml = "<?xml version=\"1.0\" encoding=\"GBK\"?>" + "\n" + xstream.toXML(request);
-        System.out.println(strXml);
-
-        StringEntity xml = new StringEntity(strXml, "GBK");
-        httppost.setEntity(xml);
-
-        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-        String responseBody = httpclient.execute(httppost, responseHandler);
-
-        System.out.println("----------------------------------------");
-        System.out.println(responseBody);
-        System.out.println("----------------------------------------");
-
-
-        T100101Response response = (T100101Response) xstream.fromXML(responseBody);
-
-        System.out.println(response);
-
-
-        httpclient.getConnectionManager().shutdown();*/
     }
 
-    public void start(){
+    public List <T100101ResponseRecord> start() {
         XStream xstream = new XStream(new DomDriver());
         xstream.processAnnotations(T100101Request.class);
         xstream.processAnnotations(T100101Response.class);
 
-
         T100101Request request = new T100101Request();
 
-        request.initHeader("0100","100101","3");
+        request.initHeader("0100", "100101", "3");
 
         //查询 房贷/消费信贷（1/2） 数据
         request.setStdcxlx("1");
+        int pkgcnt = 100;
+        int startnum = 1;
+        request.setStdymjls(String.valueOf(pkgcnt));
+        //request.setStdqsjls("1");
 
-/*
-        T100101RequestRecord reqRecord = new T100101RequestRecord();
+        NewCmsManager ncm = new NewCmsManager();
+
+        List <T100101ResponseRecord> responseList = new ArrayList();
+        int totalcount = processTxn(responseList, ncm, xstream, request, pkgcnt, startnum);
+        logger.info("received list zise:" + responseList.size());
+        if (totalcount !=responseList.size() ) {
+            logger.error("获取还款数据笔数有误！应收笔数：" +responseList.size() + "实收笔数："+totalcount);
+            throw new RuntimeException("获取还款数据笔数有误.");
+        }
+        return responseList;
+    }
+
+    /**
+     * 递归获取服务器数据
+     * @param responseList
+     * @param ncm
+     * @param xstream
+     * @param request
+     * @param pkgcnt
+     * @param startnum
+     * @return
+     */
+    public int processTxn(List <T100101ResponseRecord> responseList ,
+                           NewCmsManager ncm, XStream xstream, T100101Request request,
+                           int pkgcnt, int startnum) {
+//        T100101Request request = new T100101Request();
+
+//        request.initHeader("0100","100101","3");
+
         //查询 房贷/消费信贷（1/2） 数据
-        reqRecord.setStdcxlx("2");
-
-        T100101RequestList reqList = new T100101RequestList();
-        reqList.add(reqRecord);
-        request.setBody(reqList);
-*/
+//        request.setStdcxlx("1");
+//        int pkgcnt = 50;
+//        request.setStdymjls(String.valueOf(pkgcnt));
+        request.setStdqsjls(String.valueOf(startnum));
 
 
         String strXml = "<?xml version=\"1.0\" encoding=\"GBK\"?>" + "\n" + xstream.toXML(request);
-        System.out.println(strXml);
+        //System.out.println(strXml);
 
         //发送请求
-        NewCmsManager ncm =  new NewCmsManager();
-        String responseBody =  ncm.doPostXml(strXml);
+        String responseBody = ncm.doPostXml(strXml);
 
         T100101Response response = (T100101Response) xstream.fromXML(responseBody);
 
-        uploadCutpayResultBatch(response.getBody().getContent());
+        //头部总记录数
+        String std400acur = response.getStd400acur();
+        if (std400acur == null || std400acur == "") {
+            std400acur = "0";
+        }
+        int totalcount = Integer.parseInt(std400acur);
 
+
+        if (totalcount == 0) {
+
+        } else {
+            List<T100101ResponseRecord> tmpList =  response.getBody().getContent();
+                    
+            int currCnt = tmpList.size();
+            logger.info(currCnt);
+            logger.info("totalcount:" + totalcount + " currCnt:" + currCnt + " startnum:" + startnum);
+
+            //打包到返回list中
+            for (T100101ResponseRecord record : tmpList){
+                   responseList.add(record);
+            }
+
+            //一个包不可以处理完
+            if (totalcount > pkgcnt) {
+                startnum += pkgcnt;
+                if (startnum  <= totalcount) {
+                    processTxn(responseList,ncm, xstream, request, pkgcnt, startnum);
+                }
+            }
+        }
+
+
+        //uploadCutpayResultBatch(response.getBody().getContent());
+        return totalcount;
     }
 
     /**
      * 向信贷服务器批量上传银行扣款结果
      */
-    private void  uploadCutpayResultBatch(List<T100101ResponseRecord> records) {
+    private void uploadCutpayResultBatch(List<T100101ResponseRecord> records) {
 
-        int count=0;
+        int count = 0;
 
         //List<T100102RequestRecord> recordsT012 = new ArrayList();
         T100102RequestList t012 = new T100102RequestList();
 
-        for (T100101ResponseRecord record :records){
-            System.out.println(record.getStdjjh()+ " " + record.getStdqch() + " " + record.getStdkhmc()+ " " + record.getStdjhhkr());
+        for (T100101ResponseRecord record : records) {
+            System.out.println(record.getStdjjh() + " " + record.getStdqch() + " " + record.getStdkhmc() + " " + record.getStdjhhkr());
             count++;
 
             T100102RequestRecord recordT102 = new T100102RequestRecord();
@@ -135,7 +156,7 @@ public class T100101CTL {
         T100102CTL ctlT102 = new T100102CTL();
         ctlT102.start(t012);
 
-        System.out.println("========"+count);
+        System.out.println("========" + count);
 
     }
 }
