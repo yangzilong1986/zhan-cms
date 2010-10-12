@@ -12,20 +12,12 @@ import zt.cms.xf.newcms.domain.common.MsgHeader;
  */
 @XStreamAlias("ROOT")
 public class T100101Request extends MsgHeader {
-/*
-    @XStreamAlias("LIST")
-    private T100101RequestList body;
-
-    public T100101RequestList getBody() {
-        return body;
-    }
-
-    public void setBody(T100101RequestList body) {
-        this.body = body;
-    }
-*/
     //查询类型 1：房贷  2：消费信贷
     private String stdcxlx;
+    //起始记录数
+    private String stdqsjls;
+    //页面记录数（本报记录数）
+    private String stdymjls;
 
     public String getStdcxlx() {
         return stdcxlx;
@@ -34,4 +26,21 @@ public class T100101Request extends MsgHeader {
     public void setStdcxlx(String stdcxlx) {
         this.stdcxlx = stdcxlx;
     }
+
+    public String getStdqsjls() {
+        return stdqsjls;
+    }
+
+    public void setStdqsjls(String stdqsjls) {
+        this.stdqsjls = stdqsjls;
+    }
+
+    public String getStdymjls() {
+        return stdymjls;
+    }
+
+    public void setStdymjls(String stdymjls) {
+        this.stdymjls = stdymjls;
+    }
+
 }

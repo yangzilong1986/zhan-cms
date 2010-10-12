@@ -8,6 +8,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import zt.cms.xf.gateway.test.httpclienttest.T100101.T100101Result;
+import zt.cms.xf.gateway.test.httpclienttest.T100101.T100101ResultBody;
+import zt.cms.xf.newcms.domain.common.MsgHeader;
 
 
 /**
@@ -17,12 +20,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
  * Time: 13:22:35
  * To change this template use File | Settings | File Templates.
  */
-public class PLonCutPay {
+public class PLonCutPay100101 {
 
     public final static void main(String[] args) throws Exception {
         HttpClient httpclient = new DefaultHttpClient();
 
-        HttpPost httppost = new HttpPost("http://10.143.19.120:10002/LoanSysPortal/CMSServlet");
+//        HttpPost httppost = new HttpPost("http://10.143.19.120:10002/LoanSysPortal/CMSServlet");
+        HttpPost httppost = new HttpPost("http://10.143.19.106:10002/LoanSysPortal/CMSServlet");
 
         // Execute HTTP request
         System.out.println("executing request " + httppost.getURI());
@@ -37,19 +41,19 @@ public class PLonCutPay {
 
         XStream xstream = new XStream(new DomDriver());
 
-        TxPkgHeader header = new TxPkgHeader();
+        MsgHeader header = new MsgHeader();
         header.setStdmsgtype("0100");
         header.setStd400trcd("100101");
         header.setStd400aqid("3");
         header.setStd400tlno("teller");
 
-        header.setStdlocdate("20100827");
+        header.setStdlocdate("20100925");
         header.setStdloctime("153000");
 
         header.setStdtermtrc("1");
 
-//        xstream.alias("ROOT type=\"request\"",TxPkgHeader.class);
-        xstream.alias("ROOT", TxPkgHeader.class);
+//        xstream.alias("ROOT type=\"request\"",MsgHeader.class);
+        xstream.alias("ROOT", MsgHeader.class);
         String strXml = "<?xml version=\"1.0\" encoding=\"GBK\"?>" + "\n" + xstream.toXML(header);
 
         System.out.println(strXml);
@@ -73,7 +77,18 @@ public class PLonCutPay {
                 "<ROOT><stdmsgtype>0100</stdmsgtype><std400trcd>100101</std400trcd><stdprocode/><std400aqid>3</std400aqid><stdmercno/><stdtermtyp/><stdtermid/><std400tlno>teller</std400tlno><stdpriacno/><stdpindata/><stdlocdate>20100827</stdlocdate><stdloctime>153000</stdloctime><stdtermtrc>1</stdtermtrc><std400autl/><stdauthid/><std400aups/><std400trdt/><stdrefnum>0</stdrefnum><stdsetdate/><std400trno/><std400acur>00</std400acur><std400mgid>AAAAAAA</std400mgid></ROOT>";
 
 
-//         TxPkgHeader tt = (TxPkgHeader)xstream.fromXML(rtnstr);
+        MsgHeader tt = (MsgHeader) xstream.fromXML(rtnstr);
+
+        
+        xstream.alias("ROOT", T100101Result.class);  
+//        xstream.alias("LIST", ArrayList.class);
+//        xstream.alias("LIST", ArrayList.class);
+        xstream.alias("ROWS", T100101ResultBody.class);
+        xstream.aliasField("LIST", T100101ResultBody.class, "records");
+        T100101Result result = (T100101Result) xstream.fromXML(responseBody);
+
+        System.out.println(tt);
+        System.out.println(result);
 
 /*
         HttpResponse response = httpclient.execute(httppost);
@@ -128,12 +143,14 @@ public class PLonCutPay {
 
             }
 */
-   // }
+        // }
 
-    // When HttpClient instance is no longer needed,
-    // shut down the connection manager to ensure
-    // immediate deallocation of all system resources
-    httpclient.getConnectionManager().shutdown();
-}
+        // When HttpClient instance is no longer needed,
+        // shut down the connection manager to ensure
+        // immediate deallocation of all system resources
+        httpclient.getConnectionManager().shutdown();
+
+        System.out.println("====***====");
+    }
 
 }

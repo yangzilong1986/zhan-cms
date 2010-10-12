@@ -9,6 +9,7 @@ package zt.cms.xf.gateway.test.httpclienttest.T100101;
  */
 public class T100101ResultBody {
     String   stdjjh;
+    String   stdqch;
     String   stdkhh;
     String   stdkhmc;
     String   stddkzh;
@@ -23,6 +24,14 @@ public class T100101ResultBody {
 
     public void setStdjjh(String stdjjh) {
         this.stdjjh = stdjjh;
+    }
+
+    public String getStdqch() {
+        return stdqch;
+    }
+
+    public void setStdqch(String stdqch) {
+        this.stdqch = stdqch;
     }
 
     public String getStdkhh() {

@@ -8,14 +8,4 @@ package zt.cms.xf.newcms.domain.T100101;
  * To change this template use File | Settings | File Templates.
  */
 public class T100101RequestRecord {
-    //查询类型 1：房贷  2：消费信贷
-    private String stdcxlx;
-
-    public String getStdcxlx() {
-        return stdcxlx;
-    }
-
-    public void setStdcxlx(String stdcxlx) {
-        this.stdcxlx = stdcxlx;
-    }
 }

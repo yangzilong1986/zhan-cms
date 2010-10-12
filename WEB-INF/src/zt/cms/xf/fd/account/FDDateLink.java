@@ -1,38 +1,47 @@
 package zt.cms.xf.fd.account;
 
-import zt.platform.db.DatabaseConnection;
-import zt.platform.db.RecordSet;
-import zt.platform.form.util.FormInstance;
-import zt.platform.form.util.SessionAttributes;
-import zt.platform.form.util.event.ErrorMessages;
-import zt.platform.form.util.event.EventManager;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
-//import java.util.logging.Logger;
-import java.text.SimpleDateFormat;
-import java.text.DecimalFormat;
-import java.math.BigDecimal;
-
-import zt.platform.form.control.SessionContext;
-import zt.platform.form.control.FormActions;
-import zt.platform.form.util.event.*;
-import zt.platform.utils.Debug;
-import zt.cms.xf.common.dao.*;
-import zt.cms.xf.common.factory.*;
-import zt.cms.xf.common.dto.*;
-import zt.cms.xf.common.constant.*;
-import zt.cms.xf.common.exceptions.XfactcutpaydetlDaoException;
-import zt.cms.xf.common.exceptions.FdcutpaydetlDaoException;
-import zt.cms.xf.account.SBSManager;
-
-import zt.cmsi.mydb.MyDB;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import zt.cms.xf.account.SBSManager;
+import zt.cms.xf.common.constant.FDBillStatus;
+import zt.cms.xf.common.constant.XFBankCode;
+import zt.cms.xf.common.constant.XFBillStatus;
+import zt.cms.xf.common.constant.XFWithHoldStatus;
+import zt.cms.xf.common.dao.FdactnoinfoDao;
+import zt.cms.xf.common.dao.FdcutpaydetlDao;
+import zt.cms.xf.common.dao.XfactcutpaydetlDao;
+import zt.cms.xf.common.dao.XfifbankdetlDao;
+import zt.cms.xf.common.dto.*;
+import zt.cms.xf.common.exceptions.FdcutpaydetlDaoException;
+import zt.cms.xf.common.exceptions.XfactcutpaydetlDaoException;
+import zt.cms.xf.common.factory.FdactnoinfoDaoFactory;
+import zt.cms.xf.common.factory.FdcutpaydetlDaoFactory;
+import zt.cms.xf.common.factory.XfactcutpaydetlDaoFactory;
+import zt.cms.xf.common.factory.XfifbankdetlDaoFactory;
+import zt.cms.xf.newcms.controllers.T100101CTL;
+import zt.cms.xf.newcms.domain.T100101.T100101ResponseRecord;
+import zt.cmsi.mydb.MyDB;
+import zt.platform.db.DatabaseConnection;
+import zt.platform.db.RecordSet;
+import zt.platform.form.control.FormActions;
+import zt.platform.form.control.SessionContext;
+import zt.platform.form.util.FormInstance;
+import zt.platform.form.util.SessionAttributes;
+import zt.platform.form.util.event.ErrorMessages;
+import zt.platform.form.util.event.Event;
+import zt.platform.form.util.event.EventManager;
+import zt.platform.form.util.event.EventType;
+import zt.platform.utils.Debug;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -162,14 +171,26 @@ public class FDDateLink extends FormActions {
                     return -1;
                 }
 
+/*
                 //检查银行帐号对应情况
                 if (checkFDSystemData(conn, msgs, button,regioncd,bankcd) == -1) {
                     ctx.setRequestAtrribute("msg", msgs.getAllMessages());
                     return -1;
                 }
-
                 msgs.clear();
                 iSuccessCount = getFDSystemData(conn, msgs, button, regioncd, bankcd, "fdcutpaydetl");
+*/
+                /*
+                1、并发前处理（数据库中设置标志，本模块不允许并发） TODO
+                2、清空临时表
+                3、通过接口获取全部代扣数据到临时表
+                4、逐笔检查临时表中数据，根据合同号与本地帐户表一一对应
+                5、并发后处理
+                 */
+                iSuccessCount = getNewFDSystemData(conn, msgs, button, regioncd, bankcd);
+//                iSuccessCount = getFDSystemData(conn, msgs, button, regioncd, bankcd, "fdcutpaydetl");
+
+
                 ctx.setRequestAtrribute("msg", msgs.getAllMessages());
             } catch (Exception e) {
                 Debug.debug(e);
@@ -328,6 +349,7 @@ public class FDDateLink extends FormActions {
     /*
      在用户没有选中需要处理的记录时，根据用户点击的按钮，生成相应银行的记录集
     */
+
     private Xfactcutpaydetl[] getCutPayDetlListByBank(DatabaseConnection conn,
                                                       String bankcode) throws XfactcutpaydetlDaoException {
 
@@ -358,6 +380,7 @@ public class FDDateLink extends FormActions {
     /*
      根据记录集设置表中数据的帐单状态
      */
+
     private void setCutpayDetlStatus(DatabaseConnection conn,
                                      Xfactcutpaydetl[] xfactcutpaydetls,
                                      String billstatus) throws XfactcutpaydetlDaoException {
@@ -385,6 +408,7 @@ public class FDDateLink extends FormActions {
     /*
    检查FDCUTPAYDETL表中数据
     */
+
     private int checkFDCUTPAYDETLData(SessionContext ctx, DatabaseConnection conn, FormInstance instance, ErrorMessages msgs) throws Exception {
         try {
             MyDB.getInstance().addDBConn(conn);
@@ -414,6 +438,7 @@ public class FDDateLink extends FormActions {
     /*
     清理临时表数据
      */
+
     private void deleteTableData_CutPatDetl(DatabaseConnection conn, ErrorMessages msgs) throws Exception {
 
         MyDB.getInstance().addDBConn(conn);
@@ -428,10 +453,194 @@ public class FDDateLink extends FormActions {
         }
     }
 
+
+    /**
+     * 查询房贷系统表  生成本地临时数据
+     *
+     * @param conn
+     * @param msgs
+     * @param button
+     * @param regioncd
+     * @param bankcd
+     * @return
+     * @throws Exception
+     */
+    private int getNewFDSystemData(DatabaseConnection conn, ErrorMessages msgs, String button,
+                                   String regioncd, String bankcd) throws Exception {
+
+        String regionid = null;
+        String regionid1 = null;
+        String bankid = null;
+
+        if ("0531".equals(regioncd)) {
+            regionid = "GQ"; //济南
+            regionid1 = "GSQ"; //济南
+        } else if ("023".equals(regioncd)) {
+            regionid = "GC"; //重庆
+            regionid1 = "GSC"; //重庆
+        } else if ("0351".equals(regioncd)) {
+            regionid = "GT"; //太原
+            regionid1 = "GST"; //太原
+        } else {
+            if (!"0532".equals(regioncd)) {
+                throw new Exception("地区代码错误!");
+            }
+        }
+
+
+        String preflag = "0";
+        if (button.equals("GETFDPREDATABUTTON") || button.equals("CHECKFDPREDATABUTTON")) {
+            preflag = "1";
+        }
+
+        //事务开始
+
+        //清空临时表
+
+        //获取新信贷数据LIST
+        T100101CTL t100101 = new T100101CTL();
+        List<T100101ResponseRecord> recvList = t100101.start();
+
+
+        //核对本地帐户表信息
+        int rtn = 0;
+        rtn = checkNewFDSystemData(recvList, msgs);
+        if (rtn == -1) {
+            return -1;
+        }
+
+        RecordSet rs = null;
+        PreparedStatement ps = null;
+        MyDB.getInstance().addDBConn(conn);
+/*
+        try {
+
+            HashMap map = new HashMap();
+            String sql = "select contractno,actno from fdactnoinfo";
+            rs = conn.executeQuery(sql);
+            while (rs.next()) {
+                map.put(rs.getString(0), rs.getString(1));
+            }
+
+            int foundflag = 0;
+            int count = 0;
+            for (T100101ResponseRecord record : recvList) {
+                if (!map.containsKey(record.getStdhth())) {
+                    foundflag = 1;
+                    count++;
+                    msgs.add(count + ".信贷系统中的合同：" + record.getStdhth() + "未与本地帐户表匹配。<br>");
+                } else {
+                }
+
+            }
+            if (foundflag == 1) {
+                return 0;
+            }
+        } catch (Exception e) {
+
+        }
+*/
+
+        try {
+            MyDB.getInstance().addDBConn(conn);
+
+            String sql = "select max(seqno) from fdcutpaydetl where substr(seqno,1,8) = '" + inputdate + "'";
+            rs = conn.executeQuery(sql);
+
+            int maxno = 0;
+            if (rs.next()) {
+                String max = rs.getString(0);
+                if (max != null) {
+                    maxno = Integer.parseInt(max.substring(8));
+                }
+            }
+
+            conn.setAuto(false);
+
+            sql = " delete from fdcutpaydetltemp";
+
+            rtn = conn.executeUpdate(sql);
+
+            sql = "insert into fdcutpaydetltemp " +
+                    "(seqno,xdkhzd_khbh,xdkhzd_khmc,gthtjh_htbh,gthtjh_date,gthtjh_ll,gthtjh_jhje,gthtjh_bjje,gthtjh_lxje," +
+                    "gthtb_zhbh,cutpayactno,billstatus,createtime,failreason,remark,preflag," +
+                    "gthtjh_htnm,gthtjh_jhxh,journalno,regioncd,bankcd) " +
+                    "values" +
+                    "(?,?,?,?,?,?,?,?,?," +
+                    "?,?,?,?,?,?,?," +
+                    "?,?,?,?,?) ";
+
+            logger.info("sql=" + sql);
+            ps = conn.getPreparedStatement(sql);
+
+            int count = 0;
+            for (T100101ResponseRecord record : recvList) {
+                count++;
+                ps.setString(1, inputdate + StringUtils.leftPad(String.valueOf(maxno + count), 7, '0'));
+                ps.setString(2, record.getStdkhh());
+                ps.setString(3, record.getStdkhmc());
+                ps.setString(4, record.getStdhth());
+                ps.setString(5, "       ");
+                ps.setDouble(6, 0.00);
+                ps.setDouble(7, Double.valueOf(record.getStdhkje()));
+                ps.setDouble(8, Double.valueOf(record.getStdhkbj()));
+                ps.setDouble(9, Double.valueOf(record.getStdhklx()));
+
+                ps.setString(10, record.getStddkzh());
+                ps.setString(11, "cutpayacctno");
+                ps.setString(12, "0");   //billstatus
+                ps.setDate(13, new java.sql.Date(new Date().getTime()));
+                ps.setString(14, " ");
+                ps.setString(15, "init");
+                ps.setString(16, preflag);
+
+                ps.setString(17, "htnm");
+                ps.setString(18, record.getStdqch());
+                ps.setString(19, "0");
+                ps.setString(20, "0");
+                ps.setString(21, "0");
+                ps.addBatch();
+            }
+
+            int[] results = ps.executeBatch();//执行批处理
+
+            //处理地区信息   TODO
+            
+
+            conn.commit();
+
+
+            sql = "select count(*),sum(gthtjh_jhje) from  fdcutpaydetltemp " + " where billstatus = " + FDBillStatus.SEND_PENDING;
+            rs = conn.executeQuery(sql);
+            if (rs.next()) {
+                rtn = rs.getInt(0);
+                BigDecimal totalamt = new BigDecimal(rs.getDouble(1)).setScale(2, BigDecimal.ROUND_HALF_UP);
+                msgs.add("<br>房贷系统记录数为：" + rtn + "条！");
+                msgs.add("<br>房贷系统扣款总金额为：" + new DecimalFormat("##,###,###,###,##0.00").format(totalamt));
+            }
+        } catch (Exception e) {
+            conn.rollback();
+            msgs.add("发生异常：" + e.getMessage());
+            Debug.debug(e);
+            throw new Exception(e);
+        } finally {
+            if (ps != null) {
+                ps.close();
+            }
+            if (rs != null) {
+                rs.close();
+            }
+            MyDB.getInstance().releaseDBConn();
+        }
+        return rtn;
+    }
+
+
     /*
    查询房贷系统表  生成本地临时数据
    仅处理建行代扣的记录
     */
+
     private int getFDSystemData(DatabaseConnection conn, ErrorMessages msgs, String button,
                                 String regioncd, String bankcd, String tablename) throws Exception {
 
@@ -634,342 +843,66 @@ public class FDDateLink extends FormActions {
     }
 
 
-    /*
-    保留
-   查询房贷系统表  生成本地临时数据
-   仅处理建行代扣的记录
-    */
-    private int getFDSystemDataForCCB(DatabaseConnection conn, ErrorMessages msgs, String button) throws Exception {
+    /**
+     * 检查新信贷系统中房贷系统数据
+     */
+    private int checkNewFDSystemData(List<T100101ResponseRecord> recvList, ErrorMessages msgs) throws Exception {
 
-        int rtn = 0;
-        RecordSet rs = null;
-        try {
-            MyDB.getInstance().addDBConn(conn);
+        logger.info("[检查房贷系统数据完整性]");
 
-            String sql = "select max(seqno) from fdcutpaydetl where substr(seqno,1,8) = '" + inputdate + "'";
-            rs = conn.executeQuery(sql);
+        String actno, name, contractno;
+        FdactnoinfoDao actnodao = FdactnoinfoDaoFactory.create();
+        Fdactnoinfo actnoinfo;
+        Fdactnoinfo[] actnoinfos;
 
-            int maxno = 0;
-            if (rs.next()) {
-                String max = rs.getString(0);
-                if (max != null) {
-                    maxno = Integer.parseInt(max.substring(8));
+
+        int successflag = 0;
+        int totalcount = 0;
+        int failcount = 0;
+
+        for (T100101ResponseRecord record : recvList) {
+            name = record.getStdkhmc().trim();
+            contractno = record.getStdhth().trim();
+            actno = record.getStddkzh().trim();
+            actnoinfo = actnodao.findByPrimaryKey(contractno);
+            if (actnoinfo == null) {
+                if (contractno.trim().length() > 10) {  //类似 GZ20080606-2的合同
+                    String contractnotemp = contractno.substring(0, 10);
+                    actnoinfos = actnodao.findWhereContractnoEquals(contractnotemp);
+                    if (actnoinfos != null && actnoinfos.length == 1)
+                        continue;
+                    msgs.add("<br>===姓名：" + name + "  合同：" + contractno + "  不存在对应扣款帐号。");
+                    failcount++;
+                    successflag = -1;
+                } else {
+                    msgs.add("<br>===姓名：" + name + " 合同：" + contractno + " 不存在对应扣款帐号。");
+                    logger.info("内部帐号未找到：" + name + " " + contractno + " " + actno);
+                    failcount++;
+                    successflag = -1;
+                }
+            } else {
+                if (!actno.equals(actnoinfo.getActno())) {
+                    msgs.add("<br>===姓名：" + name + " 合同编号：" + contractno + " 内部帐号不符：<br>信贷系统中的内部帐号："
+                            + actno + "<br>扣款平台中的内部帐号：" + actnoinfo.getActno());
+                    failcount++;
                 }
             }
 
-            String queryhead = " insert into fdcutpaydetl  (select '" + inputdate + "' || lpad(rownum +" + maxno +
-                    ",7,'0') as seqno,";
-
-            if (button.equals("GETFDDATABUTTON")) {
-                sql = queryhead +
-                        "       t.XDKHZD_KHBH," +
-                        "       t.XDKHZD_KHMC," +
-                        "       t.GTHTJH_HTBH," +
-                        "       t.GTHTJH_DATE," +
-                        "       t.GTHTJH_LL," +
-                        "       round (t.GTHTJH_JHJE,2) as GTHTJH_JHJE, " +
-                        "       round (t.GTHTJH_BJJE,2) as GTHTJH_BJJE," +
-                        "       round (t.GTHTJH_LXJE,2) as GTHTJH_LXJE," +
-                        "       t.GTHTB_ZHBH," +
-                        "       t.cutpayactno," +
-                        "       '0' as BILLSTATUS," +
-                        "        sysdate as createtime," +
-                        "       ' ' as failreason," +
-                        "       ' ' as remark," +
-                        "       '0' as preflag," +       //正常还款标志
-                        "       t.GTHTJH_HTNM," +
-                        "       t.GTHTJH_JHXH," +
-                        "       '0532' as regioncd," +
-                        "       '105' as bankcd," +
-                        "       null as journalno" +
-                        "  from (select c.xdkhzd_khbh," +
-                        "               c.xdkhzd_khmc," +
-                        "               a.gthtjh_htbh," +
-                        "               a.gthtjh_date," +
-                        "               a.gthtjh_ll," +
-                        "               a.gthtjh_jhje," +
-                        "               a.gthtjh_bjje," +
-                        "               a.gthtjh_lxje," +
-                        "               to_char(b.gthtb_zhbh) gthtb_zhbh," +
-                        "               d.cutpayactno," +
-                        "               a.GTHTJH_HTNM," +
-                        "               a.GTHTJH_JHXH" +
-                        "          from gthtjh@haier_shengchan a," +
-                        "               gthtb@haier_shengchan  b," +
-                        "               xdkhzd@haier_shengchan c," +
-                        "               fdactnoinfo d" +
-                        "         where a.gthtjh_htbh = b.gthtb_htbh" +
-                        "           and b.gthtb_dwbh = c.xdkhzd_khbh" +
-                        "           and b.gthtb_htzt <> '5'" +
-                        "           and a.gthtjh_date like '" + inputdate.substring(0, 6) + "%'" +
-                        "           and a.gthtjh_hkbz <> '1'" +
-                        "           and b.gthtb_tyckzh = '801000026101041001'" +
-                        "           and b.gthtb_zhbh = d.actno" +
-                        "           order by c.xdkhzd_khbh) t )";
-            } else {
-                sql = queryhead + " t1.XDKHZD_KHBH, " +
-                        "       t1.XDKHZD_KHMC, " +
-                        "       t1.GTHTJH_HTBH, " +
-                        "       t1.GTHTJH_DATE, " +
-                        "       t1.GTHTJH_LL, " +
-//                        "       round(t1.xdfhkx_je + t2.xdfhkx_je,2) as GTHTJH_JHJE, " +
-                        "       round(t1.xdfhkx_je + decode(t2.xdfhkx_je, null, 0), 2) as GTHTJH_JHJE, " +
-                        "       round(t1.xdfhkx_je, 2) as GTHTJH_BJJE, " +
-//                        "       round(t2.xdfhkx_je, 2) as GTHTJH_LXJE, " +
-                        "       round(decode(t2.xdfhkx_je, null, 0), 2) as GTHTJH_LXJE, " +
-                        "       t1.GTHTB_ZHBH, " +
-                        "       t1.cutpayactno, " +
-                        "       '0' as BILLSTATUS, " +
-                        "        sysdate as createtime," +
-                        "       ' ' as failreason," +
-                        "       '提前还款' as remark," +
-                        "       '1' as preflag," +                                     //提前还款标志
-                        "       t1.GTHTJH_HTNM," +
-                        "       t1.GTHTJH_JHXH," +
-                        "       '0532' as regioncd," +
-                        "       '105' as bankcd," +
-                        "       null as journalno" +
-                        "  from (select c.xdkhzd_khbh, " +
-                        "               c.xdkhzd_khmc, " +
-                        "               a.xdfhkx_htbh as gthtjh_htbh, " +
-                        "               a.xdfhkx_ywrq as gthtjh_date, " +
-                        "               a.xdfhkx_ll as gthtjh_ll, " +
-                        "               a.xdfhkx_htnm as gthtjh_htnm, " +
-                        "               a.xdfhkx_jhxh as gthtjh_jhxh, " +
-                        "               a.xdfhkx_ywzl, " +
-                        "               round(a.xdfhkx_je, 2) xdfhkx_je, " +
-                        "               to_char(b.gthtb_zhbh) gthtb_zhbh, " +
-                        "               d.cutpayactno " +
-                        "          from xdfhkx@haier_shengchan a, " +
-                        "               gthtb@haier_shengchan  b, " +
-                        "               xdkhzd@haier_shengchan c, " +
-                        "               fdactnoinfo            d " +
-                        "         where a.xdfhkx_htbh = b.gthtb_htbh " +
-                        "           and b.gthtb_dwbh = c.xdkhzd_khbh " +
-                        "           and b.gthtb_htzt <> '5' " +
-                        "           and a.xdfhkx_ywrq = " + inputdate +
-                        "           and b.gthtb_htlb = '03' " +
-                        "           and (a.xdfhkx_ywzl = '6') " +
-                        "           and b.gthtb_zhbh = d.actno) t1, " +
-                        "       (select a.xdfhkx_htbh as gthtjh_htbh, " +
-                        "               a.xdfhkx_ywzl, " +
-                        "               round(a.xdfhkx_je, 2) xdfhkx_je " +
-                        "          from xdfhkx@haier_shengchan a, " +
-                        "               gthtb@haier_shengchan  b " +
-                        "         where a.xdfhkx_htbh = b.gthtb_htbh " +
-                        "           and b.gthtb_htzt <> '5' " +
-                        "           and a.xdfhkx_ywrq = " + inputdate +
-                        "           and b.gthtb_htlb = '03' " +
-                        "           and (a.xdfhkx_ywzl = '7')) t2 " +
-                        " where t1.gthtjh_htbh = t2.gthtjh_htbh(+))";
-            }
-
-            logger.info("[获取房贷扣款记录SQL语句:]" + sql);
-            rs = conn.executeQuery(sql);
-
-            if (rs.next()) {
-//                rtn = rsq.getInt(0);
-            }
-
-            sql = "select count(*),sum(gthtjh_jhje) from fdcutpaydetl where billstatus = " + FDBillStatus.SEND_PENDING;
-            rs = conn.executeQuery(sql);
-            if (rs.next()) {
-                rtn = rs.getInt(0);
-//                Double totalamt = rs.getDouble(1);
-                BigDecimal totalamt = new BigDecimal(rs.getDouble(1)).setScale(2, BigDecimal.ROUND_HALF_UP);
-                msgs.add("<br>获取房贷系统记录数为：" + rtn + "条！");
-                msgs.add("<br>获取房贷系统扣款总金额为：" + new DecimalFormat("##,###,###,###,##0.00").format(totalamt));
-            }
-        } catch (Exception e) {
-            msgs.add("发生异常：" + e.getMessage());
-            Debug.debug(e);
-            throw new Exception(e);
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            MyDB.getInstance().releaseDBConn();
+            totalcount++;
         }
-        return rtn;
+        msgs.add("<br><br>共：" + totalcount + " 条待处理扣款记录。");
+        msgs.add("<br><br>其中共：" + failcount + " 条扣款帐号信息不完整记录。");
+
+        if (successflag >= 0) {
+            successflag = totalcount;
+        }
+        return successflag;
     }
-
-    /*
-   保留
-   查询房贷系统表,生成本地临时数据
-   处理建行以外的数据
-    */
-    private int getFDSystemDataForOtherBank(DatabaseConnection conn, ErrorMessages msgs, String button,
-                                            String regioncd, String bankcd) throws Exception {
-
-        String regionid = null;
-        String bankid = null;
-
-        if ("0531".equals(regioncd)) {
-            regionid = "GQ"; //济南
-        } else if ("023".equals(regioncd)) {
-            regionid = "GC"; //重庆
-        } else {
-            throw new Exception("地区代码错误!");
-        }
-
-        if (XFBankCode.BANKCODE_BOC.equals(regioncd)) {
-            bankid = "801000026701041001";
-        } else {
-            throw new Exception("银行代码错误!");
-        }
-
-        int rtn = 0;
-        RecordSet rs = null;
-        try {
-            MyDB.getInstance().addDBConn(conn);
-
-            String sql = "select max(seqno) from fdcutpaydetl where substr(seqno,1,8) = '" + inputdate + "'";
-            rs = conn.executeQuery(sql);
-
-            int maxno = 0;
-            if (rs.next()) {
-                String max = rs.getString(0);
-                if (max != null) {
-                    maxno = Integer.parseInt(max.substring(8));
-                }
-            }
-
-            String queryhead = " insert into fdcutpaydetl  (select '" + inputdate + "' || lpad(rownum +" + maxno +
-                    ",7,'0') as seqno,";
-
-            if (button.equals("GETFDDATABUTTON")) {
-                sql = queryhead +
-                        "       t.XDKHZD_KHBH," +
-                        "       t.XDKHZD_KHMC," +
-                        "       t.GTHTJH_HTBH," +
-                        "       t.GTHTJH_DATE," +
-                        "       t.GTHTJH_LL," +
-                        "       round (t.GTHTJH_JHJE,2) as GTHTJH_JHJE, " +
-                        "       round (t.GTHTJH_BJJE,2) as GTHTJH_BJJE," +
-                        "       round (t.GTHTJH_LXJE,2) as GTHTJH_LXJE," +
-                        "       t.GTHTB_ZHBH," +
-                        "       ' ' as cutpayactno," +
-                        "       '0' as BILLSTATUS," +
-                        "        sysdate as createtime," +
-                        "       ' ' as failreason," +
-                        "       ' ' as remark," +
-                        "       '0' as preflag," +       //正常还款标志
-                        "       t.GTHTJH_HTNM," +
-                        "       t.GTHTJH_JHXH," +
-
-                        " '" + regioncd + "' " + "  as regioncd," +
-                        " '" + bankcd + "' " + "  as bankcd," +
-
-                        "       null as journalno" +
-                        "  from (select c.xdkhzd_khbh," +
-                        "               c.xdkhzd_khmc," +
-                        "               a.gthtjh_htbh," +
-                        "               a.gthtjh_date," +
-                        "               a.gthtjh_ll," +
-                        "               a.gthtjh_jhje," +
-                        "               a.gthtjh_bjje," +
-                        "               a.gthtjh_lxje," +
-                        "               to_char(b.gthtb_zhbh) gthtb_zhbh," +
-                        "               a.GTHTJH_HTNM," +
-                        "               a.GTHTJH_JHXH" +
-                        "          from gthtjh@haier_shengchan a," +
-                        "               gthtb@haier_shengchan  b," +
-                        "               xdkhzd@haier_shengchan c" +
-                        "         where a.gthtjh_htbh = b.gthtb_htbh" +
-                        "           and b.gthtb_dwbh = c.xdkhzd_khbh" +
-                        "           and b.gthtb_htzt <> '5'" +
-                        "           and a.gthtjh_date like '" + inputdate.substring(0, 6) + "%'" +
-                        "           and a.gthtjh_hkbz <> '1'" +
-                        "           and ( b.gthtb_tyckzh = '" + bankid + "'" + " and c.xdkhzd_khbh like '" + regionid + "%')" +
-                        "           order by c.xdkhzd_khbh) t )";
-            } else {
-                sql = queryhead + " t1.XDKHZD_KHBH, " +
-                        "       t1.XDKHZD_KHMC, " +
-                        "       t1.GTHTJH_HTBH, " +
-                        "       t1.GTHTJH_DATE, " +
-                        "       t1.GTHTJH_LL, " +
-                        "       round(t1.xdfhkx_je + t2.xdfhkx_je,2) as GTHTJH_JHJE, " +
-                        "       round(t1.xdfhkx_je, 2) as GTHTJH_BJJE, " +
-                        "       round(t2.xdfhkx_je, 2) as GTHTJH_LXJE, " +
-                        "       t1.GTHTB_ZHBH, " +
-                        "       ' ' as  cutpayactno, " +
-                        "       '0' as BILLSTATUS, " +
-                        "        sysdate as createtime," +
-                        "       ' ' as failreason," +
-                        "       '提前还款' as remark," +
-                        "       '1' as preflag," +                                     //提前还款标志
-                        "       t1.GTHTJH_HTNM," +
-                        "       t1.GTHTJH_JHXH," +
-                        " '" + regioncd + "' " + "  as regioncd," +
-                        " '" + bankcd + "' " + "  as bankcd," +
-                        "       null as journalno" +
-                        "  from (select c.xdkhzd_khbh, " +
-                        "               c.xdkhzd_khmc, " +
-                        "               a.xdfhkx_htbh as gthtjh_htbh, " +
-                        "               a.xdfhkx_ywrq as gthtjh_date, " +
-                        "               a.xdfhkx_ll as gthtjh_ll, " +
-                        "               a.xdfhkx_htnm as gthtjh_htnm, " +
-                        "               a.xdfhkx_jhxh as gthtjh_jhxh, " +
-                        "               a.xdfhkx_ywzl, " +
-                        "               round(a.xdfhkx_je, 2) xdfhkx_je, " +
-                        "               to_char(b.gthtb_zhbh) gthtb_zhbh " +
-                        "          from xdfhkx@haier_shengchan a, " +
-                        "               gthtb@haier_shengchan  b, " +
-                        "               xdkhzd@haier_shengchan c " +
-                        "         where a.xdfhkx_htbh = b.gthtb_htbh " +
-                        "           and b.gthtb_dwbh = c.xdkhzd_khbh " +
-                        "           and b.gthtb_htzt <> '5' " +
-                        "           and a.xdfhkx_ywrq = " + inputdate +
-                        "           and b.gthtb_htlb = '03' " +
-                        "           and (a.xdfhkx_ywzl = '6') " +
-                        "           and ( b.gthtb_tyckzh = '" + bankid + "'" + " and c.xdkhzd_khbh like '" + regionid + "%')" +
-                        "           ) t1, " +
-                        "       (select a.xdfhkx_htbh as gthtjh_htbh, " +
-                        "               a.xdfhkx_ywzl, " +
-                        "               round(a.xdfhkx_je, 2) xdfhkx_je " +
-                        "          from xdfhkx@haier_shengchan a, " +
-                        "               gthtb@haier_shengchan  b " +
-                        "         where a.xdfhkx_htbh = b.gthtb_htbh " +
-                        "           and b.gthtb_htzt <> '5' " +
-                        "           and a.xdfhkx_ywrq = " + inputdate +
-                        "           and b.gthtb_htlb = '03' " +
-                        "           and (a.xdfhkx_ywzl = '7')) t2 " +
-                        " where t1.gthtjh_htbh = t2.gthtjh_htbh)";
-            }
-
-            logger.info("[获取房贷扣款记录SQL语句:]" + sql);
-            rs = conn.executeQuery(sql);
-
-            if (rs.next()) {
-//                rtn = rsq.getInt(0);
-            }
-
-            sql = "select count(*),sum(gthtjh_jhje) from fdcutpaydetl where billstatus = " + FDBillStatus.SEND_PENDING;
-            rs = conn.executeQuery(sql);
-            if (rs.next()) {
-                rtn = rs.getInt(0);
-//                Double totalamt = rs.getDouble(1);
-                BigDecimal totalamt = new BigDecimal(rs.getDouble(1)).setScale(2, BigDecimal.ROUND_HALF_UP);
-                msgs.add("<br>获取房贷系统记录数为：" + rtn + "条！");
-                msgs.add("<br>获取房贷系统扣款总金额为：" + new DecimalFormat("##,###,###,###,##0.00").format(totalamt));
-            }
-        } catch (Exception e) {
-            msgs.add("发生异常：" + e.getMessage());
-            Debug.debug(e);
-            throw new Exception(e);
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            MyDB.getInstance().releaseDBConn();
-        }
-        return rtn;
-    }
-
 
     /*
     检查房贷系统数据
      */
+
     private int checkFDSystemData(DatabaseConnection conn, ErrorMessages msgs, String button,
                                   String regioncd, String bankcd) throws Exception {
 
@@ -1041,7 +974,6 @@ public class FDDateLink extends FormActions {
                     " or c.xdkhzd_khbh like '" + regionid1 + "%'" +
                     ")";
         }
-
 
 
         try {
@@ -1118,7 +1050,7 @@ public class FDDateLink extends FormActions {
                 } else {
                     if (!actno.equals(actnoinfo.getActno())) {
                         msgs.add("<br>===姓名：" + name + " 合同编号：" + contractno + " 内部帐号不符：<br>信贷系统中的内部帐号："
-                                + actno + "<br>消费信贷中的内部帐号：" +actnoinfo.getActno());
+                                + actno + "<br>消费信贷中的内部帐号：" + actnoinfo.getActno());
                         failcount++;
                     }
                 }
@@ -1182,6 +1114,7 @@ public class FDDateLink extends FormActions {
     /*
       根据用户选中的记录数组来返回cutpaydetl记录集
      */
+
     private Fdcutpaydetl[] getCutPayDetlList(DatabaseConnection conn, String[] recordnos) throws FdcutpaydetlDaoException {
 
         List results = new ArrayList();
@@ -1213,6 +1146,7 @@ public class FDDateLink extends FormActions {
    生成建设银行直连代扣通讯包
    返回成功处理的记录数
     */
+
     private int generateBankWithholdRecord(DatabaseConnection conn, Fdcutpaydetl[] fdcutpaydetls) throws Exception {
 
 
@@ -1262,7 +1196,7 @@ public class FDDateLink extends FormActions {
             for (i = 0; i < detlslength; i++) {
                 //检查已选中的记录，确定为"青岛""建行"代扣
                 if (!XFBankCode.BANKCODE_CCB.equals(fdcutpaydetls[i].getBankcd())) {
-                    logger.info("存在非建行代扣数据"+ fdcutpaydetls[i].getXdkhzdKhmc());
+                    logger.info("存在非建行代扣数据" + fdcutpaydetls[i].getXdkhzdKhmc());
                     continue;
                 }
 
@@ -1392,6 +1326,7 @@ public class FDDateLink extends FormActions {
     /*
    房贷处理：根据建行直连代扣的结果，对SBS进行入帐处理
     */
+
     private int doFDAccountButton(ErrorMessages msgs) {
 
         int rtn = 0;
@@ -1411,6 +1346,7 @@ public class FDDateLink extends FormActions {
     /*
    消费信贷处理：根据建行直连代扣的结果，对SBS进行入帐处理
     */
+
     private int doXFAccountButton(ErrorMessages msgs) {
 
         int rtn = 0;
@@ -1431,6 +1367,7 @@ public class FDDateLink extends FormActions {
     /*
    根据SBS入帐处理结果 对房贷系统进行回写处理
     */
+
     private int doWriteBackButton(DatabaseConnection conn, ErrorMessages msgs) {
 
         int rtn = 0;
