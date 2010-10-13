@@ -18,6 +18,9 @@ public class T100101ResponseRecord {
     String   stdhklx;
     String   stdjhhkr;
     String   stdhth;
+    String   stdhkzh; //还款帐号
+    String   stddqh;  //地区号
+    String   stdyhh;  //银行号
 
     public String getStdjjh() {
         return stdjjh;
@@ -97,5 +100,29 @@ public class T100101ResponseRecord {
 
     public void setStdhth(String stdhth) {
         this.stdhth = stdhth;
+    }
+
+    public String getStdhkzh() {
+        return stdhkzh;
+    }
+
+    public void setStdhkzh(String stdhkzh) {
+        this.stdhkzh = stdhkzh;
+    }
+
+    public String getStddqh() {
+        return stddqh;
+    }
+
+    public void setStddqh(String stddqh) {
+        this.stddqh = stddqh;
+    }
+
+    public String getStdyhh() {
+        return stdyhh;
+    }
+
+    public void setStdyhh(String stdyhh) {
+        this.stdyhh = stdyhh;
     }
 }
