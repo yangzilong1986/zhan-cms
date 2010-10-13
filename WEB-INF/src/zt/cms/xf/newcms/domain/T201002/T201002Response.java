@@ -1,14 +1,17 @@
 package zt.cms.xf.newcms.domain.T201002;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import zt.cms.xf.newcms.domain.common.MsgHeader;
+
 /**
  * Created by IntelliJ IDEA.
  * User: zhanrui
- * Date: 2010-8-27
- * Time: 16:40:10
+ * Date: 2010-10-10
+ * Time: 17:18:39
  * To change this template use File | Settings | File Templates.
  */
-public class T201002RequestRecord {
-
+@XStreamAlias("ROOT")
+public class T201002Response extends MsgHeader {
     String stdsqdzt;  //申请单状态
     String stdkhh;  //客户号
     String stdkhxm;  //客户姓名

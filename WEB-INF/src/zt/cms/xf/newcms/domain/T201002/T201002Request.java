@@ -1,5 +1,6 @@
 package zt.cms.xf.newcms.domain.T201002;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import zt.cms.xf.newcms.domain.common.MsgHeader;
 
 /**
@@ -17,17 +18,11 @@ import zt.cms.xf.newcms.domain.common.MsgHeader;
  * Time: 17:11:06
  * To change this template use File | Settings | File Templates.
  */
-public class T201002Request {
-    private MsgHeader head;
+
+@XStreamAlias("ROOT")
+public class T201002Request extends MsgHeader {
     private String stdsqdh;
 
-    public MsgHeader getHead() {
-        return head;
-    }
-
-    public void setHead(MsgHeader head) {
-        this.head = head;
-    }
 
     public String getStdsqdh() {
         return stdsqdh;

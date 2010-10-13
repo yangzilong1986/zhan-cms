@@ -4,14 +4,9 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import zt.cms.xf.newcms.domain.T100101.T100101Request;
-import zt.cms.xf.newcms.domain.T100101.T100101Response;
+import zt.cms.xf.gateway.NewCmsManager;
+import zt.cms.xf.newcms.domain.T201002.T201002Request;
+import zt.cms.xf.newcms.domain.T201002.T201002Response;
 
 
 /**
@@ -23,54 +18,46 @@ import zt.cms.xf.newcms.domain.T100101.T100101Response;
  */
 public class T201002CTL {
     private Log logger = LogFactory.getLog(this.getClass());
-       
+
     public final static void main(String[] args) throws Exception {
-        HttpClient httpclient = new DefaultHttpClient();
 
-        HttpPost httppost = new HttpPost("http://10.143.19.106:10002/LoanSysPortal/CMSServlet");
+        T201002CTL ctl = new T201002CTL();
+        ctl.start();
 
-        // Execute HTTP request
-        System.out.println("executing request " + httppost.getURI());
+    }
 
+    public T201002Response getAllRecords() {
+        return start();
+    }
+
+    public T201002Response start() {
         XStream xstream = new XStream(new DomDriver());
-        xstream.processAnnotations(T100101Request.class);
-        xstream.processAnnotations(T100101Response.class);
+        xstream.processAnnotations(T201002Request.class);
+        xstream.processAnnotations(T201002Response.class);
 
+        T201002Request request = new T201002Request();
 
-        T100101Request request = new T100101Request();
-        //查询类交易
-        request.setStdmsgtype("0100");
-        //交易码
-        request.setStd400trcd("201002");
+        request.initHeader("0100", "201002", "3");
 
-        request.setStd400aqid("3");
-        request.setStd400tlno("teller");
+        //查询 房贷/消费信贷（1/2） 数据
+//        request.setStdcxlx("2");
+//        int pkgcnt = 100;
+//        int startnum = 1;
+//        request.setStdymjls(String.valueOf(pkgcnt));
+        //request.setStdqsjls("1");
 
-        request.setStdlocdate("20101010");
-        request.setStdloctime("153000");
+        request.setStdsqdh("3708291990022332560001");
 
-        request.setStdtermtrc("1");
-
+        NewCmsManager ncm = new NewCmsManager();
         String strXml = "<?xml version=\"1.0\" encoding=\"GBK\"?>" + "\n" + xstream.toXML(request);
-        System.out.println(strXml);
+        //System.out.println(strXml);
 
-        StringEntity xml = new StringEntity(strXml, "GBK");
-        httppost.setEntity(xml);
+        //发送请求
+        String responseBody = ncm.doPostXml(strXml);
 
-        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-        String responseBody = httpclient.execute(httppost, responseHandler);
+        T201002Response response = (T201002Response) xstream.fromXML(responseBody);
 
-        System.out.println("----------------------------------------");
-        System.out.println(responseBody);
-        System.out.println("----------------------------------------");
-
-
-        T100101Response response = (T100101Response) xstream.fromXML(responseBody);
-
-        System.out.println(response);
-
-
-        httpclient.getConnectionManager().shutdown();
+        return response;
     }
 
 }
