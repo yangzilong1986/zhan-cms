@@ -11,6 +11,8 @@ import zt.cms.xf.newcms.domain.T100101.T100101ResponseRecord;
 import zt.cms.xf.newcms.domain.T100102.T100102RequestList;
 import zt.cms.xf.newcms.domain.T100102.T100102RequestRecord;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,9 @@ import java.util.List;
  * Time: 13:22:35
  * To change this template use File | Settings | File Templates.
  */
-public class T100101CTL {
+@ManagedBean(name = "T100101")
+@SessionScoped
+public class T100101CTL  implements java.io.Serializable{
 
     private Log logger = LogFactory.getLog(this.getClass());
 
@@ -33,6 +37,10 @@ public class T100101CTL {
 
     }
 
+    public    List <T100101ResponseRecord> getAllRecords() {
+        return start();
+    }
+    
     public List <T100101ResponseRecord> start() {
         XStream xstream = new XStream(new DomDriver());
         xstream.processAnnotations(T100101Request.class);
