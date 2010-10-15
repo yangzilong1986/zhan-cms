@@ -23,8 +23,24 @@
         </div>
         <div style="padding-left:50px">
             <!--<h:commandButton id="post" style="padding:3px;width:100px;" value="提交响应" action="txn1000"/>-->
-            <h:commandButton id="post" style="padding:3px;width:100px;" value="提交响应" action="#{T201001.start}"/>
+            <h:commandButton id="post" style="padding:3px;width:100px;" value="提交响应" action="#{T100101.start}"/>
         </div>
+
+        <h:dataTable id="records" value="#{T100101.allRecords}" var="record" border="1" width="80%">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="客户号" />
+                </f:facet>
+                <h:outputText value="#{record.stdjjh}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="客户号1" />
+                </f:facet>
+                <h:outputText value="#{record.stdkhmc}" />
+            </h:column>
+        </h:dataTable>
+
     </h:form>
 </div>
 <h:panelGroup id="after">
@@ -32,5 +48,8 @@
         响应：<h:outputText id="echo" value="#{T201001.ID}" escape="false" />
     </div>
 </h:panelGroup>
+
+
+
 </body>
 </html>

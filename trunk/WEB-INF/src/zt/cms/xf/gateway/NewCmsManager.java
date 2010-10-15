@@ -80,6 +80,9 @@ public class NewCmsManager {
             //TODO  close conn
         }
 
+        if (responseBody == null || responseBody.equals("")) {
+            throw new RuntimeException("通讯可能出现错误，返回报文为空！");
+        }
         logger.info("接收报文： " + responseBody);
         return responseBody;
     }
