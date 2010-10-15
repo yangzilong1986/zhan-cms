@@ -9,15 +9,12 @@ import zt.cms.xf.newcms.domain.T100101.T100101ResponseRecord;
 import zt.cms.xf.newcms.domain.T100102.T100102RequestList;
 import zt.cms.xf.newcms.domain.T100102.T100102RequestRecord;
 import zt.cms.xf.newcms.domain.T201001.T201001Request;
-import zt.cms.xf.newcms.domain.T201001.T201001RequestList;
-import zt.cms.xf.newcms.domain.T201001.T201001RequestRecord;
 import zt.cms.xf.newcms.domain.T201001.T201001Response;
 import zt.platform.db.ConnectionManager;
 import zt.platform.db.DatabaseConnection;
 import zt.platform.db.RecordSet;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import java.util.List;
 
 
@@ -29,10 +26,10 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @ManagedBean(name = "T201001")
-@SessionScoped
+//@SessionScoped
 public class T201001CTL implements java.io.Serializable {
     private Log logger = LogFactory.getLog(this.getClass());
-    private String ID = "aaa" ;
+    private String ID = "aaa";
 
     public String getID() {
         return ID;
@@ -54,17 +51,15 @@ public class T201001CTL implements java.io.Serializable {
         xstream.processAnnotations(T201001Response.class);
 
 
-        T201001Request request = new T201001Request();
+//        T201001Request request = new T201001Request();
+//
+//        request.initHeader("0200", "201001", "3");
 
-        request.initHeader("0200", "201001", "3");
         //组包体
-        T201001RequestRecord reqRecord = getAppFormInfo("4113241986060409140001");
-        System.out.println(reqRecord);
+        T201001Request request = getAppFormInfo("4113241986060409140001");
+        request.initHeader("0200", "201001", "3");
+        System.out.println(request);
 
-        //组包
-        T201001RequestList reqList = new T201001RequestList();
-        reqList.add(reqRecord);
-        request.setBody(reqList);
 
         String strXml = "<?xml version=\"1.0\" encoding=\"GBK\"?>" + "\n" + xstream.toXML(request);
         System.out.println(strXml);
@@ -77,7 +72,6 @@ public class T201001CTL implements java.io.Serializable {
 
         System.out.println(response);
 
-        //uploadCutpayResultBatch(response.getBody().getContent());
 
     }
 
@@ -112,14 +106,22 @@ public class T201001CTL implements java.io.Serializable {
     }
 
 
-    private T201001RequestRecord getAppFormInfo(String AppFormNo) {
-        T201001RequestRecord reqRecord = new T201001RequestRecord();
+    private T201001Request getAppFormInfo(String AppFormNo) {
+        T201001Request reqRecord = new T201001Request();
         DatabaseConnection conn = null;
         try {
             conn = ConnectionManager.getInstance().getConnection();
 
-            String sql = "select c.CLIENTNO,to_char(c.BIRTHDAY,'yyyyMMdd') BIRTHDAY,c.GENDER,c.NATIONALITY,c.MARRIAGESTATUS,c.HUKOUADDRESS,c.CURRENTADDRESS," +
-                    "c.COMPANY,c.TITLE,c.QUALIFICATION,c.EDULEVEL,c.PHONE1,c.PHONE2," +
+            String sql = "select c.CLIENTNO,to_char(c.BIRTHDAY,'yyyyMMdd') BIRTHDAY," +
+                    "(select enudt from PTENUMINFODETL where enuid = 'NewGender' and  enutp = c.GENDER ) as GENDER," +
+                    "c.NATIONALITY," +
+                    "(select enudt from PTENUMINFODETL where enuid = 'NewMarriageStatus' and  enutp = c.MARRIAGESTATUS ) as MARRIAGESTATUS," +
+                    "c.HUKOUADDRESS,c.CURRENTADDRESS," +
+                    "c.COMPANY," +
+                    "(select enudt from PTENUMINFODETL where enuid = 'NewTitle' and  enutp = c.TITLE ) as TITLE," +
+                    "(select enudt from PTENUMINFODETL where enuid = 'NewQualification' and  enutp = c.QUALIFICATION ) as QUALIFICATION," +
+                    "(select enudt from PTENUMINFODETL where enuid = 'NewEduLevel' and  enutp = c.EDULEVEL ) as EDULEVEL," +
+                    "c.PHONE1,c.PHONE2," +
                     "c.PHONE3,c.NAME,c.CLIENTTYPE,c.DEGREETYPE,c.COMADDR,c.SERVFROM,c.RESIDENCEADR,c.HOUSINGSTS," +
                     "c.HEALTHSTATUS,c.MONTHLYPAY,c.BURDENSTATUS,c.EMPNO,c.SOCIALSECURITY,c.LIVEFROM,c.PC,c.COMPC,c.RESDPC,c.RESDADDR,c.EMAIL," +
                     "p.NAME  PNAME ,p.IDTYPE PIDTYPE ,p.ID PID ,p.COMPANY PCOMPANY ,p.TITLE PTITLE ,p.PHONE1 PPHONE1 ," +
@@ -128,44 +130,54 @@ public class T201001CTL implements java.io.Serializable {
                     "m.CHANNEL,m.COMMNAME,m.COMMTYPE,m.ADDR,m.NUM,m.AMT,m.RECEIVEAMT,m.APPAMT,m.DIVID," +
                     "d.ACTOPENINGBANK,d.BANKACTNO,d.XY,d.XYR,d.DY,d.DYW,d.ZY,d.ZYW,d.BZ,d.BZR,d.CREDITTYPE,d.MONPAYAMT," +
                     "d.LINKMAN,d.LINKMANGENDER,d.LINKMANPHONE1,d.LINKMANPHONE2,d.APPRELATION,d.LINKMANADD,d.LINKMANCOMPANY,d.ACTOPENINGBANK_UD," +
-                    "a.IDTYPE,a.ID,to_char(a.APPDATE,'yyyyMMdd') as APPDATE,a.APPTYPE,a.APPSTATUS,a.SID,a.ORDERNO,a.REQUESTTIME " +
+                    "(select enudt from PTENUMINFODETL where enuid = 'NewIDType' and  enutp = a.IDTYPE ) as IDTYPE," +
+                    "a.ID,to_char(a.APPDATE,'yyyyMMdd') as APPDATE,a.APPTYPE,a.APPSTATUS,a.SID,a.ORDERNO,a.REQUESTTIME " +
+
                     "from XFCLIENT c,XFAPPCOMM m,XFAPPADD d,XFAPP a " +
                     "left outer join XFCLIENT p on a.APPNO=p.APPNO and p.XFCLTP='2' " +
+
                     "where a.APPNO='" + AppFormNo + "' and a.APPNO=c.APPNO and c.XFCLTP='1' " +
                     "and a.APPNO=m.APPNO " +
                     "and a.APPNO=d.APPNO";
+                                                                           
 
-
+            logger.info(sql);
             RecordSet recordSet = conn.executeQuery(sql);
+
+            if (recordSet.getRecordCount()==0) {
+                logger.error("未找到对应申请信息" + sql);
+                throw new RuntimeException("未找到对应申请信息");
+            }
+
             while (recordSet.next()) {
                 //reqRecord.setStdsqdh(recordSet.getString("appno"));    //申请单号
                 reqRecord.setStdsqdh(AppFormNo);    //申请单号
-                reqRecord.setStdurl("");    //文件URL
+                reqRecord.setStdurl("http://192.168.91.20/dnldfile.xhtml");    //文件URL  TODO 参数化
                 reqRecord.setStdkhxm(recordSet.getString("name"));    //客户姓名
                 reqRecord.setStdzjlx(recordSet.getString("idtype"));    //证件类型
                 reqRecord.setStdzjhm(recordSet.getString("id"));    //证件号码
                 reqRecord.setStdlxfs(recordSet.getString("phone1"));    //联系方式
                 reqRecord.setStdxb(recordSet.getString("gender"));    //性别
                 reqRecord.setStdcsrq(recordSet.getString("birthday"));    //出生日期
-                reqRecord.setStdgj(recordSet.getString("CHN"));    //国籍
+                reqRecord.setStdgj("CHN");    //国籍
                 reqRecord.setStdkhxz(recordSet.getString("clienttype"));    //客户性质 TODO
                 reqRecord.setStdhyzk(recordSet.getString("marriagestatus"));    //婚姻状况
                 reqRecord.setStdjycd(recordSet.getString("edulevel"));    //教育程度
-                reqRecord.setStdkhly(recordSet.getString("99"));    //客户来源
+                reqRecord.setStdkhly("99");    //客户来源
                 reqRecord.setStdhjszd(recordSet.getString("residenceadr"));    //户籍所在地
                 reqRecord.setStdhkxz(recordSet.getString("residenceadr"));    //户口性质
-                reqRecord.setStdrhzxqk(recordSet.getString("6"));    //人行征信情况
-                reqRecord.setStdfdyqqs(recordSet.getString("0"));    //征信记录中零售房贷最高逾期期数
-                reqRecord.setStdffdyqqs(recordSet.getString("0"));    //征信记录中零售非房贷最高逾期期数
+                reqRecord.setStdrhzxqk("6");    //人行征信情况
+                reqRecord.setStdfdyqqs("0");    //征信记录中零售房贷最高逾期期数
+                reqRecord.setStdffdyqqs("0");    //征信记录中零售非房贷最高逾期期数
                 reqRecord.setStdjtdz(recordSet.getString("currentaddress"));    //家庭地址
                 reqRecord.setStdjtdzdh(recordSet.getString("phone2"));    //家庭地址电话
-                reqRecord.setStdzzxz(recordSet.getString("9"));    //住宅性质
+                reqRecord.setStdzzxz("9");    //住宅性质
                 reqRecord.setStdzy(recordSet.getString("clienttype"));    //职业 TODO
                 reqRecord.setStdzw(recordSet.getString("title"));    //职务
                 reqRecord.setStdzc(recordSet.getString("qualification"));    //职称
                 reqRecord.setStdgzdw(recordSet.getString("company"));    //工作单位
-                reqRecord.setStdsshy(recordSet.getString("U"));    //所属行业
-                reqRecord.setStdszqyrs(recordSet.getString("0"));    //所在企业人数
+                reqRecord.setStdsshy("U");    //所属行业
+                reqRecord.setStdszqyrs("0");    //所在企业人数
 
                 String servyears = recordSet.getString("servfrom");
                 if (servyears == null) {
@@ -190,12 +202,12 @@ public class T201001CTL implements java.io.Serializable {
                 reqRecord.setStdlxr(recordSet.getString("linkman"));    //联系人
                 reqRecord.setStdlxrdh(recordSet.getString("linkmanphone1"));    //联系人电话
                 reqRecord.setStdgrysr(recordSet.getString("monthlypay"));    //个人月收入
-                reqRecord.setStdjtwdsr(recordSet.getString("0"));    //家庭稳定收入
-                reqRecord.setStdzwzc(recordSet.getString("0"));    //每月其他债务支出
+                reqRecord.setStdjtwdsr("0");    //家庭稳定收入
+                reqRecord.setStdzwzc("0");    //每月其他债务支出
             }
 
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new RuntimeException(e);
         } finally {
             ConnectionManager.getInstance().releaseConnection(conn);
         }

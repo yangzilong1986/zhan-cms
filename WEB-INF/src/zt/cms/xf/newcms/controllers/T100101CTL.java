@@ -12,7 +12,6 @@ import zt.cms.xf.newcms.domain.T100102.T100102RequestList;
 import zt.cms.xf.newcms.domain.T100102.T100102RequestRecord;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +24,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @ManagedBean(name = "T100101")
-@SessionScoped
+//@SessionScoped
 public class T100101CTL  implements java.io.Serializable{
 
     private Log logger = LogFactory.getLog(this.getClass());
