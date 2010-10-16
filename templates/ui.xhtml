@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  html  PUBLIC  "-//W3C//DTD  XHTML  1.0  Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+<f:view contentType="text/html">
+
+	<h:head>
+		<title>PrimeFaces - ShowCase</title>
+		<meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/themes/flick/skin.css"/>  
+		<ui:insert name="head"></ui:insert>          
+	</h:head>
+
+	<h:body>
+
+
+		<div id="wrapper">
+
+			<div id="page">
+				<div id="content">
+					<div class="post">
+						<ui:insert name="content">...</ui:insert>
+					</div>
+				</div>
+
+				<div style="clear: both;">&nbsp;</div>
+			</div>
+		</div>
+
+		<div id="footer">
+			<p class="copyright">&copy;&nbsp;&nbsp;2010 &nbsp;&bull;&nbsp; <a href="http://primefaces.prime.com.tr/">FBI Technology</a>.</p>
+			<!--<p style="float:left">Running #{build.primefacesVersion} on #{build.jsfVersion}</p>-->
+			<!--<p style="float:left">Running jsf 2.0</p>-->
+		</div>
+
+	</h:body>
+
+
+</f:view>
+</html>

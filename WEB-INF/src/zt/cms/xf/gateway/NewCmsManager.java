@@ -22,7 +22,8 @@ import java.io.UnsupportedEncodingException;
  */
 public class NewCmsManager {
 
-    private String serverUrl = "http://10.143.19.106:10002/LoanSysPortal/CMSServlet";
+    private String serverUrl = "http://10.143.20.33:10002/LoanSysPortal/CMSServlet";
+//    private String serverUrl = "http://10.143.19.106:10002/LoanSysPortal/CMSServlet";
     private Log logger = LogFactory.getLog(this.getClass());
 
     private HttpClient httpclient = null;
