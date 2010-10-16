@@ -36,6 +36,10 @@ public class T100101CTL  implements java.io.Serializable{
 
     }
 
+    public String  test(){
+           return  "about";
+    }
+    
     public    List <T100101ResponseRecord> getAllRecords() {
         return start();
     }
