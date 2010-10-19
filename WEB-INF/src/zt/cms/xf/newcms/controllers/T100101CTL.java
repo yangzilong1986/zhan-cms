@@ -32,7 +32,7 @@ public class T100101CTL  implements java.io.Serializable{
     public final static void main(String[] args) throws Exception {
 
         T100101CTL ctl = new T100101CTL();
-        ctl.start();
+        ctl.start("1");
 
     }
 
@@ -40,11 +40,21 @@ public class T100101CTL  implements java.io.Serializable{
            return  "about";
     }
     
-    public    List <T100101ResponseRecord> getAllRecords() {
-        return start();
+    public    List <T100101ResponseRecord> getAllFDRecords() {
+        //查询 房贷/消费信贷（1/2） 数据
+        return start("1");
     }
-    
-    public List <T100101ResponseRecord> start() {
+    public    List <T100101ResponseRecord> getAllXFRecords() {
+        //查询 房贷/消费信贷（1/2） 数据
+        return start("2");
+    }
+
+    /**
+     *
+     * @param systemcode 要查询的系统别    房贷/消费信贷（1/2） 数据
+     * @return
+     */
+    public List <T100101ResponseRecord> start(String systemcode) {
         XStream xstream = new XStream(new DomDriver());
         xstream.processAnnotations(T100101Request.class);
         xstream.processAnnotations(T100101Response.class);
@@ -54,7 +64,7 @@ public class T100101CTL  implements java.io.Serializable{
         request.initHeader("0100", "100101", "3");
 
         //查询 房贷/消费信贷（1/2） 数据
-        request.setStdcxlx("1");
+        request.setStdcxlx(systemcode);
         int pkgcnt = 100;
         int startnum = 1;
         request.setStdymjls(String.valueOf(pkgcnt));

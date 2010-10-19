@@ -499,7 +499,8 @@ public class FDDateLink extends FormActions {
 
         //获取新信贷数据LIST
         T100101CTL t100101 = new T100101CTL();
-        List<T100101ResponseRecord> recvList = t100101.start();
+        //查询 房贷/消费信贷（1/2） 数据
+        List<T100101ResponseRecord> recvList = t100101.start("1");
 
 
         //核对本地帐户表信息
@@ -587,7 +588,7 @@ public class FDDateLink extends FormActions {
                 ps.setDouble(9, Double.valueOf(record.getStdhklx()));
 
                 ps.setString(10, record.getStddkzh());
-                ps.setString(11, "cutpayacctno");
+                ps.setString(11, record.getStdhkzh());
                 ps.setString(12, "0");   //billstatus
                 ps.setDate(13, new java.sql.Date(new Date().getTime()));
                 ps.setString(14, " ");
@@ -597,8 +598,8 @@ public class FDDateLink extends FormActions {
                 ps.setString(17, "htnm");
                 ps.setString(18, record.getStdqch());
                 ps.setString(19, "0");
-                ps.setString(20, "0");
-                ps.setString(21, "0");
+                ps.setString(20, record.getStddqh());
+                ps.setString(21, record.getStdyhh());
                 ps.addBatch();
             }
 
