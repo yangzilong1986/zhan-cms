@@ -1,21 +1,36 @@
 package zt.cms.xf.account;
 
+import org.apache.commons.lang.StringUtils;
+import zt.cms.xf.common.constant.XFBillStatus;
+import zt.cms.xf.common.dao.XfactcutpaydetlDao;
+import zt.cms.xf.common.dao.XfactcutpaymainDao;
+import zt.cms.xf.common.dto.Xfactcutpaydetl;
+import zt.cms.xf.common.dto.Xfactcutpaymain;
+import zt.cms.xf.common.factory.XfactcutpaydetlDaoFactory;
+import zt.cms.xf.common.factory.XfactcutpaymainDaoFactory;
+import zt.cms.xf.newcms.controllers.T100101CTL;
+import zt.cms.xf.newcms.domain.T100101.T100101ResponseRecord;
+import zt.cmsi.mydb.MyDB;
 import zt.platform.db.DatabaseConnection;
+import zt.platform.db.RecordSet;
+import zt.platform.form.config.SystemAttributeNames;
+import zt.platform.form.control.FormActions;
+import zt.platform.form.control.SessionContext;
 import zt.platform.form.util.FormInstance;
 import zt.platform.form.util.event.ErrorMessages;
+import zt.platform.form.util.event.Event;
 import zt.platform.form.util.event.EventManager;
-
-import java.util.Date;
-import java.util.logging.Logger;
-import java.text.SimpleDateFormat;
-
-import zt.platform.form.control.SessionContext;
-import zt.platform.form.control.FormActions;
-import zt.platform.form.util.event.*;
+import zt.platform.form.util.event.EventType;
+import zt.platform.user.UserManager;
 import zt.platform.utils.Debug;
-import zt.cms.xf.common.dao.XfactcutpaymainDao;
-import zt.cms.xf.common.factory.XfactcutpaymainDaoFactory;
-import zt.cms.xf.common.dto.Xfactcutpaymain;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -66,11 +81,22 @@ public class XFActCutPayLink extends FormActions {
                     return (-1);
                 }
 
+/*
+                //20101018 新信贷接口改造 屏蔽本段处理
                 if ((count = bm.generateBills(ctx, conn, msgs)) == 0) {
                     ctx.setRequestAtrribute("msg", "今日无待出帐扣款记录，请查询！");
                 } else {
                     ctx.setRequestAtrribute("msg", "帐单生成成功，共生成 " + count + " 条新扣款记录，请查询！");
                 }
+
+*/
+                //20101018 新信贷接口改造
+                if ((count = generateNewCmsBills(ctx, conn, msgs)) == 0) {
+                    ctx.setRequestAtrribute("msg", "今日无待出帐扣款记录，请查询！");
+                } else {
+                    ctx.setRequestAtrribute("msg", "帐单生成成功，共生成 " + count + " 条新扣款记录，请查询！");
+                }
+
 
                 ctx.setRequestAtrribute("flag", "1");
                 ctx.setRequestAtrribute("isback", "0");
@@ -87,6 +113,114 @@ public class XFActCutPayLink extends FormActions {
 
         }
         return 0;
+    }
+
+    /**
+     * 20101018  新信贷接口
+     *
+     * @param ctx
+     * @param conn
+     * @param msgs
+     * @return
+     * @throws Exception
+     */
+    public int generateNewCmsBills(SessionContext ctx, DatabaseConnection conn, ErrorMessages msgs) throws Exception {
+
+        Connection sqlconn = null;
+
+        try {
+
+            MyDB.getInstance().addDBConn(conn);
+            //conn.setAuto(false);                        //TODO
+            sqlconn = conn.getConnection();
+            sqlconn.setAutoCommit(false);
+
+            UserManager um = (UserManager) ctx.getAttribute(SystemAttributeNames.USER_INFO_NAME);
+
+
+            XfactcutpaydetlDao detldao = XfactcutpaydetlDaoFactory.create(sqlconn);
+            Xfactcutpaydetl xfactcutpaydetl = new Xfactcutpaydetl();
+
+            String journalnoSql = "select max(journalno) from xfactcutpaydetl where substr(journalno,1,8) = '" + chargeoffdate + "'";
+            RecordSet rs = conn.executeQuery(journalnoSql);
+
+            int maxno = 0;
+            if (rs.next()) {
+                String max = rs.getString(0);
+                if (max != null) {
+                    maxno = Integer.parseInt(max.substring(8));
+                }
+            }
+
+            SimpleDateFormat sFmt = new SimpleDateFormat("yyyyMMdd");
+
+            //获取新信贷数据LIST
+            T100101CTL t100101 = new T100101CTL();
+            //查询 房贷/消费信贷（1/2） 数据
+            List<T100101ResponseRecord> recvList = t100101.start("2");
+
+            int count = 0;
+            for (T100101ResponseRecord recvRecord : recvList) {
+
+                //流水号生成
+                maxno++;
+                String journalno = chargeoffdate + StringUtils.leftPad(Integer.toString(maxno), 5, "0");
+                xfactcutpaydetl.setJournalno(journalno);
+
+                xfactcutpaydetl.setContractno(recvRecord.getStdhth());
+                xfactcutpaydetl.setClientno(recvRecord.getStdkhh());
+                xfactcutpaydetl.setClientname(recvRecord.getStdkhmc());
+                xfactcutpaydetl.setPoano(new BigDecimal(recvRecord.getStdqch()));
+                xfactcutpaydetl.setClientact(recvRecord.getStddkzh());
+                xfactcutpaydetl.setPaybackact(recvRecord.getStdhkzh());
+
+                xfactcutpaydetl.setBillstatus(XFBillStatus.BILLSTATUS_CHECK_PENDING);
+
+                String curruser = StringUtils.trimToEmpty(um.getUserName());
+                xfactcutpaydetl.setOperatorid(curruser);
+                xfactcutpaydetl.setCreatorid(curruser);
+
+                xfactcutpaydetl.setOperatedate(new Date());
+                xfactcutpaydetl.setCreatedate(new Date());
+
+                xfactcutpaydetl.setCheckerid(null);
+                xfactcutpaydetl.setCheckdate(null);
+
+                xfactcutpaydetl.setPaidupamt(BigDecimal.valueOf(0));
+                xfactcutpaydetl.setStartdate(sFmt.parse(chargeoffdate));
+                xfactcutpaydetl.setBilltype("0"); //默认为正常帐单
+
+                xfactcutpaydetl.setPaybackamt(new BigDecimal(recvRecord.getStdhkje()));
+                xfactcutpaydetl.setPrincipalamt(new BigDecimal(recvRecord.getStdhkbj()));
+                xfactcutpaydetl.setServicechargefee(new BigDecimal(recvRecord.getStdhklx()));
+
+                //生成新的明细帐单
+                detldao.insert(xfactcutpaydetl);
+
+                count++;
+            }
+
+            sqlconn.commit();
+            return count;
+
+        }
+
+        catch (Exception e) {
+            if (sqlconn != null) {
+                try {
+                    sqlconn.rollback();
+                }
+                catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            msgs.add("发生异常：" + e.getMessage());
+            Debug.debug(e);
+            throw new Exception(e);
+        } finally {
+            MyDB.getInstance().releaseDBConn();
+        }
+
     }
 
 
