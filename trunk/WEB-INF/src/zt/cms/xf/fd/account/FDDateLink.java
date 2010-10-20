@@ -89,7 +89,8 @@ public class FDDateLink extends FormActions {
 
         if (lastbutton.equals("GETCUTPAYBUTTON")) {
             instance.getFormBean().getElement("GETFDDATABUTTON").setComponetTp(15);
-            instance.getFormBean().getElement("CHECKFDDATABUTTON").setComponetTp(15);
+//            instance.getFormBean().getElement("CHECKFDDATABUTTON").setComponetTp(15);
+            instance.getFormBean().getElement("CHECKFDDATABUTTON").setComponetTp(6);
         } else if (lastbutton.equals("GENERATEPKGBUTTON")) {
             instance.getFormBean().getElement("GENERATEPKGBUTTON").setComponetTp(15);
         } else if (lastbutton.equals("SENDPKGBUTTON")) {
@@ -206,6 +207,7 @@ public class FDDateLink extends FormActions {
 
         //利用DBLINK 检查房贷系统数据
         if (button.equals("CHECKFDDATABUTTON") || button.equals("CHECKFDPREDATABUTTON")) {
+/*
 
             String regioncd = ctx.getParameter("REGION");
             String bankcd = null;
@@ -262,6 +264,7 @@ public class FDDateLink extends FormActions {
                 ctx.setTarget("/showinfo.jsp");
                 instance.setReadonly(true);
             }
+*/
         }
 
 
@@ -468,6 +471,7 @@ public class FDDateLink extends FormActions {
     private int getNewFDSystemData(DatabaseConnection conn, ErrorMessages msgs, String button,
                                    String regioncd, String bankcd) throws Exception {
 
+/*
         String regionid = null;
         String regionid1 = null;
         String bankid = null;
@@ -486,6 +490,7 @@ public class FDDateLink extends FormActions {
                 throw new Exception("地区代码错误!");
             }
         }
+*/
 
 
         String preflag = "0";
@@ -505,10 +510,12 @@ public class FDDateLink extends FormActions {
 
         //核对本地帐户表信息
         int rtn = 0;
+/*
         rtn = checkNewFDSystemData(recvList, msgs);
         if (rtn == -1) {
             return -1;
         }
+*/
 
         RecordSet rs = null;
         PreparedStatement ps = null;
@@ -576,6 +583,23 @@ public class FDDateLink extends FormActions {
 
             int count = 0;
             for (T100101ResponseRecord record : recvList) {
+                //TODO 地区字段为临时方案 待修正
+                String tmpStr = record.getStddqh();
+                String regioncdTmp,bankcdTmp;
+                if (tmpStr == null) {
+                    msgs.add("地区代号转换有误");
+                    return -1;
+                    //throw new RuntimeException("地区代号转换有误");
+                } else {
+                    String[] code = tmpStr.split("-");
+                    regioncdTmp = code[0].trim();
+                    bankcdTmp =  code[1].trim();
+                }
+
+                if (!regioncd.equals(regioncdTmp)) {
+                    continue;
+                }
+
                 count++;
                 ps.setString(1, inputdate + StringUtils.leftPad(String.valueOf(maxno + count), 7, '0'));
                 ps.setString(2, record.getStdkhh());
@@ -598,20 +622,32 @@ public class FDDateLink extends FormActions {
                 ps.setString(17, "htnm");
                 ps.setString(18, record.getStdqch());
                 ps.setString(19, "0");
-                ps.setString(20, record.getStddqh());
-                ps.setString(21, record.getStdyhh());
+
+                //2010-10-20 对地区及银行代码进行临时处理
+                //ps.setString(20, record.getStddqh());
+                //ps.setString(21, record.getStdyhh());
+                //begin
+                ps.setString(20, regioncdTmp);
+                ps.setString(21, bankcdTmp);
+                //end
+
                 ps.addBatch();
             }
 
             int[] results = ps.executeBatch();//执行批处理
 
             //处理地区信息   TODO
-            
+            sql = "insert into fdcutpaydetl select * from fdcutpaydetltemp";
+            rtn = conn.executeUpdate(sql);
+            if (rtn < 0) {
+                msgs.add("处理临时表数据时出现问题。");
+                return -1;
+            }
 
             conn.commit();
 
 
-            sql = "select count(*),sum(gthtjh_jhje) from  fdcutpaydetltemp " + " where billstatus = " + FDBillStatus.SEND_PENDING;
+            sql = "select count(*),sum(gthtjh_jhje) from  fdcutpaydetl " + " where billstatus = " + FDBillStatus.SEND_PENDING;
             rs = conn.executeQuery(sql);
             if (rs.next()) {
                 rtn = rs.getInt(0);

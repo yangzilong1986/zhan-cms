@@ -25,9 +25,37 @@ import java.util.List;
  */
 @ManagedBean(name = "T100101")
 //@SessionScoped
-public class T100101CTL  implements java.io.Serializable{
+public class T100101CTL implements java.io.Serializable {
 
     private Log logger = LogFactory.getLog(this.getClass());
+    private T100101ResponseRecord responseRecord = new T100101ResponseRecord() ;
+    List<T100101ResponseRecord> responseFDList = new ArrayList();
+    List<T100101ResponseRecord> responseXFList = new ArrayList();
+
+
+    public T100101ResponseRecord getResponseRecord() {
+        return responseRecord;
+    }
+
+    public void setResponseRecord(T100101ResponseRecord responseRecord) {
+        this.responseRecord = responseRecord;
+    }
+
+    public List<T100101ResponseRecord> getResponseFDList() {
+        return responseFDList;
+    }
+
+    public void setResponseFDList(List<T100101ResponseRecord> responseFDList) {
+        this.responseFDList = responseFDList;
+    }
+
+    public List<T100101ResponseRecord> getResponseXFList() {
+        return responseXFList;
+    }
+
+    public void setResponseXFList(List<T100101ResponseRecord> responseXFList) {
+        this.responseXFList = responseXFList;
+    }
 
     public final static void main(String[] args) throws Exception {
 
@@ -36,25 +64,35 @@ public class T100101CTL  implements java.io.Serializable{
 
     }
 
-    public String  test(){
-           return  "about";
+    public String test() {
+        return "about.xhtml";
     }
-    
-    public    List <T100101ResponseRecord> getAllFDRecords() {
+
+    public List<T100101ResponseRecord> getAllFDRecords() {
         //查询 房贷/消费信贷（1/2） 数据
-        return start("1");
+        setResponseFDList(start("1"));
+        return this.getResponseFDList();
     }
-    public    List <T100101ResponseRecord> getAllXFRecords() {
+
+    public List<T100101ResponseRecord> getAllXFRecords() {
         //查询 房贷/消费信贷（1/2） 数据
-        return start("2");
+        setResponseXFList(start("2"));
+        return this.getResponseXFList();
+
+    }
+
+    public String query() {
+        setResponseFDList(start("1"));
+        setResponseXFList(start("2"));
+
+         return null;
     }
 
     /**
-     *
      * @param systemcode 要查询的系统别    房贷/消费信贷（1/2） 数据
      * @return
      */
-    public List <T100101ResponseRecord> start(String systemcode) {
+    public List<T100101ResponseRecord> start(String systemcode) {
         XStream xstream = new XStream(new DomDriver());
         xstream.processAnnotations(T100101Request.class);
         xstream.processAnnotations(T100101Response.class);
@@ -72,11 +110,11 @@ public class T100101CTL  implements java.io.Serializable{
 
         NewCmsManager ncm = new NewCmsManager();
 
-        List <T100101ResponseRecord> responseList = new ArrayList();
+        List<T100101ResponseRecord> responseList = new ArrayList();
         int totalcount = processTxn(responseList, ncm, xstream, request, pkgcnt, startnum);
         logger.info("received list zise:" + responseList.size());
-        if (totalcount !=responseList.size() ) {
-            logger.error("获取还款数据笔数有误！应收笔数：" +responseList.size() + "实收笔数："+totalcount);
+        if (totalcount != responseList.size()) {
+            logger.error("获取还款数据笔数有误！应收笔数：" + responseList.size() + "实收笔数：" + totalcount);
             throw new RuntimeException("获取还款数据笔数有误.");
         }
         return responseList;
@@ -84,6 +122,7 @@ public class T100101CTL  implements java.io.Serializable{
 
     /**
      * 递归获取服务器数据
+     *
      * @param responseList
      * @param ncm
      * @param xstream
@@ -92,9 +131,9 @@ public class T100101CTL  implements java.io.Serializable{
      * @param startnum
      * @return
      */
-    public int processTxn(List <T100101ResponseRecord> responseList ,
-                           NewCmsManager ncm, XStream xstream, T100101Request request,
-                           int pkgcnt, int startnum) {
+    public int processTxn(List<T100101ResponseRecord> responseList,
+                          NewCmsManager ncm, XStream xstream, T100101Request request,
+                          int pkgcnt, int startnum) {
 //        T100101Request request = new T100101Request();
 
 //        request.initHeader("0100","100101","3");
@@ -125,22 +164,22 @@ public class T100101CTL  implements java.io.Serializable{
         if (totalcount == 0) {
 
         } else {
-            List<T100101ResponseRecord> tmpList =  response.getBody().getContent();
-                    
+            List<T100101ResponseRecord> tmpList = response.getBody().getContent();
+
             int currCnt = tmpList.size();
             logger.info(currCnt);
             logger.info("totalcount:" + totalcount + " currCnt:" + currCnt + " startnum:" + startnum);
 
             //打包到返回list中
-            for (T100101ResponseRecord record : tmpList){
-                   responseList.add(record);
+            for (T100101ResponseRecord record : tmpList) {
+                responseList.add(record);
             }
 
             //一个包不可以处理完
             if (totalcount > pkgcnt) {
                 startnum += pkgcnt;
-                if (startnum  <= totalcount) {
-                    processTxn(responseList,ncm, xstream, request, pkgcnt, startnum);
+                if (startnum <= totalcount) {
+                    processTxn(responseList, ncm, xstream, request, pkgcnt, startnum);
                 }
             }
         }
@@ -180,4 +219,16 @@ public class T100101CTL  implements java.io.Serializable{
         System.out.println("========" + count);
 
     }
+
+/*
+       public void handleReorder(DashboardReorderEvent event) {
+        FacesMessage message = new FacesMessage();
+        message.setSeverity(FacesMessage.SEVERITY_INFO);
+        message.setSummary("Reordered: " );
+        message.setDetail("Item index: " );
+
+        FacesContext.getCurrentInstance().addMessage(null, message);  
+    }
+*/
+
 }
