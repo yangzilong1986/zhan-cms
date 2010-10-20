@@ -34,13 +34,6 @@
         </context-param>
     -->
 
-    <!--icefaces-->
-<!--
-    <context-param>
-        <param-name>org.icefaces.render.auto</param-name>
-        <param-value>false</param-value>
-    </context-param>
--->
 
     <!--primefaces-->
     <servlet>

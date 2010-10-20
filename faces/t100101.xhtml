@@ -5,221 +5,230 @@
                 xmlns:p="http://primefaces.prime.com.tr/ui"
                 template="/templates/ui.xhtml">
 
-    <ui:define name="head">
+<ui:define name="head">
 
-    </ui:define>
+</ui:define>
 
-    <ui:define name="content">
-        <div id="header"
-             style="padding:20px  0  20px  0px;font-size:22px;font-weight:bold;border-bottom:solid  1px  blue">
-            <div>
-                <h:form id="form" style="padding:20px  0  0px  0px">
+<ui:define name="content">
+<div id="header"
+     style="padding:20px  0  20px  0;border-bottom:solid  1px  blue">
+    <div style="font-size:0.9em">
+        <p:panel header="查询条件">
+            <h:form>
+                <h:panelGrid columns="2" style="text-align:left">
+                    <h:outputLabel  value="客户号* :" for="txt_title"/>
+                    <h:inputText id="txt_title" size="40" value="#{T100101.responseRecord.stdkhh}"/>
 
-                    <div style="padding-left:20px">
-                        <!--<h:commandButton id="post" style="padding:3px;width:100px;" value="提交响应" action="txn1000"/>-->
-                        <h:commandButton id="post" style="padding:3px;width:100px;" value="提交查询"
-                                         action="about"/>
-                    </div>
+                    <h:outputLabel value="客户名称* :" for="txt_author"/>
+                    <h:inputText id="txt_author" size="40" value="#{T100101.responseRecord.stdkhmc}"/>
 
-                </h:form>
-            </div>
-        </div>
-                       
-        <div style="padding:15px">
-            <p:tabView>
-                <p:tab title="房贷代扣记录">
-                    <h:form>
-                        <p:dataTable var="response" value="#{T100101.allFDRecords}" 
-                                     paginator="true" rows="30" 
-                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="5,10,15" style="width:98%; font-size:0.7em">
-                            <f:facet name="header">
-                                还款记录清单
-                            </f:facet>
-                            <!--<p:dataTable var="car" value="#{searchService.allRecords}">-->
-                            <p:column width="30">
-                                <f:facet name="header">
-                                    合同号
-                                </f:facet>
-                                <h:outputText value="#{response.stdhth}"/>
-                            </p:column>
+                </h:panelGrid>
+                <h:panelGrid columns="1" style="text-align:center;padding-top:10px;font-size:11px" width="30%">
+                    <h:panelGroup>
+                        <p:commandButton id="qrybtn" value="查询" action="#{T100101.query}"/>
+                        <p:commandButton value="重置" type="reset"/>
+                    </h:panelGroup>
+                </h:panelGrid>
+            </h:form>
+        </p:panel>
+    </div>
+</div>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    期次号
-                                </f:facet>
-                                <h:outputText value="#{response.stdqch}"/>
-                            </p:column>
+<div style="padding:15px">
+    <p:tabView>
+        <p:tab title="房贷代扣记录">
+            <h:form>
+                <p:dataTable var="response" value="#{T100101.allFDRecords}"
+                             paginator="true" rows="30"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15" style="width:98%; font-size:0.7em">
+                    <f:facet name="header">
+                        还款记录清单
+                    </f:facet>
+                    <!--<p:dataTable var="car" value="#{searchService.allRecords}">-->
+                    <p:column width="30">
+                        <f:facet name="header">
+                            合同号
+                        </f:facet>
+                        <h:outputText value="#{response.stdhth}"/>
+                    </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    客户号
-                                </f:facet>
-                                <h:outputText value="#{response.stdkhh}"/>
-                            </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            期次号
+                        </f:facet>
+                        <h:outputText value="#{response.stdqch}"/>
+                    </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    客户名称
-                                </f:facet>
-                                <h:outputText value="#{response.stdkhmc}"/>
-                            </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            客户号
+                        </f:facet>
+                        <h:outputText value="#{response.stdkhh}"/>
+                    </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    还款金额
-                                </f:facet>
-                                <h:outputText value="#{response.stdhkje}"/>
-                            </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            客户名称
+                        </f:facet>
+                        <h:outputText value="#{response.stdkhmc}"/>
+                    </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    还款本金
-                                </f:facet>
-                                <h:outputText value="#{response.stdhkbj}"/>
-                            </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            还款金额
+                        </f:facet>
+                        <h:outputText value="#{response.stdhkje}"/>
+                    </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    还款利息
-                                </f:facet>
-                                <h:outputText value="#{response.stdhklx}"/>
-                            </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            还款本金
+                        </f:facet>
+                        <h:outputText value="#{response.stdhkbj}"/>
+                    </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    贷款帐号
-                                </f:facet>
-                                <h:outputText value="#{response.stddkzh}"/>
-                            </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            还款利息
+                        </f:facet>
+                        <h:outputText value="#{response.stdhklx}"/>
+                    </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    扣款帐号
-                                </f:facet>
-                                <h:outputText value="#{response.stdhkzh}"/>
-                            </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            贷款帐号
+                        </f:facet>
+                        <h:outputText value="#{response.stddkzh}"/>
+                    </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    地区
-                                </f:facet>
-                                <h:outputText value="#{response.stddqh}"/>
-                            </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            扣款帐号
+                        </f:facet>
+                        <h:outputText value="#{response.stdhkzh}"/>
+                    </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    代扣银行
-                                </f:facet>
-                                <h:outputText value="#{response.stdyhh}"/>
-                            </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            地区
+                        </f:facet>
+                        <h:outputText value="#{response.stddqh}"/>
+                    </p:column>
 
-
-                        </p:dataTable>
-                    </h:form>
-                </p:tab>
-
-                <p:tab title="个人分期代扣记录">
-                    <h:form>
-                        <p:dataTable var="response" value="#{T100101.allXFRecords}"
-                                     paginator="true" rows="10"
-                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="5,10,15">
-                            <f:facet name="header">
-                                还款记录清单
-                            </f:facet>
-                            <!--<p:dataTable var="car" value="#{searchService.allRecords}">-->
-                            <p:column>
-                                <f:facet name="header">
-                                    合同号
-                                </f:facet>
-                                <h:outputText value="#{response.stdhth}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    期次号
-                                </f:facet>
-                                <h:outputText value="#{response.stdqch}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    客户号
-                                </f:facet>
-                                <h:outputText value="#{response.stdkhh}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    客户名称
-                                </f:facet>
-                                <h:outputText value="#{response.stdkhmc}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    还款金额
-                                </f:facet>
-                                <h:outputText value="#{response.stdhkje}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    还款本金
-                                </f:facet>
-                                <h:outputText value="#{response.stdhkbj}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    还款利息
-                                </f:facet>
-                                <h:outputText value="#{response.stdhklx}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    贷款帐号
-                                </f:facet>
-                                <h:outputText value="#{response.stddkzh}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    扣款帐号
-                                </f:facet>
-                                <h:outputText value="#{response.stdhkzh}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    地区
-                                </f:facet>
-                                <h:outputText value="#{response.stddqh}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    代扣银行
-                                </f:facet>
-                                <h:outputText value="#{response.stdyhh}"/>
-                            </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            代扣银行
+                        </f:facet>
+                        <h:outputText value="#{response.stdyhh}"/>
+                    </p:column>
 
 
-                        </p:dataTable>
-                    </h:form>
-                </p:tab>
-            </p:tabView>
+                </p:dataTable>
+            </h:form>
+        </p:tab>
+
+        <p:tab title="个人分期代扣记录">
+            <h:form>
+                <p:dataTable var="response" value="#{T100101.allXFRecords}"
+                             paginator="true" rows="10"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15">
+                    <f:facet name="header">
+                        还款记录清单
+                    </f:facet>
+                    <!--<p:dataTable var="car" value="#{searchService.allRecords}">-->
+                    <p:column>
+                        <f:facet name="header">
+                            合同号
+                        </f:facet>
+                        <h:outputText value="#{response.stdhth}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            期次号
+                        </f:facet>
+                        <h:outputText value="#{response.stdqch}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            客户号
+                        </f:facet>
+                        <h:outputText value="#{response.stdkhh}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            客户名称
+                        </f:facet>
+                        <h:outputText value="#{response.stdkhmc}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            还款金额
+                        </f:facet>
+                        <h:outputText value="#{response.stdhkje}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            还款本金
+                        </f:facet>
+                        <h:outputText value="#{response.stdhkbj}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            还款利息
+                        </f:facet>
+                        <h:outputText value="#{response.stdhklx}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            贷款帐号
+                        </f:facet>
+                        <h:outputText value="#{response.stddkzh}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            扣款帐号
+                        </f:facet>
+                        <h:outputText value="#{response.stdhkzh}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            地区
+                        </f:facet>
+                        <h:outputText value="#{response.stddqh}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            代扣银行
+                        </f:facet>
+                        <h:outputText value="#{response.stdyhh}"/>
+                    </p:column>
 
 
-        </div>
+                </p:dataTable>
+            </h:form>
+        </p:tab>
+    </p:tabView>
 
 
-        <div id="footer_body"
-             style="padding:100px  0  20px  100px;font-size:12px;font-weight:bold;border-bottom:solid  1px  blue">
-            <!--Test for new cms txn 100101.-->
-        </div>
-    </ui:define>
+</div>
+
+
+<div id="footer_body"
+     style="padding:100px  0  20px  100px;font-size:12px;font-weight:bold;border-bottom:solid  1px  blue">
+    <!--Test for new cms txn 100101.-->
+</div>
+</ui:define>
 
 </ui:composition>
