@@ -27,11 +27,13 @@ import zt.cms.xf.newcms.domain.T100102.T100102Response;
 public class T100102CTL {
 
     private Log logger = LogFactory.getLog(this.getClass());
-    
+    private XStream xstream;
+    private NewCmsManager ncm;
+
     public final static void main(String[] args) throws Exception {
         HttpClient httpclient = new DefaultHttpClient();
 
-        HttpPost httppost = new HttpPost("http://10.143.19.106:10002/LoanSysPortal/CMSServlet");
+        HttpPost httppost = new HttpPost("http://10.143.19.13:10002/LoanSysPortal/CMSServlet");
 
         // Execute HTTP request
         System.out.println("executing request " + httppost.getURI());
@@ -100,30 +102,22 @@ public class T100102CTL {
     }
 
 
-    public void start(T100102RequestList requestBody) {
-        XStream xstream = new XStream(new DomDriver());
+    public  T100102CTL(){
+        xstream = new XStream(new DomDriver());
         xstream.processAnnotations(T100102Request.class);
         xstream.processAnnotations(T100102Response.class);
+        ncm = new NewCmsManager();
+    }
+    public boolean start(T100102RequestList requestBody) {
+        //XStream xstream = new XStream(new DomDriver());
+        //xstream.processAnnotations(T100102Request.class);
+        //xstream.processAnnotations(T100102Response.class);
 
 
         T100102Request request = new T100102Request();
         request.initHeader("0200", "100102", "3");
 
-        //包体处理
-        //T100102RequestList requestBody = new T100102RequestList();
-        T100102RequestRecord record = new T100102RequestRecord();
-        record.setStdjjh("111112");
-        record.setStdqch("1");
-        record.setStdjhkkr("20100802");
-        record.setStdkkjg("1");
-        requestBody.add(record);
-
-        record = new T100102RequestRecord();
-        record.setStdjjh("111112");
-        record.setStdqch("2");
-        record.setStdjhkkr("20100802");
-        record.setStdkkjg("1");
-        requestBody.add(record);
+        request.setStd400acur(String.valueOf(requestBody.getContent().size()));
 
         //组包
         request.setBody(requestBody);
@@ -134,15 +128,22 @@ public class T100102CTL {
         //发送请求
         String responseBody = null;
         try {
-            NewCmsManager ncm = new NewCmsManager();
+            //NewCmsManager ncm = new NewCmsManager();
             responseBody = ncm.doPostXml(strXml);
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            logger.error("通讯失败");
+            throw new RuntimeException("通讯失败", e);
         }
 
         T100102Response response = (T100102Response) xstream.fromXML(responseBody);
 
-        System.out.println(response);
+        if ("AAAAAAA".equals(response.getStd400mgid())) {
+            return true;
+        }else{
+            return false;
+        }
+
+
     }
 
 }

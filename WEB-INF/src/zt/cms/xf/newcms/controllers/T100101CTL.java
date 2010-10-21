@@ -8,8 +8,6 @@ import zt.cms.xf.gateway.NewCmsManager;
 import zt.cms.xf.newcms.domain.T100101.T100101Request;
 import zt.cms.xf.newcms.domain.T100101.T100101Response;
 import zt.cms.xf.newcms.domain.T100101.T100101ResponseRecord;
-import zt.cms.xf.newcms.domain.T100102.T100102RequestList;
-import zt.cms.xf.newcms.domain.T100102.T100102RequestRecord;
 
 import javax.faces.bean.ManagedBean;
 import java.util.ArrayList;
@@ -23,12 +21,13 @@ import java.util.List;
  * Time: 13:22:35
  * To change this template use File | Settings | File Templates.
  */
+
 @ManagedBean(name = "T100101")
 //@SessionScoped
 public class T100101CTL implements java.io.Serializable {
 
     private Log logger = LogFactory.getLog(this.getClass());
-    private T100101ResponseRecord responseRecord = new T100101ResponseRecord() ;
+    private T100101ResponseRecord responseRecord = new T100101ResponseRecord();
     List<T100101ResponseRecord> responseFDList = new ArrayList();
     List<T100101ResponseRecord> responseXFList = new ArrayList();
 
@@ -85,7 +84,7 @@ public class T100101CTL implements java.io.Serializable {
         setResponseFDList(start("1"));
         setResponseXFList(start("2"));
 
-         return null;
+        return null;
     }
 
     /**
@@ -134,14 +133,8 @@ public class T100101CTL implements java.io.Serializable {
     public int processTxn(List<T100101ResponseRecord> responseList,
                           NewCmsManager ncm, XStream xstream, T100101Request request,
                           int pkgcnt, int startnum) {
-//        T100101Request request = new T100101Request();
-
-//        request.initHeader("0100","100101","3");
-
+        
         //查询 房贷/消费信贷（1/2） 数据
-//        request.setStdcxlx("1");
-//        int pkgcnt = 50;
-//        request.setStdymjls(String.valueOf(pkgcnt));
         request.setStdqsjls(String.valueOf(startnum));
 
 
@@ -188,47 +181,5 @@ public class T100101CTL implements java.io.Serializable {
         //uploadCutpayResultBatch(response.getBody().getContent());
         return totalcount;
     }
-
-    /**
-     * 向信贷服务器批量上传银行扣款结果
-     */
-    private void uploadCutpayResultBatch(List<T100101ResponseRecord> records) {
-
-        int count = 0;
-
-        //List<T100102RequestRecord> recordsT012 = new ArrayList();
-        T100102RequestList t012 = new T100102RequestList();
-
-        for (T100101ResponseRecord record : records) {
-            System.out.println(record.getStdjjh() + " " + record.getStdqch() + " " + record.getStdkhmc() + " " + record.getStdjhhkr());
-            count++;
-
-            T100102RequestRecord recordT102 = new T100102RequestRecord();
-            recordT102.setStdjjh(record.getStdjjh());
-            recordT102.setStdqch(record.getStdqch());
-            recordT102.setStdjhkkr(record.getStdjhhkr());
-            //1-成功 2-失败
-            recordT102.setStdkkjg("2");
-
-            t012.add(recordT102);
-        }
-
-        T100102CTL ctlT102 = new T100102CTL();
-        ctlT102.start(t012);
-
-        System.out.println("========" + count);
-
-    }
-
-/*
-       public void handleReorder(DashboardReorderEvent event) {
-        FacesMessage message = new FacesMessage();
-        message.setSeverity(FacesMessage.SEVERITY_INFO);
-        message.setSummary("Reordered: " );
-        message.setDetail("Item index: " );
-
-        FacesContext.getCurrentInstance().addMessage(null, message);  
-    }
-*/
 
 }

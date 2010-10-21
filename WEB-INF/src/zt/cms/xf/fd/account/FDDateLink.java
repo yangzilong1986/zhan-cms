@@ -325,7 +325,7 @@ public class FDDateLink extends FormActions {
         if (button.equals("FDWRITEBACKBUTTON")) {
             int iSuccessCount = 0;
             try {
-                iSuccessCount = doWriteBackButton(conn, msgs);
+                iSuccessCount = doWriteBackButton(ctx,conn, msgs);
                 if (iSuccessCount == -1) {
                     msgs.add("<br>--回写房贷系统时出现问题！");
                 } else {
@@ -585,10 +585,11 @@ public class FDDateLink extends FormActions {
             for (T100101ResponseRecord record : recvList) {
                 //TODO 地区字段为临时方案 待修正
                 String tmpStr = record.getStddqh();
-                String regioncdTmp,bankcdTmp;
-                if (tmpStr == null) {
-                    msgs.add("地区代号转换有误");
-                    return -1;
+                String regioncdTmp,bankcdTmp,nameTmp;
+                if (tmpStr == null || tmpStr.equals("null")) {
+                    continue;
+                    //msgs.add("地区代号转换有误");
+                    //return -1;
                     //throw new RuntimeException("地区代号转换有误");
                 } else {
                     String[] code = tmpStr.split("-");
@@ -605,7 +606,7 @@ public class FDDateLink extends FormActions {
                 ps.setString(2, record.getStdkhh());
                 ps.setString(3, record.getStdkhmc());
                 ps.setString(4, record.getStdhth());
-                ps.setString(5, "       ");
+                ps.setString(5, record.getStdjhhkr());
                 ps.setDouble(6, 0.00);
                 ps.setDouble(7, Double.valueOf(record.getStdhkje()));
                 ps.setDouble(8, Double.valueOf(record.getStdhkbj()));
@@ -619,7 +620,7 @@ public class FDDateLink extends FormActions {
                 ps.setString(15, "init");
                 ps.setString(16, preflag);
 
-                ps.setString(17, "htnm");
+                ps.setString(17, record.getStdjjh());   //借据号
                 ps.setString(18, record.getStdqch());
                 ps.setString(19, "0");
 
@@ -1405,17 +1406,30 @@ public class FDDateLink extends FormActions {
    根据SBS入帐处理结果 对房贷系统进行回写处理
     */
 
-    private int doWriteBackButton(DatabaseConnection conn, ErrorMessages msgs) {
+    private int doWriteBackButton(SessionContext ctx,DatabaseConnection conn, ErrorMessages msgs) {
 
         int rtn = 0;
 
         try {
+            Fdcutpaydetl[] cutpaydetls;
+            String[] recordnos = (String[]) ctx.getAttribute(SessionAttributes.REQUEST_DELETE_RANGE_NAME);
+            if (recordnos != null && recordnos.length != 0) {
+                cutpaydetls = getCutPayDetlList(conn, recordnos);
+            } else {
+                String sql = "billstatus = " + FDBillStatus.SBS_ACCOUNT_SUCCESS;
+                FdcutpaydetlDao detlDao = FdcutpaydetlDaoFactory.create();
+                cutpaydetls = detlDao.findByDynamicWhere(sql, null);
+            }
+
             FDWriteBackManager fdw = new FDWriteBackManager();
-            rtn = fdw.processWriteBack(inputdate, conn, msgs);
-//            rtn = fdw.processWriteBack_temp(inputdate, conn, msgs);
+            rtn = fdw.processWriteBack4NewCMS_SingleRecord(cutpaydetls , conn, msgs);
+            //rtn = fdw.processWriteBack4NewCMS(inputdate, conn, msgs);
+            //rtn = fdw.processWriteBack(inputdate, conn, msgs);
         } catch (java.io.IOException e) {
+            logger.error("回写出现错误",e);
             return -1;
         } catch (Exception e) {
+            logger.error("回写出现错误",e);
             throw new RuntimeException(e);
         }
 

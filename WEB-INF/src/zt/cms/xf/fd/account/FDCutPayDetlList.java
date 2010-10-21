@@ -10,24 +10,14 @@ package zt.cms.xf.fd.account;
 
 import com.zt.util.PropertyManager;
 import org.apache.commons.lang.StringUtils;
-import zt.cms.xf.common.constant.XFBankCode;
-import zt.cms.xf.common.constant.XFBillStatus;
 import zt.cms.xf.common.constant.FDBillStatus;
-import zt.cms.xf.common.dao.XfactcutpaydetlDao;
 import zt.cms.xf.common.dao.FdcutpaydetlDao;
-import zt.cms.xf.common.dto.Xfactcutpaydetl;
 import zt.cms.xf.common.dto.Fdcutpaydetl;
 import zt.cms.xf.common.dto.FdcutpaydetlPk;
-import zt.cms.xf.common.exceptions.XfactcutpaydetlDaoException;
 import zt.cms.xf.common.exceptions.FdcutpaydetlDaoException;
-import zt.cms.xf.common.factory.XfactcutpaydetlDaoFactory;
 import zt.cms.xf.common.factory.FdcutpaydetlDaoFactory;
-import zt.cms.xf.gateway.CtgManager;
-import zt.cms.xf.account.BillsManager;
-import zt.cmsi.mydb.MyDB;
 import zt.platform.cachedb.ConnectionManager;
 import zt.platform.db.DatabaseConnection;
-import zt.platform.form.config.SystemAttributeNames;
 import zt.platform.form.config.FormBean;
 import zt.platform.form.control.FormActions;
 import zt.platform.form.control.SessionContext;
@@ -35,20 +25,15 @@ import zt.platform.form.util.FormInstance;
 import zt.platform.form.util.SessionAttributes;
 import zt.platform.form.util.event.ErrorMessages;
 import zt.platform.form.util.event.EventManager;
-import zt.platform.user.UserManager;
 import zt.platform.utils.Debug;
 
 import javax.sql.rowset.CachedRowSet;
 import java.io.UnsupportedEncodingException;
-import java.sql.Connection;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
-import java.math.BigDecimal;
 
 public class FDCutPayDetlList extends FormActions {
 
@@ -128,6 +113,12 @@ public class FDCutPayDetlList extends FormActions {
         }
 
         if (button != null && button.equals("FDWRITEBACKBUTTON")) {
+            String[] recordnos = ctx.getParameters(SessionAttributes.REQUEST_DELETE_RANGE_NAME);
+            if (recordnos == null) {
+                ctx.removeAttribute(SessionAttributes.REQUEST_DELETE_RANGE_NAME);
+            }else{
+                ctx.setAttribute(SessionAttributes.REQUEST_DELETE_RANGE_NAME, recordnos);
+            }
             ctx.setAttribute("BUTTONNAME", button);
             trigger(manager, "FDDATELINK", null);
         }

@@ -22,9 +22,15 @@ public class SearchService {
 
     private List<Fdactnoinfo> allRecords;
     private String ID = "aaaaaaa1zhan" ;
+    private int port ;
+
+    public int getPort(){
+           return StaticClassTmp.getPort();
+    }
 
     public String getID() {
-        return ID;
+        String str = StaticClassTmp.getHostip();
+        return str;
     }
 
     public void setID(String ID) {
@@ -32,7 +38,6 @@ public class SearchService {
     }
 
     public List<Fdactnoinfo> getAllRecords() throws FdactnoinfoDaoException {
-//    public Fdactnoinfo[] getAllRecords() throws FdactnoinfoDaoException {
         String actno, name, contractno;
         FdactnoinfoDao actnodao = FdactnoinfoDaoFactory.create();
         Fdactnoinfo actnoinfo;
