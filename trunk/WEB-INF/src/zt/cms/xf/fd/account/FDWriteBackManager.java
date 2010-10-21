@@ -1,27 +1,25 @@
 package zt.cms.xf.fd.account;
 
-import zt.cms.xf.gateway.BatchQueryResult;
-import zt.cms.xf.gateway.CtgManager;
-import zt.cms.xf.common.constant.FDBillStatus;
-import zt.cms.xf.common.dao.FdcutpaydetlDao;
-import zt.cms.xf.common.factory.FdcutpaydetlDaoFactory;
-import zt.cms.xf.common.dto.Fdcutpaydetl;
-import zt.cms.xf.common.dto.FdcutpaydetlPk;
-import zt.platform.form.util.FormInstance;
-import zt.platform.form.util.event.ErrorMessages;
-import zt.platform.utils.Debug;
-import zt.platform.db.DatabaseConnection;
-import zt.platform.db.RecordSet;
-import zt.cmsi.mydb.MyDB;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.logging.Logger;
-import java.sql.PreparedStatement;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import zt.cms.xf.common.constant.FDBillStatus;
+import zt.cms.xf.common.dao.FdcutpaydetlDao;
+import zt.cms.xf.common.dto.Fdcutpaydetl;
+import zt.cms.xf.common.dto.FdcutpaydetlPk;
+import zt.cms.xf.common.factory.FdcutpaydetlDaoFactory;
+import zt.cms.xf.newcms.controllers.T100102CTL;
+import zt.cms.xf.newcms.domain.T100102.T100102RequestList;
+import zt.cms.xf.newcms.domain.T100102.T100102RequestRecord;
+import zt.cmsi.mydb.MyDB;
+import zt.platform.db.DatabaseConnection;
+import zt.platform.db.RecordSet;
+import zt.platform.form.util.event.ErrorMessages;
+import zt.platform.utils.Debug;
+
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 根据SBS入帐成功的扣款记录，通过DBLINK，对房贷系统的数据库进行回写
@@ -39,9 +37,220 @@ public class FDWriteBackManager {
     private static Log logger = LogFactory.getLog(FDWriteBackManager.class);
 
     /*
-    查询房贷系统的扣款记录表，对代扣成功的记录逐笔进行SBS入帐处理
+    20101020 单笔处理
+    查询房贷系统的扣款记录表，对SBS入帐成功的记录进行回写（to 新信贷）
     返回成功处理笔数
      */
+
+    public int processWriteBack4NewCMS_SingleRecord(Fdcutpaydetl[] cutpaydetls, DatabaseConnection conn, ErrorMessages msgs) throws Exception {
+
+        int count = 0;
+
+        try {
+            if (cutpaydetls != null && cutpaydetls.length > 0) {
+                T100102CTL t100102ctl = new T100102CTL();
+                FdcutpaydetlDao detlDao = FdcutpaydetlDaoFactory.create();
+                FdcutpaydetlPk cutpaydetlPk = new FdcutpaydetlPk();
+                for (Fdcutpaydetl detl : cutpaydetls) {
+                    if (!detl.getBillstatus().equals(FDBillStatus.SBS_ACCOUNT_SUCCESS)) {
+                        logger.error("状态检查失败");
+                        continue;
+                    }
+                    T100102RequestRecord recordT102 = new T100102RequestRecord();
+                    recordT102.setStdjjh(detl.getGthtjhHtnm());
+                    recordT102.setStdqch(detl.getGthtjhJhxh());
+                    recordT102.setStdjhkkr(detl.getGthtjhDate());
+                    //1-成功 2-失败
+                    recordT102.setStdkkjg("1");
+                    T100102RequestList t100012list = new T100102RequestList();
+                    t100012list.add(recordT102);
+                    //单笔发送处理
+                    boolean txResult = t100102ctl.start(t100012list);
+                    if (txResult) {
+                        cutpaydetlPk.setSeqno(detl.getSeqno());
+                        detl.setBillstatus(FDBillStatus.FD_WRITEBACK_SUCCESS);
+                        detlDao.update(cutpaydetlPk, detl);
+                        count++;
+                    }
+                }
+            } else {
+                logger.info("无符合SBS入帐条件的明细帐单记录");
+            }
+        } catch (Exception e) {
+            logger.error(e);
+            msgs.add("回写新信贷系统时出现错误。成功处理笔数:"+count);
+            return -1;
+        }
+        return count;
+    }
+
+
+    /*
+    20101020
+    查询房贷系统的扣款记录表，对SBS入帐成功的记录进行回写（to 新信贷）
+    返回成功处理笔数
+     */
+
+    public int processWriteBack4NewCMS(String txndate, DatabaseConnection conn, ErrorMessages msgs) throws Exception {
+
+        int rtn = 0;
+
+        try {
+            String sql = "billstatus = " + FDBillStatus.SBS_ACCOUNT_SUCCESS;
+
+            FdcutpaydetlDao detlDao = FdcutpaydetlDaoFactory.create();
+            Fdcutpaydetl[] cutpaydetls = detlDao.findByDynamicWhere(sql, null);
+            FdcutpaydetlPk cutpaydetlpk = new FdcutpaydetlPk();
+
+            int count = 0;
+            if (cutpaydetls != null && cutpaydetls.length > 0) {
+
+                T100102RequestList t100012list = new T100102RequestList();
+                for (Fdcutpaydetl detl : cutpaydetls) {
+                    T100102RequestRecord recordT102 = new T100102RequestRecord();
+                    recordT102.setStdjjh(detl.getGthtjhHtnm());
+                    recordT102.setStdqch(detl.getGthtjhJhxh());
+                    recordT102.setStdjhkkr(detl.getGthtjhDate());
+                    //1-成功 2-失败
+                    recordT102.setStdkkjg("1");
+                    t100012list.add(recordT102);
+                    count++;
+                }
+                //发送数据
+                T100102CTL t100102ctl = new T100102CTL();
+                boolean txresult = false;
+                try {
+                    txresult = t100102ctl.start(t100012list);
+                } catch (Exception e) {
+                    logger.error("发送失败。");
+                    String mess = "向新信贷系统提交报文失败。";
+                    msgs.add(mess);
+                    return -1;
+                }
+
+                if (txresult) {
+                    //发送完成，返回业务成功标志 更新本地记录状态
+                    conn.setAuto(false);
+                    String detlSql = "update fdcutpaydetl set billstatus = " +
+                            FDBillStatus.FD_WRITEBACK_SUCCESS +
+                            " where billstatus = " + FDBillStatus.SBS_ACCOUNT_SUCCESS;
+                    int updatertn = conn.executeUpdate(detlSql);
+                    if (updatertn != count) {
+                        String mess = "修改本地系统中FDCUTPAYDETL表的状态时出现错误(笔数不符)。" + "应为：" + count + " 实际： " + updatertn;
+                        msgs.add(mess);
+                        conn.rollback();
+                        return -1;
+                    }
+                    conn.commit();
+                }
+            } else {
+                logger.info("无符合SBS入帐条件的明细帐单记录");
+                rtn = 0;
+            }
+        } catch (Exception e) {
+            logger.error(e);
+            conn.rollback();
+            msgs.add("回写新信贷系统时出现错误。");
+            return -1;
+        }
+        return rtn;
+    }
+
+    public int processWriteBack4NewCMS_fenbao(String txndate, DatabaseConnection conn, ErrorMessages msgs, int numperkdg) throws Exception {
+
+        int rtn = 0;
+
+        try {
+            String sql = "billstatus = " + FDBillStatus.SBS_ACCOUNT_SUCCESS;
+
+            FdcutpaydetlDao detlDao = FdcutpaydetlDaoFactory.create();
+            Fdcutpaydetl[] cutpaydetls = detlDao.findByDynamicWhere(sql, null);
+            FdcutpaydetlPk cutpaydetlpk = new FdcutpaydetlPk();
+
+            int count = 0;
+            if (cutpaydetls != null && cutpaydetls.length > 0) {
+
+                T100102RequestList t100012list = new T100102RequestList();
+                List<String> seqnoList = new ArrayList();
+                //int totalnum = cutpaydetls.length;
+
+                String updateLocalStatus = "update fdcutpaydetl set billstatus = " +
+                        FDBillStatus.FD_WRITEBACK_SUCCESS +
+                        " where seqno = ? ";
+                PreparedStatement ps = conn.getPreparedStatement(updateLocalStatus);
+
+                for (Fdcutpaydetl detl : cutpaydetls) {
+                    T100102RequestRecord recordT102 = new T100102RequestRecord();
+                    recordT102.setStdjjh(detl.getGthtjhHtnm());
+                    recordT102.setStdqch(detl.getGthtjhJhxh());
+                    recordT102.setStdjhkkr(detl.getGthtjhDate());
+                    //1-成功 2-失败
+                    recordT102.setStdkkjg("1");
+                    t100012list.add(recordT102);
+                    seqnoList.add(detl.getSeqno());
+                    count++;
+
+                    if (count % numperkdg == 0) {
+                        //发送数据
+                        if (sendDataToNewCMS(t100012list, msgs)) { //服务器返回成功
+                            //逐笔更新本地table状态
+                            for (String seqno : seqnoList) {
+                                ps.setString(1, seqno);
+                                ps.addBatch();
+                            }
+                            ps.executeBatch();
+
+                            //初始化发送包list
+                            t100012list = new T100102RequestList();
+                            seqnoList = new ArrayList();
+                        } else {
+                            logger.error("发送失败。");
+                            String mess = "向新信贷系统提交报文失败。";
+                            msgs.add(mess);
+                            return -1;
+                        }
+                    }
+                }
+                //处理取模后余下的数据
+
+
+                conn.commit();
+
+            } else {
+                logger.info("无符合SBS入帐条件的明细帐单记录");
+                rtn = 0;
+            }
+        } catch (Exception e) {
+            logger.error(e);
+            conn.rollback();
+            msgs.add("回写新信贷系统时出现错误。");
+            return -1;
+        }
+        return rtn;
+    }
+
+    private boolean sendDataToNewCMS(T100102RequestList t100012list, ErrorMessages msgs) {
+        //发送数据
+        T100102CTL t100102ctl = new T100102CTL();
+        boolean txresult = false;
+        try {
+            txresult = t100102ctl.start(t100012list);
+            return txresult;
+        } catch (Exception e) {
+            logger.error("发送失败。");
+            String mess = "向新信贷系统提交报文失败。";
+            msgs.add(mess);
+            return false;
+        }
+
+    }
+
+
+    /*
+   查询房贷系统的扣款记录表，对代扣成功的记录逐笔进行SBS入帐处理
+   返回成功处理笔数
+    */
+
     public int processWriteBack(String txndate, DatabaseConnection conn, ErrorMessages msgs) throws Exception {
 
         int rtn = 0;
@@ -66,7 +275,7 @@ public class FDWriteBackManager {
             if (hkpch == -1) {
                 return -1;
             }
-        
+
 
             if (cutpaydetls != null && cutpaydetls.length > 0) {
 
@@ -287,7 +496,7 @@ public class FDWriteBackManager {
                                 + " where xdfhkx_htnm='"
                                 + cutpaydetls[i].getGthtjhHtnm()
                                 + "' and (xdfhkx_ywzl = '6' or xdfhkx_ywzl = '7') and xdfhkx_ywrq = '"
-                                + cutpaydetls[i].getGthtjhDate() +"'";
+                                + cutpaydetls[i].getGthtjhDate() + "'";
 //                                + txndate +"'";
 
 //                        System.out.println("UPDATE XDFHKX sql=" + sql);
@@ -419,6 +628,7 @@ public class FDWriteBackManager {
     20090723
     对入错的房贷系统传票信息进行修改
      */
+
     public int processWriteBack_temp(String txndate, DatabaseConnection conn, ErrorMessages msgs) throws Exception {
 
         int rtn = 0;
@@ -479,37 +689,37 @@ public class FDWriteBackManager {
 
     private long get_XDFHKX_Seqno(DatabaseConnection conn, ErrorMessages msgs) {
 
-          try {
-              MyDB.getInstance().addDBConn(conn);
+        try {
+            MyDB.getInstance().addDBConn(conn);
 
-              String sql = "select lsnbbm_dqnm from lsnbbm@haier_shengchan where lsnbbm_nmbh = 'XDFHKX' for update";
-              System.out.println(sql);
+            String sql = "select lsnbbm_dqnm from lsnbbm@haier_shengchan where lsnbbm_nmbh = 'XDFHKX' for update";
+            System.out.println(sql);
 
-              RecordSet rs = conn.executeQuery(sql);
+            RecordSet rs = conn.executeQuery(sql);
 
 
-              long seqno = 0;
-              if (rs.next()) {
-                  seqno = rs.getLong(0);
-              } else {
-                  String msg = "读取房贷系统序号（lsnbbm_nmbh = 'XDFHKX'）时出错，请通知系统管理员。";
-                  msgs.add(msg);
-                  logger.error(msg);
-                  logger.error(sql);
-                  return -1;
-              }
-              return ++seqno;
-          } catch (Exception e) {
-              String msg = "读取房贷系统序号（lsnbbm_nmbh = 'XDFHKX'）时出现异常，请通知系统管理员。";
-              msgs.add(msg);
-              logger.error(msg);
-              logger.error(e);
-              Debug.debug(e);
-              return -1;
-          } finally {
-              MyDB.getInstance().releaseDBConn();
-          }
-      }
+            long seqno = 0;
+            if (rs.next()) {
+                seqno = rs.getLong(0);
+            } else {
+                String msg = "读取房贷系统序号（lsnbbm_nmbh = 'XDFHKX'）时出错，请通知系统管理员。";
+                msgs.add(msg);
+                logger.error(msg);
+                logger.error(sql);
+                return -1;
+            }
+            return ++seqno;
+        } catch (Exception e) {
+            String msg = "读取房贷系统序号（lsnbbm_nmbh = 'XDFHKX'）时出现异常，请通知系统管理员。";
+            msgs.add(msg);
+            logger.error(msg);
+            logger.error(e);
+            Debug.debug(e);
+            return -1;
+        } finally {
+            MyDB.getInstance().releaseDBConn();
+        }
+    }
 
     private long set_XDFHKX_Seqno(Long seqno, DatabaseConnection conn, ErrorMessages msgs) {
 
@@ -540,6 +750,7 @@ public class FDWriteBackManager {
     /*
     还款自动拆分批次号
      */
+
     private long get_XDFHKX_HKPCH(DatabaseConnection conn, ErrorMessages msgs) {
 
         try {
@@ -648,6 +859,7 @@ public class FDWriteBackManager {
     /*
    正常还款的记录
     */
+
     private int processOneCutpayDetlRecord(Fdcutpaydetl cutpaydetl, DatabaseConnection conn, ErrorMessages msgs) {
 
         try {

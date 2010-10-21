@@ -1,5 +1,6 @@
 package zt.cms.xf.gateway;
 
+import com.zt.util.PropertyManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.HttpClient;
@@ -22,8 +23,11 @@ import java.io.UnsupportedEncodingException;
  */
 public class NewCmsManager {
 
-    private String serverUrl = "http://10.143.20.33:10002/LoanSysPortal/CMSServlet";
-//    private String serverUrl = "http://10.143.19.106:10002/LoanSysPortal/CMSServlet";
+    //生产机地址
+    //private String serverUrl = "http://10.143.20.33:10002/LoanSysPortal/CMSServlet";
+    //测试机地址
+    //private String serverUrl = "http://10.143.19.13:10002/LoanSysPortal/CMSServlet";
+    private String serverUrl;
     private Log logger = LogFactory.getLog(this.getClass());
 
     private HttpClient httpclient = null;
@@ -33,6 +37,7 @@ public class NewCmsManager {
         logger.info("初始化新信贷接口网关。");
 
         try {
+            serverUrl = PropertyManager.getProperty("HUATENG_SERVER_URL");
             httpclient = new DefaultHttpClient();
             //请求超时
             httpclient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 5000*5);

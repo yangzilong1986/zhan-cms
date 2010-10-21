@@ -2,6 +2,7 @@ package zt.cms.xf.gateway;
 
 import com.ibm.ctg.client.ECIRequest;
 import com.ibm.ctg.client.JavaGateway;
+import com.zt.util.PropertyManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import zt.platform.utils.Debug;
@@ -31,8 +32,10 @@ public class CtgManager {
 
     //SBS测试环境地址 192.168.91.2
     //SBS生产环境地址 192.168.91.5
-    private static String strUrl = "192.168.91.5";
-    private static int iPort = 2006;
+    //private static String strUrl = "192.168.91.5";
+    //private static int iPort = 2006;
+    private static String strUrl = PropertyManager.getProperty("SBS_HOSTIP");;
+    private static int iPort = Integer.parseInt(PropertyManager.getProperty("SBS_HOSTPORT"));
 
     private static int iCommareaSize = 32000;
 
