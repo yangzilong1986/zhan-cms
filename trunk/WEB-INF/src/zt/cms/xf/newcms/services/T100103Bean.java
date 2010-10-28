@@ -4,8 +4,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.primefaces.event.SelectEvent;
-import zt.cms.xf.newcms.controllers.T100101CTL;
-import zt.cms.xf.newcms.domain.T100101.T100101ResponseRecord;
+import zt.cms.xf.newcms.controllers.T100103CTL;
+import zt.cms.xf.newcms.domain.T100103.T100103ResponseRecord;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -23,46 +23,42 @@ import java.util.List;
  * Time: 11:28:16
  * To change this template use File | Settings | File Templates.
  */
-@ManagedBean(name = "T100101")
+@ManagedBean(name = "T100103")
 @SessionScoped
 //@RequestScoped
-public class T100101Bean implements Serializable {
+public class T100103Bean implements Serializable {
 //    private DataModel model;
 //    private LazyDataModel<T100101ResponseRecord> lazyModel;
-    private T100101ResponseRecord selectedRecord;
+    private T100103ResponseRecord selectedRecord;
 
     private Log logger = LogFactory.getLog(this.getClass());
-    private T100101ResponseRecord responseRecord = new T100101ResponseRecord();
-    List<T100101ResponseRecord> responseFDList;
-    List<T100101ResponseRecord> responseXFList;
+    private T100103ResponseRecord responseRecord = new T100103ResponseRecord();
+    List<T100103ResponseRecord> responseFDList;
+    List<T100103ResponseRecord> responseXFList;
 
-    T100101CTL t100101ctl = new T100101CTL();
+    T100103CTL t100103ctl = new T100103CTL();
 
     private int totalcount;
     private BigDecimal totalamt;
     private BigDecimal totalPrincipalAmt;   //本金
     private BigDecimal totalInterestAmt;    //利息
-    private BigDecimal totalFxjeAmt;    //罚息
 
     private String[] regionCodes = {"0532", "0531", "023", "0351"};
     private String[] regionNames = {"青岛", "济南", "重庆", "太原"};
     private SelectItem[] regionOptions;
 
-    private String field;
 
-    public T100101Bean() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        field = context.getExternalContext().getRequestParameterMap().get("field");
+    public T100103Bean() {
         initFilters();
     }
 
     private void initList() {
-        List<T100101ResponseRecord> fdList = t100101ctl.getAllFDRecords();
+        List<T100103ResponseRecord> fdList = t100103ctl.getAllFDRecords();
         totalcount = 0;
         initAmt();
-        responseFDList = new ArrayList<T100101ResponseRecord>();
+        responseFDList = new ArrayList<T100103ResponseRecord>();
 
-        for (T100101ResponseRecord record : fdList) {
+        for (T100103ResponseRecord record : fdList) {
             String tmpStr = record.getStddqh();
             String regioncdTmp, bankcdTmp, nameTmp;
             if (tmpStr == null || tmpStr.equals("null")) {
@@ -98,7 +94,6 @@ public class T100101Bean implements Serializable {
     }
 
     public String query() {
-
         initList();
 
         String hth, dqh, khmc;
@@ -107,8 +102,8 @@ public class T100101Bean implements Serializable {
         khmc = responseRecord.getStdkhmc();
         totalcount = 0;
         initAmt();
-        List<T100101ResponseRecord> newResponseFDList = new ArrayList<T100101ResponseRecord>();
-        for (T100101ResponseRecord record : responseFDList) {
+        List<T100103ResponseRecord> newResponseFDList = new ArrayList<T100103ResponseRecord>();
+        for (T100103ResponseRecord record : responseFDList) {
             if (StringUtils.isNotEmpty(hth)) {
                 if (!record.getStdhth().equals(hth)) {
                     continue;
@@ -136,14 +131,12 @@ public class T100101Bean implements Serializable {
         totalamt = new BigDecimal(0);
         totalPrincipalAmt = new BigDecimal(0);
         totalInterestAmt = new BigDecimal(0);
-        totalFxjeAmt = new BigDecimal(0);
     }
 
-    private void countAmt(T100101ResponseRecord record) {
+    private void countAmt(T100103ResponseRecord record) {
         totalamt = totalamt.add(new BigDecimal(record.getStdhkje()));
         totalPrincipalAmt = totalPrincipalAmt.add(new BigDecimal(record.getStdhkbj()));
         totalInterestAmt = totalInterestAmt.add(new BigDecimal(record.getStdhklx()));
-        totalFxjeAmt = totalFxjeAmt.add(new BigDecimal(record.getStdfxje()));
     }
 
     public String onRowSelectNavigate(SelectEvent event) {
@@ -154,43 +147,43 @@ public class T100101Bean implements Serializable {
 
     //==============================================================
 
-//    public LazyDataModel<T100101ResponseRecord> getLazyModel() {
+//    public LazyDataModel<T100103ResponseRecord> getLazyModel() {
 //        return lazyModel;
 //    }
 
-/*    public void setLazyModel(LazyDataModel<T100101ResponseRecord> lazyModel) {
+/*    public void setLazyModel(LazyDataModel<T100103ResponseRecord> lazyModel) {
         this.lazyModel = lazyModel;
     }*/
 
-    public T100101ResponseRecord getSelectedRecord() {
+    public T100103ResponseRecord getSelectedRecord() {
         return selectedRecord;
     }
 
-    public void setSelectedRecord(T100101ResponseRecord selectedRecord) {
+    public void setSelectedRecord(T100103ResponseRecord selectedRecord) {
         this.selectedRecord = selectedRecord;
     }
 
-    public List<T100101ResponseRecord> getResponseFDList() {
+    public List<T100103ResponseRecord> getResponseFDList() {
         return responseFDList;
     }
 
-    public void setResponseFDList(List<T100101ResponseRecord> responseFDList) {
+    public void setResponseFDList(List<T100103ResponseRecord> responseFDList) {
         this.responseFDList = responseFDList;
     }
 
-    public List<T100101ResponseRecord> getResponseXFList() {
+    public List<T100103ResponseRecord> getResponseXFList() {
         return responseXFList;
     }
 
-    public void setResponseXFList(List<T100101ResponseRecord> responseXFList) {
+    public void setResponseXFList(List<T100103ResponseRecord> responseXFList) {
         this.responseXFList = responseXFList;
     }
 
-    public T100101ResponseRecord getResponseRecord() {
+    public T100103ResponseRecord getResponseRecord() {
         return responseRecord;
     }
 
-    public void setResponseRecord(T100101ResponseRecord responseRecord) {
+    public void setResponseRecord(T100103ResponseRecord responseRecord) {
         this.responseRecord = responseRecord;
     }
 
@@ -230,19 +223,4 @@ public class T100101Bean implements Serializable {
         this.regionNames = regionNames;
     }
 
-    public BigDecimal getTotalFxjeAmt() {
-        return totalFxjeAmt;
-    }
-
-    public void setTotalFxjeAmt(BigDecimal totalFxjeAmt) {
-        this.totalFxjeAmt = totalFxjeAmt;
-    }
-
-    public String getField() {
-        return field;
-    }
-
-    public void setField(String field) {
-        this.field = field;
-    }
 }

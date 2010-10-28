@@ -15,18 +15,22 @@
             <div>
                 <p:panel header="查询条件">
                     <h:form>
-                        <h:panelGrid columns="2" style="text-align:left">
-                            <h:outputLabel value="客户号* :" for="txt_title"/>
-                            <h:inputText id="txt_title" size="40" value="#{searchService.regioncd}"/>
+                        <p:focus/>
+                        <h:panelGrid columns="3" style="text-align:left">
+                            <h:outputLabel value="地区号* :" for="txt_title"/>
+                            <h:inputText id="txt_title" size="40" value="#{searchService.regioncd}" required="true" requiredMessage="地区必须输入"/>
+                            <p:message for="txt_title"/>
 
                             <h:outputLabel value="客户名称* :" for="txt_author"/>
-                            <h:inputText id="txt_author" size="40" value="#{searchService.NAME}"/>
+                            <h:inputText id="txt_author" size="40" value="#{searchService.NAME}" />
+                            <p:message for="txt_author"/>
+
 
                         </h:panelGrid>
                         <h:panelGrid columns="1" style="text-align:center;padding-top:10px;font-size:11px" width="30%">
                             <h:panelGroup>
-                                <h:commandButton id="qrybtn" value="查询" action="#{searchService.query}"/>
-                                <h:commandButton value="重置" type="reset"/>
+                                <p:commandButton id="qrybtn" ajax="false" value="查询" action="#{searchService.query}"/>
+                                <p:commandButton value="重置" type="reset"/>
                             </h:panelGroup>
                         </h:panelGrid>
                     </h:form>
@@ -38,13 +42,8 @@
             <p:tabView>
                 <p:tab title="房贷代扣记录">
                     <h:form prependId="false">
-                        <p:dataTable  var="response" value="#{searchService.records}"
-                                     paginator="true" rows="15"
-                                     selection="#{searchService.selectedRecords}"
-                                     selectionMode="single"
-                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="5,15,10" style="width:98%; font-size:0.7em"
-                                     emptyMessage="未发现查询记录...">
+                        <p:dataTable var="response" value="#{searchService.records}"
+                                     paginator="true" rows="10" dynamic="true">
 
                             <f:facet name="header">
                                 还款记录清单
@@ -52,14 +51,11 @@
 
                             <p:column selectionMode="multiple"/>
 
-                            <p:column>
+                            <p:column filterBy="#{response.actno}" filterMatchMode="contains">
                                 <f:facet name="header">
                                     合同号
                                 </f:facet>
                                 <h:outputText value="#{response.actno}"/>
-                                <f:facet name="footer">
-                                    aa
-                                </f:facet>
                             </p:column>
 
                             <p:column>
@@ -69,7 +65,7 @@
                                 <h:outputText value="#{response.actnostatus}"/>
                             </p:column>
 
-                            <p:column>
+                            <p:column filterBy="#{response.bankcd}" filterMatchMode="exact">
                                 <f:facet name="header">
                                     期次号
                                 </f:facet>
@@ -103,32 +99,7 @@
                                 </f:facet>
                                 <h:outputText value="#{response.creatorid}"/>
                             </p:column>
-<!--
-
-                            <p:column style="width:32px">
-                                <p:commandButton update="display" oncomplete="multiCarDialog.show()"
-                                                 image="ui-icon ui-icon-search">
-                                    <f:setPropertyActionListener value="#{response}"
-                                                                 target="#{searchService.selectedRecord}"/>
-                                </p:commandButton>
-                            </p:column>
-
-                            <f:facet name="footer">
-                                <p:commandButton value="View" image="ui-icon ui-icon-search"
-                                                 update="displayMulti" oncomplete="multiCarDialog.show()"/>
-                            </f:facet>
--->
                         </p:dataTable>
-
-                        <p:dialog header="Car Detail" widgetVar="multiCarDialog"
-                                  width="450" height="300">
-
-                            <p:dataList id="displayMulti"
-                                        value="#{searchService.selectedRecords}" var="selectedRecord">
-                                Model: #{selectedRecord.actno}, Year: #{selectedRecord.name}
-                            </p:dataList>
-
-                        </p:dialog>
 
                     </h:form>
                 </p:tab>

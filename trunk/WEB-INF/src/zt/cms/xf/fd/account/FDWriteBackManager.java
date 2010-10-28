@@ -9,8 +9,11 @@ import zt.cms.xf.common.dto.Fdcutpaydetl;
 import zt.cms.xf.common.dto.FdcutpaydetlPk;
 import zt.cms.xf.common.factory.FdcutpaydetlDaoFactory;
 import zt.cms.xf.newcms.controllers.T100102CTL;
+import zt.cms.xf.newcms.controllers.T100104CTL;
 import zt.cms.xf.newcms.domain.T100102.T100102RequestList;
 import zt.cms.xf.newcms.domain.T100102.T100102RequestRecord;
+import zt.cms.xf.newcms.domain.T100104.T100104RequestList;
+import zt.cms.xf.newcms.domain.T100104.T100104RequestRecord;
 import zt.cmsi.mydb.MyDB;
 import zt.platform.db.DatabaseConnection;
 import zt.platform.db.RecordSet;
@@ -49,6 +52,7 @@ public class FDWriteBackManager {
         try {
             if (cutpaydetls != null && cutpaydetls.length > 0) {
                 T100102CTL t100102ctl = new T100102CTL();
+                T100104CTL t100104ctl = new T100104CTL();
                 FdcutpaydetlDao detlDao = FdcutpaydetlDaoFactory.create();
                 FdcutpaydetlPk cutpaydetlPk = new FdcutpaydetlPk();
                 for (Fdcutpaydetl detl : cutpaydetls) {
@@ -56,16 +60,31 @@ public class FDWriteBackManager {
                         logger.error("状态检查失败");
                         continue;
                     }
-                    T100102RequestRecord recordT102 = new T100102RequestRecord();
-                    recordT102.setStdjjh(detl.getGthtjhHtnm());
-                    recordT102.setStdqch(detl.getGthtjhJhxh());
-                    recordT102.setStdjhkkr(detl.getGthtjhDate());
-                    //1-成功 2-失败
-                    recordT102.setStdkkjg("1");
-                    T100102RequestList t100012list = new T100102RequestList();
-                    t100012list.add(recordT102);
-                    //单笔发送处理
-                    boolean txResult = t100102ctl.start(t100012list);
+                    boolean txResult = false;
+                    if (detl.getPreflag().equals("0")) { //正常还款
+                        T100102RequestRecord recordT102 = new T100102RequestRecord();
+                        recordT102.setStdjjh(detl.getGthtjhHtnm());
+                        recordT102.setStdqch(detl.getGthtjhJhxh());
+                        recordT102.setStdjhkkr(detl.getGthtjhDate());
+                        //1-成功 2-失败
+                        recordT102.setStdkkjg("1");
+                        T100102RequestList t100102list = new T100102RequestList();
+                        t100102list.add(recordT102);
+                        //单笔发送处理
+                        txResult = t100102ctl.start(t100102list);
+                    }else{
+                        T100104RequestRecord recordT104 = new T100104RequestRecord();
+                        recordT104.setStdjjh(detl.getGthtjhHtnm());
+                        recordT104.setStdqch(detl.getGthtjhJhxh());
+                        recordT104.setStdjhkkr(detl.getGthtjhDate());
+                        //1-成功 2-失败
+                        recordT104.setStdkkjg("1");
+                        T100104RequestList t100104list = new T100104RequestList();
+                        t100104list.add(recordT104);
+                        //单笔发送处理
+                        txResult = t100104ctl.start(t100104list);
+                    }
+                    
                     if (txResult) {
                         cutpaydetlPk.setSeqno(detl.getSeqno());
                         detl.setBillstatus(FDBillStatus.FD_WRITEBACK_SUCCESS);
@@ -86,14 +105,15 @@ public class FDWriteBackManager {
 
 
     /*
-    20101020
+    20101020   批处理模式 废弃
     查询房贷系统的扣款记录表，对SBS入帐成功的记录进行回写（to 新信贷）
     返回成功处理笔数
      */
 
     public int processWriteBack4NewCMS(String txndate, DatabaseConnection conn, ErrorMessages msgs) throws Exception {
-
         int rtn = 0;
+
+/*
 
         try {
             String sql = "billstatus = " + FDBillStatus.SBS_ACCOUNT_SUCCESS;
@@ -153,8 +173,19 @@ public class FDWriteBackManager {
             msgs.add("回写新信贷系统时出现错误。");
             return -1;
         }
+*/
         return rtn;
     }
+
+    /**
+     * 批处理模式 分包  废弃
+     * @param txndate
+     * @param conn
+     * @param msgs
+     * @param numperkdg
+     * @return
+     * @throws Exception
+     */
 
     public int processWriteBack4NewCMS_fenbao(String txndate, DatabaseConnection conn, ErrorMessages msgs, int numperkdg) throws Exception {
 

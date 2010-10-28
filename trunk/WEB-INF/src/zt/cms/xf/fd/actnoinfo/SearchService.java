@@ -6,6 +6,8 @@ import zt.cms.xf.common.exceptions.FdactnoinfoDaoException;
 import zt.cms.xf.common.factory.FdactnoinfoDaoFactory;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,33 +19,86 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 
-@ManagedBean(name="searchService")
-public class SearchService {
+@ManagedBean(name = "searchService")
+@SessionScoped
+//@RequestScoped
+public class SearchService implements Serializable {
 
-    private List<Fdactnoinfo> allRecords;
-    private String ID = "aaaaaaa1zhan" ;
-    private int port ;
+    private List<Fdactnoinfo> records;
+    private String regioncd;
+    private String NAME;
+    private int port;
+    private Fdactnoinfo selectedRecord;
+    private Fdactnoinfo[] selectedRecords;
 
-    public int getPort(){
-           return StaticClassTmp.getPort();
+    public String query() {
+        try {
+            records = queryDB();
+        } catch (FdactnoinfoDaoException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return null;
+//        return "about.xhtml";
     }
 
-    public String getID() {
-        String str = StaticClassTmp.getHostip();
-        return str;
+    public Fdactnoinfo getSelectedRecord() {
+        return selectedRecord;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setSelectedRecord(Fdactnoinfo selectedRecord) {
+        this.selectedRecord = selectedRecord;
     }
 
-    public List<Fdactnoinfo> getAllRecords() throws FdactnoinfoDaoException {
-        String actno, name, contractno;
+    public Fdactnoinfo[] getSelectedRecords() {
+        return selectedRecords;
+    }
+
+    public void setSelectedRecords(Fdactnoinfo[] selectedRecords) {
+        this.selectedRecords = selectedRecords;
+    }
+
+    public String getRegioncd() {
+        return regioncd;
+    }
+
+    public void setRegioncd(String regioncd) {
+        this.regioncd = regioncd;
+    }
+
+    public String getNAME() {
+        return NAME;
+    }
+
+    public void setNAME(String NAME) {
+        this.NAME = NAME;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public List<Fdactnoinfo> getRecords() {
+        return records;
+    }
+
+    public void setRecords(List<Fdactnoinfo> records) {
+        this.records = records;
+    }
+
+    public List<Fdactnoinfo> queryDB() throws FdactnoinfoDaoException {
         FdactnoinfoDao actnodao = FdactnoinfoDaoFactory.create();
         Fdactnoinfo actnoinfo;
         Fdactnoinfo[] actnoinfos;
-
-        actnoinfos = actnodao.findAll();
+        if (regioncd == null || regioncd.equals("")) {
+            actnoinfos = actnodao.findAll();
+        } else {
+            String sql = " regioncd ='" + regioncd + "'";
+            actnoinfos = actnodao.findByDynamicWhere(sql, null);
+        }
         return Arrays.asList(actnoinfos);
 
     }

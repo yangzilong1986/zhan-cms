@@ -19,7 +19,9 @@ import zt.cms.xf.common.factory.FdactnoinfoDaoFactory;
 import zt.cms.xf.common.factory.FdcutpaydetlDaoFactory;
 import zt.cms.xf.common.factory.XfactcutpaydetlDaoFactory;
 import zt.cms.xf.common.factory.XfifbankdetlDaoFactory;
+import zt.cms.xf.newcms.controllers.BaseCTL;
 import zt.cms.xf.newcms.controllers.T100101CTL;
+import zt.cms.xf.newcms.controllers.T100103CTL;
 import zt.cms.xf.newcms.domain.T100101.T100101ResponseRecord;
 import zt.cmsi.mydb.MyDB;
 import zt.platform.db.DatabaseConnection;
@@ -207,6 +209,11 @@ public class FDDateLink extends FormActions {
 
         //利用DBLINK 检查房贷系统数据
         if (button.equals("CHECKFDDATABUTTON") || button.equals("CHECKFDPREDATABUTTON")) {
+            ctx.setRequestAtrribute("flag", "1");
+            ctx.setRequestAtrribute("isback", "0");
+            ctx.setTarget("/faces/cutpay/t100101.xhtml");
+            instance.setReadonly(true);
+
 /*
 
             String regioncd = ctx.getParameter("REGION");
@@ -471,28 +478,6 @@ public class FDDateLink extends FormActions {
     private int getNewFDSystemData(DatabaseConnection conn, ErrorMessages msgs, String button,
                                    String regioncd, String bankcd) throws Exception {
 
-/*
-        String regionid = null;
-        String regionid1 = null;
-        String bankid = null;
-
-        if ("0531".equals(regioncd)) {
-            regionid = "GQ"; //济南
-            regionid1 = "GSQ"; //济南
-        } else if ("023".equals(regioncd)) {
-            regionid = "GC"; //重庆
-            regionid1 = "GSC"; //重庆
-        } else if ("0351".equals(regioncd)) {
-            regionid = "GT"; //太原
-            regionid1 = "GST"; //太原
-        } else {
-            if (!"0532".equals(regioncd)) {
-                throw new Exception("地区代码错误!");
-            }
-        }
-*/
-
-
         String preflag = "0";
         if (button.equals("GETFDPREDATABUTTON") || button.equals("CHECKFDPREDATABUTTON")) {
             preflag = "1";
@@ -503,10 +488,14 @@ public class FDDateLink extends FormActions {
         //清空临时表
 
         //获取新信贷数据LIST
-        T100101CTL t100101 = new T100101CTL();
+        BaseCTL ctl;
+        if (preflag.equals("0")) {
+            ctl = new T100101CTL();
+        }else{
+            ctl = new T100103CTL();
+        }
         //查询 房贷/消费信贷（1/2） 数据
-        List<T100101ResponseRecord> recvList = t100101.start("1");
-
+        List<T100101ResponseRecord> recvList = ctl.start("1");
 
         //核对本地帐户表信息
         int rtn = 0;
@@ -520,34 +509,6 @@ public class FDDateLink extends FormActions {
         RecordSet rs = null;
         PreparedStatement ps = null;
         MyDB.getInstance().addDBConn(conn);
-/*
-        try {
-
-            HashMap map = new HashMap();
-            String sql = "select contractno,actno from fdactnoinfo";
-            rs = conn.executeQuery(sql);
-            while (rs.next()) {
-                map.put(rs.getString(0), rs.getString(1));
-            }
-
-            int foundflag = 0;
-            int count = 0;
-            for (T100101ResponseRecord record : recvList) {
-                if (!map.containsKey(record.getStdhth())) {
-                    foundflag = 1;
-                    count++;
-                    msgs.add(count + ".信贷系统中的合同：" + record.getStdhth() + "未与本地帐户表匹配。<br>");
-                } else {
-                }
-
-            }
-            if (foundflag == 1) {
-                return 0;
-            }
-        } catch (Exception e) {
-
-        }
-*/
 
         try {
             MyDB.getInstance().addDBConn(conn);
@@ -588,9 +549,6 @@ public class FDDateLink extends FormActions {
                 String regioncdTmp,bankcdTmp,nameTmp;
                 if (tmpStr == null || tmpStr.equals("null")) {
                     continue;
-                    //msgs.add("地区代号转换有误");
-                    //return -1;
-                    //throw new RuntimeException("地区代号转换有误");
                 } else {
                     String[] code = tmpStr.split("-");
                     regioncdTmp = code[0].trim();
@@ -607,7 +565,11 @@ public class FDDateLink extends FormActions {
                 ps.setString(3, record.getStdkhmc());
                 ps.setString(4, record.getStdhth());
                 ps.setString(5, record.getStdjhhkr());
-                ps.setDouble(6, 0.00);
+                if (preflag.equals("0")) {
+                    ps.setDouble(6, Double.valueOf(record.getStdfxje()));  //罚息
+                }else{
+                    ps.setDouble(6, 0);  
+                }
                 ps.setDouble(7, Double.valueOf(record.getStdhkje()));
                 ps.setDouble(8, Double.valueOf(record.getStdhkbj()));
                 ps.setDouble(9, Double.valueOf(record.getStdhklx()));
@@ -617,7 +579,7 @@ public class FDDateLink extends FormActions {
                 ps.setString(12, "0");   //billstatus
                 ps.setDate(13, new java.sql.Date(new Date().getTime()));
                 ps.setString(14, " ");
-                ps.setString(15, "init");
+                ps.setString(15, record.getStdryje()); //冗余金额字段  暂时放在备注里stdryje
                 ps.setString(16, preflag);
 
                 ps.setString(17, record.getStdjjh());   //借据号

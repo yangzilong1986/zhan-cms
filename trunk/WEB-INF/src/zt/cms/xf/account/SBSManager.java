@@ -1,27 +1,25 @@
 package zt.cms.xf.account;
 
-import zt.cms.xf.gateway.BatchQueryResult;
-import zt.cms.xf.gateway.CtgManager;
+import org.apache.commons.lang.StringUtils;
 import zt.cms.xf.common.constant.FDBillStatus;
 import zt.cms.xf.common.constant.XFBillStatus;
 import zt.cms.xf.common.dao.FdcutpaydetlDao;
 import zt.cms.xf.common.dao.XfactcutpaydetlDao;
-import zt.cms.xf.common.factory.FdcutpaydetlDaoFactory;
-import zt.cms.xf.common.factory.XfactcutpaydetlDaoFactory;
 import zt.cms.xf.common.dto.Fdcutpaydetl;
 import zt.cms.xf.common.dto.FdcutpaydetlPk;
 import zt.cms.xf.common.dto.Xfactcutpaydetl;
 import zt.cms.xf.common.dto.XfactcutpaydetlPk;
-import zt.platform.form.util.FormInstance;
+import zt.cms.xf.common.factory.FdcutpaydetlDaoFactory;
+import zt.cms.xf.common.factory.XfactcutpaydetlDaoFactory;
+import zt.cms.xf.gateway.CtgManager;
 import zt.platform.form.util.event.ErrorMessages;
 import zt.platform.utils.Debug;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.logging.Logger;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
-
-import org.apache.commons.lang.StringUtils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -61,7 +59,8 @@ public class SBSManager {
 
                     list.add("+" + StringUtils.leftPad(cutpaydetls[i].getGthtjhBjje().setScale(2).toString(), 16, '0'));     //本金金额
                     list.add("+" + StringUtils.leftPad(cutpaydetls[i].getGthtjhLxje().setScale(2).toString(), 16, '0'));     //利息金额
-                    list.add("+0000000000000.00");     //违约金金额
+                    list.add("+" + StringUtils.leftPad(new BigDecimal(cutpaydetls[i].getGthtjhLl()).setScale(2).toString(), 16, '0'));     //罚息金额
+                    //list.add("+0000000000000.00");     //违约金金额
                     list.add("+0000000000000.00");     //手续费金额
 
                     /*

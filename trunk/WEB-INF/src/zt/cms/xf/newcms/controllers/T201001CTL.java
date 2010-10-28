@@ -27,7 +27,7 @@ import java.util.List;
  */
 @ManagedBean(name = "T201001")
 //@SessionScoped
-public class T201001CTL implements java.io.Serializable {
+public class T201001CTL  extends BaseCTL implements java.io.Serializable {
     private Log logger = LogFactory.getLog(this.getClass());
     private String ID = "aaa";
 

@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                template="/templates/ui.xhtml">
+
+
+    <ui:define name="content">
+
+        <h2 class="title ui-widget-header ui-corner-all">还款信息详细表单</h2>
+        <div class="entry">
+            <p>This is a detail page for the selected car.</p>
+
+
+        <p:fieldset>
+            <f:facet name="legend">
+                aaaaaa
+            </f:facet>
+
+            <h:panelGrid id="display" columns="4" cellpadding="4">
+                <h:outputText value="Model:"/>
+                <h:outputText value="#{flash.selectedRecord.stdkhmc}" style="font-weight:bold"/>
+                <h:outputText value="Year:"/>
+                <h:outputText value="#{flash.selectedRecord.stdhth}" style="font-weight:bold"/>
+                <h:outputText value="Model:"/>
+                <h:outputText value="#{flash.selectedRecord.stdkhmc}" style="font-weight:bold"/>
+                <h:outputText value="Year:"/>
+                <h:outputText value="#{flash.selectedRecord.stdhth}" style="font-weight:bold"/>
+
+            </h:panelGrid>
+        </p:fieldset>
+        </div>
+    </ui:define>
+
+</ui:composition>
