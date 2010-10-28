@@ -1,4 +1,4 @@
-package zt.cms.xf.newcms.domain.T100101;
+package zt.cms.xf.newcms.domain.T100103;
 
 /**
  * Created by IntelliJ IDEA.
@@ -7,7 +7,7 @@ package zt.cms.xf.newcms.domain.T100101;
  * Time: 16:40:10
  * To change this template use File | Settings | File Templates.
  */
-public class T100101ResponseRecord {
+public class T100103ResponseRecord {
     String   stdjjh;
     String   stdqch;
     String   stdkhh;
@@ -21,8 +21,6 @@ public class T100101ResponseRecord {
     String   stdhkzh; //还款帐号
     String   stddqh;  //地区号
     String   stdyhh;  //银行号
-    String   stdfxje;  //罚息金额
-    String   stdryje;  //冗余金额
 
     public String getStdjjh() {
         return stdjjh;
@@ -128,19 +126,4 @@ public class T100101ResponseRecord {
         this.stdyhh = stdyhh;
     }
 
-    public String getStdfxje() {
-        return stdfxje;
-    }
-
-    public void setStdfxje(String stdfxje) {
-        this.stdfxje = stdfxje;
-    }
-
-    public String getStdryje() {
-        return stdryje;
-    }
-
-    public void setStdryje(String stdryje) {
-        this.stdryje = stdryje;
-    }
 }

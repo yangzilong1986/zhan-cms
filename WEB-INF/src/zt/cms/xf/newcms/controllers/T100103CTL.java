@@ -5,9 +5,9 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import zt.cms.xf.gateway.NewCmsManager;
-import zt.cms.xf.newcms.domain.T100101.T100101Request;
-import zt.cms.xf.newcms.domain.T100101.T100101Response;
-import zt.cms.xf.newcms.domain.T100101.T100101ResponseRecord;
+import zt.cms.xf.newcms.domain.T100103.T100103Request;
+import zt.cms.xf.newcms.domain.T100103.T100103Response;
+import zt.cms.xf.newcms.domain.T100103.T100103ResponseRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,43 +21,41 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 
-//@ManagedBean(name = "T100101")
-//@SessionScoped
-public class T100101CTL extends BaseCTL implements java.io.Serializable {
+public class T100103CTL  extends BaseCTL implements java.io.Serializable {
 
     private Log logger = LogFactory.getLog(this.getClass());
-    private T100101ResponseRecord responseRecord = new T100101ResponseRecord();
-    List<T100101ResponseRecord> responseFDList = new ArrayList();
-    List<T100101ResponseRecord> responseXFList = new ArrayList();
+    private T100103ResponseRecord responseRecord = new T100103ResponseRecord();
+    List<T100103ResponseRecord> responseFDList = new ArrayList();
+    List<T100103ResponseRecord> responseXFList = new ArrayList();
 
 
-    public T100101ResponseRecord getResponseRecord() {
+    public T100103ResponseRecord getResponseRecord() {
         return responseRecord;
     }
 
-    public void setResponseRecord(T100101ResponseRecord responseRecord) {
+    public void setResponseRecord(T100103ResponseRecord responseRecord) {
         this.responseRecord = responseRecord;
     }
 
-    public List<T100101ResponseRecord> getResponseFDList() {
+    public List<T100103ResponseRecord> getResponseFDList() {
         return responseFDList;
     }
 
-    public void setResponseFDList(List<T100101ResponseRecord> responseFDList) {
+    public void setResponseFDList(List<T100103ResponseRecord> responseFDList) {
         this.responseFDList = responseFDList;
     }
 
-    public List<T100101ResponseRecord> getResponseXFList() {
+    public List<T100103ResponseRecord> getResponseXFList() {
         return responseXFList;
     }
 
-    public void setResponseXFList(List<T100101ResponseRecord> responseXFList) {
+    public void setResponseXFList(List<T100103ResponseRecord> responseXFList) {
         this.responseXFList = responseXFList;
     }
 
     public final static void main(String[] args) throws Exception {
 
-        T100101CTL ctl = new T100101CTL();
+        T100103CTL ctl = new T100103CTL();
         ctl.start("1");
 
     }
@@ -66,13 +64,13 @@ public class T100101CTL extends BaseCTL implements java.io.Serializable {
         return "about.xhtml";
     }
 
-    public List<T100101ResponseRecord> getAllFDRecords() {
+    public List<T100103ResponseRecord> getAllFDRecords() {
         //查询 房贷/消费信贷（1/2） 数据
         setResponseFDList(start("1"));
         return this.getResponseFDList();
     }
 
-    public List<T100101ResponseRecord> getAllXFRecords() {
+    public List<T100103ResponseRecord> getAllXFRecords() {
         //查询 房贷/消费信贷（1/2） 数据
         setResponseXFList(start("2"));
         return this.getResponseXFList();
@@ -90,14 +88,14 @@ public class T100101CTL extends BaseCTL implements java.io.Serializable {
      * @param systemcode 要查询的系统别    房贷/消费信贷（1/2） 数据
      * @return
      */
-    public List<T100101ResponseRecord> start(String systemcode) {
+    public List<T100103ResponseRecord> start(String systemcode) {
         XStream xstream = new XStream(new DomDriver());
-        xstream.processAnnotations(T100101Request.class);
-        xstream.processAnnotations(T100101Response.class);
+        xstream.processAnnotations(T100103Request.class);
+        xstream.processAnnotations(T100103Response.class);
 
-        T100101Request request = new T100101Request();
+        T100103Request request = new T100103Request();
 
-        request.initHeader("0100", "100101", "3");
+        request.initHeader("0100", "100103", "3");
 
         //查询 房贷/消费信贷（1/2） 数据
         request.setStdcxlx(systemcode);
@@ -108,7 +106,7 @@ public class T100101CTL extends BaseCTL implements java.io.Serializable {
 
         NewCmsManager ncm = new NewCmsManager();
 
-        List<T100101ResponseRecord> responseList = new ArrayList();
+        List<T100103ResponseRecord> responseList = new ArrayList();
         int totalcount = processTxn(responseList, ncm, xstream, request, pkgcnt, startnum);
         logger.info("received list zise:" + responseList.size());
         if (totalcount != responseList.size()) {
@@ -129,8 +127,8 @@ public class T100101CTL extends BaseCTL implements java.io.Serializable {
      * @param startnum
      * @return
      */
-    public int processTxn(List<T100101ResponseRecord> responseList,
-                          NewCmsManager ncm, XStream xstream, T100101Request request,
+    public int processTxn(List<T100103ResponseRecord> responseList,
+                          NewCmsManager ncm, XStream xstream, T100103Request request,
                           int pkgcnt, int startnum) {
         
         //查询 房贷/消费信贷（1/2） 数据
@@ -143,7 +141,7 @@ public class T100101CTL extends BaseCTL implements java.io.Serializable {
         //发送请求
         String responseBody = ncm.doPostXml(strXml);
 
-        T100101Response response = (T100101Response) xstream.fromXML(responseBody);
+        T100103Response response = (T100103Response) xstream.fromXML(responseBody);
 
         //头部总记录数
         String std400acur = response.getStd400acur();
@@ -156,14 +154,14 @@ public class T100101CTL extends BaseCTL implements java.io.Serializable {
         if (totalcount == 0) {
 
         } else {
-            List<T100101ResponseRecord> tmpList = response.getBody().getContent();
+            List<T100103ResponseRecord> tmpList = response.getBody().getContent();
 
             int currCnt = tmpList.size();
             logger.info(currCnt);
             logger.info("totalcount:" + totalcount + " currCnt:" + currCnt + " startnum:" + startnum);
 
             //打包到返回list中
-            for (T100101ResponseRecord record : tmpList) {
+            for (T100103ResponseRecord record : tmpList) {
                 responseList.add(record);
             }
 

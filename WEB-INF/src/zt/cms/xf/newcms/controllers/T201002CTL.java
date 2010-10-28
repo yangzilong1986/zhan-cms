@@ -16,7 +16,7 @@ import zt.cms.xf.newcms.domain.T201002.T201002Response;
  * Time: 13:22:35
  * To change this template use File | Settings | File Templates.
  */
-public class T201002CTL {
+public class T201002CTL  extends BaseCTL {
     private Log logger = LogFactory.getLog(this.getClass());
 
     public final static void main(String[] args) throws Exception {

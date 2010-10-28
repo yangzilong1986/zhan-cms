@@ -81,7 +81,6 @@ public class XFActCutPayLink extends FormActions {
                     return (-1);
                 }
 
-/*
                 //20101018 新信贷接口改造 屏蔽本段处理
                 if ((count = bm.generateBills(ctx, conn, msgs)) == 0) {
                     ctx.setRequestAtrribute("msg", "今日无待出帐扣款记录，请查询！");
@@ -89,7 +88,9 @@ public class XFActCutPayLink extends FormActions {
                     ctx.setRequestAtrribute("msg", "帐单生成成功，共生成 " + count + " 条新扣款记录，请查询！");
                 }
 
-*/
+                
+/*
+
                 //20101018 新信贷接口改造
                 if ((count = generateNewCmsBills(ctx, conn, msgs)) == 0) {
                     ctx.setRequestAtrribute("msg", "今日无待出帐扣款记录，请查询！");
@@ -97,6 +98,7 @@ public class XFActCutPayLink extends FormActions {
                     ctx.setRequestAtrribute("msg", "帐单生成成功，共生成 " + count + " 条新扣款记录，请查询！");
                 }
 
+*/
 
                 ctx.setRequestAtrribute("flag", "1");
                 ctx.setRequestAtrribute("isback", "0");
