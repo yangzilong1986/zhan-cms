@@ -23,6 +23,7 @@ import zt.cms.xf.newcms.controllers.BaseCTL;
 import zt.cms.xf.newcms.controllers.T100101CTL;
 import zt.cms.xf.newcms.controllers.T100103CTL;
 import zt.cms.xf.newcms.domain.T100101.T100101ResponseRecord;
+import zt.cms.xf.newcms.domain.T100103.T100103ResponseRecord;
 import zt.cmsi.mydb.MyDB;
 import zt.platform.db.DatabaseConnection;
 import zt.platform.db.RecordSet;
@@ -91,8 +92,8 @@ public class FDDateLink extends FormActions {
 
         if (lastbutton.equals("GETCUTPAYBUTTON")) {
             instance.getFormBean().getElement("GETFDDATABUTTON").setComponetTp(15);
-//            instance.getFormBean().getElement("CHECKFDDATABUTTON").setComponetTp(15);
-            instance.getFormBean().getElement("CHECKFDDATABUTTON").setComponetTp(6);
+            instance.getFormBean().getElement("CHECKFDDATABUTTON").setComponetTp(15);
+//            instance.getFormBean().getElement("CHECKFDDATABUTTON").setComponetTp(6);
         } else if (lastbutton.equals("GENERATEPKGBUTTON")) {
             instance.getFormBean().getElement("GENERATEPKGBUTTON").setComponetTp(15);
         } else if (lastbutton.equals("SENDPKGBUTTON")) {
@@ -190,8 +191,12 @@ public class FDDateLink extends FormActions {
                 4、逐笔检查临时表中数据，根据合同号与本地帐户表一一对应
                 5、并发后处理
                  */
-                iSuccessCount = getNewFDSystemData(conn, msgs, button, regioncd, bankcd);
-//                iSuccessCount = getFDSystemData(conn, msgs, button, regioncd, bankcd, "fdcutpaydetl");
+                if (button.equals("GETFDDATABUTTON")) {
+                    iSuccessCount = getNewFDSystemData(conn, msgs, button, regioncd, bankcd);
+                }else{
+                    iSuccessCount = getNewPreFDSystemData(conn, msgs, button, regioncd, bankcd);
+                }
+                //                iSuccessCount = getFDSystemData(conn, msgs, button, regioncd, bankcd, "fdcutpaydetl");
 
 
                 ctx.setRequestAtrribute("msg", msgs.getAllMessages());
@@ -208,11 +213,18 @@ public class FDDateLink extends FormActions {
         }
 
         //利用DBLINK 检查房贷系统数据
-        if (button.equals("CHECKFDDATABUTTON") || button.equals("CHECKFDPREDATABUTTON")) {
+        if (button.equals("CHECKFDDATABUTTON")) {
             ctx.setRequestAtrribute("flag", "1");
             ctx.setRequestAtrribute("isback", "0");
             ctx.setTarget("/faces/cutpay/t100101.xhtml");
             instance.setReadonly(true);
+        }
+        if (button.equals("CHECKFDPREDATABUTTON")) {
+            ctx.setRequestAtrribute("flag", "1");
+            ctx.setRequestAtrribute("isback", "0");
+            ctx.setTarget("/faces/cutpay/t100103.xhtml");
+            instance.setReadonly(true);
+        }
 
 /*
 
@@ -272,7 +284,6 @@ public class FDDateLink extends FormActions {
                 instance.setReadonly(true);
             }
 */
-        }
 
 
         //房贷系统SBS入帐处理
@@ -332,7 +343,7 @@ public class FDDateLink extends FormActions {
         if (button.equals("FDWRITEBACKBUTTON")) {
             int iSuccessCount = 0;
             try {
-                iSuccessCount = doWriteBackButton(ctx,conn, msgs);
+                iSuccessCount = doWriteBackButton(ctx, conn, msgs);
                 if (iSuccessCount == -1) {
                     msgs.add("<br>--回写房贷系统时出现问题！");
                 } else {
@@ -479,9 +490,9 @@ public class FDDateLink extends FormActions {
                                    String regioncd, String bankcd) throws Exception {
 
         String preflag = "0";
-        if (button.equals("GETFDPREDATABUTTON") || button.equals("CHECKFDPREDATABUTTON")) {
-            preflag = "1";
-        }
+//        if (button.equals("GETFDPREDATABUTTON") || button.equals("CHECKFDPREDATABUTTON")) {
+//            preflag = "1";
+//        }
 
         //事务开始
 
@@ -489,23 +500,16 @@ public class FDDateLink extends FormActions {
 
         //获取新信贷数据LIST
         BaseCTL ctl;
-        if (preflag.equals("0")) {
-            ctl = new T100101CTL();
-        }else{
-            ctl = new T100103CTL();
-        }
+//        if (preflag.equals("0")) {
+        ctl = new T100101CTL();
+//        }else{
+//            ctl = new T100103CTL();
+//        }
         //查询 房贷/消费信贷（1/2） 数据
         List<T100101ResponseRecord> recvList = ctl.start("1");
 
         //核对本地帐户表信息
         int rtn = 0;
-/*
-        rtn = checkNewFDSystemData(recvList, msgs);
-        if (rtn == -1) {
-            return -1;
-        }
-*/
-
         RecordSet rs = null;
         PreparedStatement ps = null;
         MyDB.getInstance().addDBConn(conn);
@@ -543,16 +547,17 @@ public class FDDateLink extends FormActions {
             ps = conn.getPreparedStatement(sql);
 
             int count = 0;
+//            for (T100101ResponseRecord record : recvList) {
             for (T100101ResponseRecord record : recvList) {
                 //TODO 地区字段为临时方案 待修正
                 String tmpStr = record.getStddqh();
-                String regioncdTmp,bankcdTmp,nameTmp;
+                String regioncdTmp, bankcdTmp, nameTmp;
                 if (tmpStr == null || tmpStr.equals("null")) {
                     continue;
                 } else {
                     String[] code = tmpStr.split("-");
                     regioncdTmp = code[0].trim();
-                    bankcdTmp =  code[1].trim();
+                    bankcdTmp = code[1].trim();
                 }
 
                 if (!regioncd.equals(regioncdTmp)) {
@@ -565,11 +570,11 @@ public class FDDateLink extends FormActions {
                 ps.setString(3, record.getStdkhmc());
                 ps.setString(4, record.getStdhth());
                 ps.setString(5, record.getStdjhhkr());
-                if (preflag.equals("0")) {
-                    ps.setDouble(6, Double.valueOf(record.getStdfxje()));  //罚息
-                }else{
-                    ps.setDouble(6, 0);  
-                }
+//                if (preflag.equals("0")) {
+                ps.setDouble(6, Double.valueOf(record.getStdfxje()));  //罚息
+//                }else{
+//                    ps.setDouble(6, 0);
+//                }
                 ps.setDouble(7, Double.valueOf(record.getStdhkje()));
                 ps.setDouble(8, Double.valueOf(record.getStdhkbj()));
                 ps.setDouble(9, Double.valueOf(record.getStdhklx()));
@@ -590,6 +595,156 @@ public class FDDateLink extends FormActions {
                 //ps.setString(20, record.getStddqh());
                 //ps.setString(21, record.getStdyhh());
                 //begin
+                ps.setString(20, regioncdTmp);
+                ps.setString(21, bankcdTmp);
+                //end
+
+                ps.addBatch();
+            }
+
+            int[] results = ps.executeBatch();//执行批处理
+
+            //处理地区信息   TODO
+            sql = "insert into fdcutpaydetl select * from fdcutpaydetltemp";
+            rtn = conn.executeUpdate(sql);
+            if (rtn < 0) {
+                msgs.add("处理临时表数据时出现问题。");
+                return -1;
+            }
+
+            conn.commit();
+
+
+            sql = "select count(*),sum(gthtjh_jhje) from  fdcutpaydetl " + " where billstatus = " + FDBillStatus.SEND_PENDING;
+            rs = conn.executeQuery(sql);
+            if (rs.next()) {
+                rtn = rs.getInt(0);
+                BigDecimal totalamt = new BigDecimal(rs.getDouble(1)).setScale(2, BigDecimal.ROUND_HALF_UP);
+                msgs.add("<br>房贷系统记录数为：" + rtn + "条！");
+                msgs.add("<br>房贷系统扣款总金额为：" + new DecimalFormat("##,###,###,###,##0.00").format(totalamt));
+            }
+        } catch (Exception e) {
+            conn.rollback();
+            msgs.add("发生异常：" + e.getMessage());
+            Debug.debug(e);
+            throw new Exception(e);
+        } finally {
+            if (ps != null) {
+                ps.close();
+            }
+            if (rs != null) {
+                rs.close();
+            }
+            MyDB.getInstance().releaseDBConn();
+        }
+        return rtn;
+    }
+
+    /**
+     * 查询房贷系统表  生成本地临时数据   (提前还款)
+     *
+     * @param conn
+     * @param msgs
+     * @param button
+     * @param regioncd
+     * @param bankcd
+     * @return
+     * @throws Exception
+     */
+    private int getNewPreFDSystemData(DatabaseConnection conn, ErrorMessages msgs, String button,
+                                      String regioncd, String bankcd) throws Exception {
+
+        String preflag = "1";
+
+        //事务开始
+
+        //清空临时表
+
+        //获取新信贷数据LIST
+        BaseCTL ctl;
+        ctl = new T100103CTL();
+        //查询 房贷/消费信贷（1/2） 数据
+        List<T100103ResponseRecord> recvList = ctl.start("1");
+
+        //核对本地帐户表信息
+        int rtn = 0;
+        RecordSet rs = null;
+        PreparedStatement ps = null;
+        MyDB.getInstance().addDBConn(conn);
+
+        try {
+            MyDB.getInstance().addDBConn(conn);
+
+            String sql = "select max(seqno) from fdcutpaydetl where substr(seqno,1,8) = '" + inputdate + "'";
+            rs = conn.executeQuery(sql);
+
+            int maxno = 0;
+            if (rs.next()) {
+                String max = rs.getString(0);
+                if (max != null) {
+                    maxno = Integer.parseInt(max.substring(8));
+                }
+            }
+
+            conn.setAuto(false);
+
+            sql = " delete from fdcutpaydetltemp";
+
+            rtn = conn.executeUpdate(sql);
+
+            sql = "insert into fdcutpaydetltemp " +
+                    "(seqno,xdkhzd_khbh,xdkhzd_khmc,gthtjh_htbh,gthtjh_date,gthtjh_ll,gthtjh_jhje,gthtjh_bjje,gthtjh_lxje," +
+                    "gthtb_zhbh,cutpayactno,billstatus,createtime,failreason,remark,preflag," +
+                    "gthtjh_htnm,gthtjh_jhxh,journalno,regioncd,bankcd) " +
+                    "values" +
+                    "(?,?,?,?,?,?,?,?,?," +
+                    "?,?,?,?,?,?,?," +
+                    "?,?,?,?,?) ";
+
+            logger.info("sql=" + sql);
+            ps = conn.getPreparedStatement(sql);
+
+            int count = 0;
+//            for (T100101ResponseRecord record : recvList) {
+            for (T100103ResponseRecord record : recvList) {
+                //TODO 地区字段为临时方案 待修正
+                String tmpStr = record.getStddqh();
+                String regioncdTmp, bankcdTmp, nameTmp;
+                if (tmpStr == null || tmpStr.equals("null")) {
+                    continue;
+                } else {
+                    String[] code = tmpStr.split("-");
+                    regioncdTmp = code[0].trim();
+                    bankcdTmp = code[1].trim();
+                }
+
+                if (!regioncd.equals(regioncdTmp)) {
+                    continue;
+                }
+
+                count++;
+                ps.setString(1, inputdate + StringUtils.leftPad(String.valueOf(maxno + count), 7, '0'));
+                ps.setString(2, record.getStdkhh());
+                ps.setString(3, record.getStdkhmc());
+                ps.setString(4, record.getStdhth());
+                ps.setString(5, record.getStdjhhkr());
+                ps.setDouble(6, 0);
+                ps.setDouble(7, Double.valueOf(record.getStdhkje()));
+                ps.setDouble(8, Double.valueOf(record.getStdhkbj()));
+                ps.setDouble(9, Double.valueOf(record.getStdhklx()));
+
+                ps.setString(10, record.getStddkzh());
+                ps.setString(11, record.getStdhkzh());
+                ps.setString(12, "0");   //billstatus
+                ps.setDate(13, new java.sql.Date(new Date().getTime()));
+                ps.setString(14, " ");
+                ps.setString(15, "冗余金额"); //冗余金额字段  暂时放在备注里stdryje
+                ps.setString(16, preflag);
+
+                ps.setString(17, record.getStdjjh());   //借据号
+                ps.setString(18, record.getStdqch());
+                ps.setString(19, "0");
+
                 ps.setString(20, regioncdTmp);
                 ps.setString(21, bankcdTmp);
                 //end
@@ -1368,7 +1523,7 @@ public class FDDateLink extends FormActions {
    根据SBS入帐处理结果 对房贷系统进行回写处理
     */
 
-    private int doWriteBackButton(SessionContext ctx,DatabaseConnection conn, ErrorMessages msgs) {
+    private int doWriteBackButton(SessionContext ctx, DatabaseConnection conn, ErrorMessages msgs) {
 
         int rtn = 0;
 
@@ -1384,14 +1539,14 @@ public class FDDateLink extends FormActions {
             }
 
             FDWriteBackManager fdw = new FDWriteBackManager();
-            rtn = fdw.processWriteBack4NewCMS_SingleRecord(cutpaydetls , conn, msgs);
+            rtn = fdw.processWriteBack4NewCMS_SingleRecord(cutpaydetls, conn, msgs);
             //rtn = fdw.processWriteBack4NewCMS(inputdate, conn, msgs);
             //rtn = fdw.processWriteBack(inputdate, conn, msgs);
         } catch (java.io.IOException e) {
-            logger.error("回写出现错误",e);
+            logger.error("回写出现错误", e);
             return -1;
         } catch (Exception e) {
-            logger.error("回写出现错误",e);
+            logger.error("回写出现错误", e);
             throw new RuntimeException(e);
         }
 
