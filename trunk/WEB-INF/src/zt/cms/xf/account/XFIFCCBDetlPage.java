@@ -449,15 +449,21 @@ public class XFIFCCBDetlPage extends FormActions {
             } else {
                 int count = 0;
 
+                for (CutpayFailRecord record :failrecords){
+                    logger.info("银行返回扣款失败记录:" + record.getActnam()+" " +record.getTxnamt() + "失败原因："+record.getReason());
+                }
+
                 for (int i = 0; i < cutpaydetls.length; i++) {
                     int failrecordflag = 0;
                     detlpk = new FdcutpaydetlPk(cutpaydetls[i].getSeqno());
+
                     //遍历查询结果包中失败记录集
                     for (int k = 0; k < failedcount; k++) {
-                        BigDecimal jhje = cutpaydetls[i].getGthtjhJhje().setScale(2);
+//                        BigDecimal jhje = cutpaydetls[i].getGthtjhJhje().setScale(2);
+                        BigDecimal jhje = cutpaydetls[i].getGthtjhJhje();
 
                         if (cutpaydetls[i].getCutpayactno().trim().equals(failrecords.get(k).getActnum().trim()) &&
-                                jhje.equals(new BigDecimal(failrecords.get(k).getTxnamt())) &&
+                                (jhje.compareTo(new BigDecimal(failrecords.get(k).getTxnamt())) == 0) &&
                                 !failrecords.get(k).isProcessed()) { //帐号、金额相同，并且此失败记录未被处理过
                             cutpaydetls[i].setBillstatus(FDBillStatus.CUTPAY_FAILD);
                             cutpaydetls[i].setFailreason(failrecords.get(k).getReason());
