@@ -59,7 +59,7 @@ public class XFActCutPayLink extends FormActions {
             instance.setValue("CHARGEOFFNUM", num);
         }
 
-        //trigger(manager, instance, EventType.EDIT_VIEW_EVENT_TYPE, Event.BRANCH_CONTINUE_TYPE);
+        instance.getFormBean().getElement("CHARGEOFFNUM").setComponetTp(6);
         trigger(manager, instance, EventType.EDIT_VIEW_EVENT_TYPE, Event.BRANCH_BREAK_TYPE);
         return 0;
     }
@@ -81,6 +81,8 @@ public class XFActCutPayLink extends FormActions {
                     return (-1);
                 }
 
+/*
+
                 //20101018 新信贷接口改造 屏蔽本段处理
                 if ((count = bm.generateBills(ctx, conn, msgs)) == 0) {
                     ctx.setRequestAtrribute("msg", "今日无待出帐扣款记录，请查询！");
@@ -88,8 +90,8 @@ public class XFActCutPayLink extends FormActions {
                     ctx.setRequestAtrribute("msg", "帐单生成成功，共生成 " + count + " 条新扣款记录，请查询！");
                 }
 
-                
-/*
+*/
+
 
                 //20101018 新信贷接口改造
                 if ((count = generateNewCmsBills(ctx, conn, msgs)) == 0) {
@@ -98,7 +100,6 @@ public class XFActCutPayLink extends FormActions {
                     ctx.setRequestAtrribute("msg", "帐单生成成功，共生成 " + count + " 条新扣款记录，请查询！");
                 }
 
-*/
 
                 ctx.setRequestAtrribute("flag", "1");
                 ctx.setRequestAtrribute("isback", "0");
@@ -163,6 +164,17 @@ public class XFActCutPayLink extends FormActions {
 
             int count = 0;
             for (T100101ResponseRecord recvRecord : recvList) {
+                //TODO 地区字段为临时方案 待修正
+                String tmpStr = recvRecord.getStddqh();
+                String regioncdTmp, bankcdTmp, nameTmp;
+                if (tmpStr == null || "null".equals(tmpStr) || "".equals(tmpStr)) {
+                    continue;
+                } else {
+                    String[] code = tmpStr.split("-");
+                    regioncdTmp = code[0].trim();
+                    bankcdTmp = code[1].trim();
+                }
+
 
                 //流水号生成
                 maxno++;
@@ -176,7 +188,9 @@ public class XFActCutPayLink extends FormActions {
                 xfactcutpaydetl.setClientact(recvRecord.getStddkzh());
                 xfactcutpaydetl.setPaybackact(recvRecord.getStdhkzh());
 
-                xfactcutpaydetl.setBillstatus(XFBillStatus.BILLSTATUS_CHECK_PENDING);
+                xfactcutpaydetl.setPaybackdate(new SimpleDateFormat("yyyyMMdd").parse(recvRecord.getStdjhhkr()));
+
+                xfactcutpaydetl.setBillstatus(XFBillStatus.BILLSTATUS_CHECKED);
 
                 String curruser = StringUtils.trimToEmpty(um.getUserName());
                 xfactcutpaydetl.setOperatorid(curruser);
@@ -194,8 +208,22 @@ public class XFActCutPayLink extends FormActions {
 
                 xfactcutpaydetl.setPaybackamt(new BigDecimal(recvRecord.getStdhkje()));
                 xfactcutpaydetl.setPrincipalamt(new BigDecimal(recvRecord.getStdhkbj()));
-                xfactcutpaydetl.setServicechargefee(new BigDecimal(recvRecord.getStdhklx()));
 
+                if (StringUtils.isNotEmpty(recvRecord.getStdhklx())) {
+                    xfactcutpaydetl.setServicechargefee(new BigDecimal(recvRecord.getStdhklx()));
+                }else{
+                    xfactcutpaydetl.setServicechargefee(BigDecimal.valueOf(0));
+                }
+                
+                xfactcutpaydetl.setLatefee(BigDecimal.valueOf(0));
+                if (StringUtils.isNotEmpty(recvRecord.getStdfxje())) {
+                    xfactcutpaydetl.setBreachfee(new BigDecimal(recvRecord.getStdfxje()));
+                }else{
+                    xfactcutpaydetl.setBreachfee(BigDecimal.valueOf(0));
+                }
+
+                xfactcutpaydetl.setClientid("1");
+                xfactcutpaydetl.setClientidtype("1");
                 //生成新的明细帐单
                 detldao.insert(xfactcutpaydetl);
 

@@ -141,9 +141,15 @@ public class T100101Bean implements Serializable {
 
     private void countAmt(T100101ResponseRecord record) {
         totalamt = totalamt.add(new BigDecimal(record.getStdhkje()));
-        totalPrincipalAmt = totalPrincipalAmt.add(new BigDecimal(record.getStdhkbj()));
-        totalInterestAmt = totalInterestAmt.add(new BigDecimal(record.getStdhklx()));
-        totalFxjeAmt = totalFxjeAmt.add(new BigDecimal(record.getStdfxje()));
+        if (StringUtils.isNotEmpty(record.getStdhkbj())) {
+            totalPrincipalAmt = totalPrincipalAmt.add(new BigDecimal(record.getStdhkbj()));
+        }
+        if (StringUtils.isNotEmpty(record.getStdhklx())) {
+            totalInterestAmt = totalInterestAmt.add(new BigDecimal(record.getStdhklx()));
+        }
+        if (StringUtils.isNotEmpty(record.getStdfxje())) {
+            totalFxjeAmt = totalFxjeAmt.add(new BigDecimal(record.getStdfxje()));
+        }
     }
 
     public String onRowSelectNavigate(SelectEvent event) {
