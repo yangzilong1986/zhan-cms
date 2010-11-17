@@ -26,7 +26,6 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @ManagedBean(name = "T201001")
-//@SessionScoped
 public class T201001CTL  extends BaseCTL implements java.io.Serializable {
     private Log logger = LogFactory.getLog(this.getClass());
     private String ID = "aaa";
@@ -152,7 +151,7 @@ public class T201001CTL  extends BaseCTL implements java.io.Serializable {
             while (recordSet.next()) {
                 //reqRecord.setStdsqdh(recordSet.getString("appno"));    //申请单号
                 reqRecord.setStdsqdh(AppFormNo);    //申请单号
-                reqRecord.setStdurl("http://192.168.91.20/dnldfile.xhtml");    //文件URL  TODO 参数化
+                reqRecord.setStdurl("http://192.168.91.20/faces/dnldfile.xhtml?appno=" + AppFormNo);    //文件URL  TODO 参数化
                 reqRecord.setStdkhxm(recordSet.getString("name"));    //客户姓名
                 reqRecord.setStdzjlx(recordSet.getString("idtype"));    //证件类型
                 reqRecord.setStdzjhm(recordSet.getString("id"));    //证件号码

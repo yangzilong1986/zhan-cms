@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                template="/templates/ui.xhtml">
+
+    <ui:define name="head">
+
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="entry" style="margin-top:30px">
+            <h:form>
+                <p:messages showDetail="true"/>
+
+                <p:panel header="消费信贷申请单附件下载">
+                    <br/>
+                    appno=#{attachmentDownload.appno}
+                </p:panel>
+            </h:form>
+
+        </div>
+        <div id="footer_body"
+             style="padding:100px  0  20px  50px;font-size:12px;font-weight:bold;border-bottom:solid  1px  blue">
+        </div>
+    </ui:define>
+
+</ui:composition>

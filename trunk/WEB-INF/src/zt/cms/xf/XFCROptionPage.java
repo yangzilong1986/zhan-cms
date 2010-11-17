@@ -226,9 +226,21 @@ public class XFCROptionPage extends FormActions {
                 ctx.setRequestAtrribute("msg", "修改审批意见成功，已成功提交到下一级审批！");
         } else
             ctx.setRequestAtrribute("msg", "修改审批意见成功！");
+
+
+        //=============================================
+        //20101116 增加与新信贷系统的接口    TODO
+        Boolean newcmsReturn = sendDataToNewCMS(APPNO);
+        
         ctx.setTarget("/showinfo.jsp");
 
         return 0;
+    }
+
+    //20101116 zhanrui
+    private Boolean sendDataToNewCMS(String appno) {
+        
+        return true;
     }
 
     public int buttonEvent(SessionContext ctx, DatabaseConnection conn, FormInstance instance, String button,
