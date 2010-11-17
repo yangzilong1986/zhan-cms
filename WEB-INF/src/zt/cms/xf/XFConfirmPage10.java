@@ -9,14 +9,7 @@ package zt.cms.xf;
  * @version 1.0
  */
 
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.logging.Logger;
-
-import javax.sql.rowset.CachedRowSet;
-
+import com.zt.util.PropertyManager;
 import zt.cms.cm.common.RightChecker;
 import zt.cms.util.Workflow;
 import zt.cms.util.poiutil.IWriteOtherInfos;
@@ -39,7 +32,12 @@ import zt.platform.form.util.event.EventManager;
 import zt.platform.form.util.event.EventType;
 import zt.platform.user.UserManager;
 
-import com.zt.util.PropertyManager;
+import javax.sql.rowset.CachedRowSet;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.logging.Logger;
 
 public class XFConfirmPage10 extends FormActions {
 	public static Logger logger = Logger.getLogger("zt.cms.xf.XFConfirmPage10");
@@ -169,8 +167,10 @@ public class XFConfirmPage10 extends FormActions {
 			}
 			trigger(manager, "XFCRINFO", null);
 		} else if (button.equals("MODOPIN")) {// 审批意见
-			// ctx.setRequestAtrribute("flag", "write");
-			String str = "select * from XFCREDITINFO  where APPNO='" + APPNO
+			//20101116 新信贷改造 屏蔽征信信息检查
+
+/*
+            String str = "select * from XFCREDITINFO  where APPNO='" + APPNO
 					+ "' ";
 			if (!conn.isExist(str)) {
 				ctx.setRequestAtrribute("msg", "请录入客户征信信息！");
@@ -178,6 +178,8 @@ public class XFConfirmPage10 extends FormActions {
 				ctx.setTarget("/showinfo.jsp");
 				return -1;
 			}
+*/
+
 			ctx.setRequestAtrribute("APPAMT", APPAMT);
 			trigger(manager, "XFCROPINIONLIST", null);
 		} else if (button.equals("GRADE")) {// 信用评价

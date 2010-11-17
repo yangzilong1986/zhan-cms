@@ -224,6 +224,9 @@ public class XFActCutPayLink extends FormActions {
 
                 xfactcutpaydetl.setClientid("1");
                 xfactcutpaydetl.setClientidtype("1");
+
+                xfactcutpaydetl.setPaybackbankid(bankcdTmp);
+
                 //生成新的明细帐单
                 detldao.insert(xfactcutpaydetl);
 
