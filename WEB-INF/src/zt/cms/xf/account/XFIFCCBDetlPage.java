@@ -80,7 +80,8 @@ public class XFIFCCBDetlPage extends FormActions {
             instance.getFormBean().getElement("SENDREQUESTBTN").setComponetTp(15);
             instance.getFormBean().getElement("SENDQUERYBTN").setComponetTp(15);
         } else if ((bankdetl.getStatus().equals(XFWithHoldStatus.SEND_SUCCESS))
-                || (bankdetl.getStatus().equals(XFWithHoldStatus.QUERY_FAILD))) {
+                || (bankdetl.getStatus().equals(XFWithHoldStatus.QUERY_FAILD))
+                || (bankdetl.getStatus().equals(XFWithHoldStatus.QUERY_SUCCESS))) {
 //                || (bankdetl.getStatus().equals(XFWithHoldStatus.UPDATESTATUS_FAILD))
 //                || (bankdetl.getStatus().equals(XFWithHoldStatus.UPDATESTATUS_SUCCESS))) {
 

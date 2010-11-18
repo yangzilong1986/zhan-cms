@@ -32,4 +32,10 @@ public class XFBillStatus {
     //后台入帐成功
     public static final String BILLSTATUS_CORE_SUCCESS = "10";                         
 
+    //房贷系统处理失败
+    public static final String FD_WRITEBACK_FAILD = "11";
+
+    //房贷系统处理成功
+    public static final String FD_WRITEBACK_SUCCESS = "12";
+
 }
