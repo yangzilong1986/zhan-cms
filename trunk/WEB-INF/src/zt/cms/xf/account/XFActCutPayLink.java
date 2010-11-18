@@ -188,6 +188,8 @@ public class XFActCutPayLink extends FormActions {
                 xfactcutpaydetl.setClientact(recvRecord.getStddkzh());
                 xfactcutpaydetl.setPaybackact(recvRecord.getStdhkzh());
 
+                xfactcutpaydetl.setPaybackactname(recvRecord.getStdkhmc());
+
                 xfactcutpaydetl.setPaybackdate(new SimpleDateFormat("yyyyMMdd").parse(recvRecord.getStdjhhkr()));
 
                 xfactcutpaydetl.setBillstatus(XFBillStatus.BILLSTATUS_CHECKED);

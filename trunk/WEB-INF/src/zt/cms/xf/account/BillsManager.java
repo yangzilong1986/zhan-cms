@@ -1,41 +1,35 @@
 package zt.cms.xf.account;
 
-import zt.platform.form.control.SessionContext;
-import zt.platform.form.util.event.ErrorMessages;
-import zt.platform.form.config.SystemAttributeNames;
-import zt.platform.db.DatabaseConnection;
-import zt.platform.db.RecordSet;
-import zt.platform.user.UserManager;
-import zt.platform.utils.Debug;
-import zt.platform.cachedb.ConnectionManager;
-import zt.cmsi.mydb.MyDB;
-import zt.cms.xf.common.dao.XfactcutpaymainDao;
-import zt.cms.xf.common.dao.XfactcutpaydetlDao;
-import zt.cms.xf.common.dao.XfcontractDao;
-import zt.cms.xf.common.factory.XfactcutpaymainDaoFactory;
-import zt.cms.xf.common.factory.XfactcutpaydetlDaoFactory;
-import zt.cms.xf.common.factory.XfcontractDaoFactory;
-import zt.cms.xf.common.dto.*;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import zt.cms.xf.common.constant.XFBillStatus;
 import zt.cms.xf.common.constant.XFCommon;
 import zt.cms.xf.common.constant.XFContractStatus;
+import zt.cms.xf.common.dao.XfactcutpaydetlDao;
+import zt.cms.xf.common.dao.XfactcutpaymainDao;
+import zt.cms.xf.common.dao.XfcontractDao;
+import zt.cms.xf.common.dto.*;
 import zt.cms.xf.common.exceptions.XfactcutpaydetlDaoException;
-import zt.cms.xf.common.exceptions.XfvcutpaydetlDaoException;
+import zt.cms.xf.common.factory.XfactcutpaydetlDaoFactory;
+import zt.cms.xf.common.factory.XfactcutpaymainDaoFactory;
+import zt.cms.xf.common.factory.XfcontractDaoFactory;
+import zt.cmsi.mydb.MyDB;
+import zt.platform.db.DatabaseConnection;
+import zt.platform.db.RecordSet;
+import zt.platform.form.config.SystemAttributeNames;
+import zt.platform.form.control.SessionContext;
+import zt.platform.form.util.event.ErrorMessages;
+import zt.platform.user.UserManager;
+import zt.platform.utils.Debug;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Calendar;
-import java.util.logging.Logger;
-
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
+import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -525,125 +519,6 @@ public class BillsManager {
     }
 
 
-    /*
-    （本方法已废弃：20090801）
-    正常还款扣款成功后的处理(批量处理)
-    未对提前还款进行处理
-    */
-//
-//    public void setCutpayDetlPaidupSuccessBatch(Xfactcutpaydetl[] xfactcutpaydetls) throws XfactcutpaydetlDaoException {
-//
-//
-//        Connection conn = null;
-//        try {
-//
-//            DatabaseConnection dc = new DatabaseConnection();
-//            conn = dc.getConnection();
-//            conn.setAutoCommit(false);
-//
-//            XfactcutpaydetlDao detlDao = XfactcutpaydetlDaoFactory.create(conn);
-//            XfactcutpaydetlPk detlPk = new XfactcutpaydetlPk();
-//            Xfactcutpaydetl cutpaydetl = null;
-//
-//            XfactcutpaymainDao mainDao = XfactcutpaymainDaoFactory.create(conn);
-//            XfactcutpaymainPk mainPk = new XfactcutpaymainPk();
-//            Xfactcutpaymain cutpaymain = null;
-//
-//            String journalno = null;
-//
-//            BigDecimal latefeerate = new BigDecimal(XFCommon.COMMON_LATEFEERATE);
-//            BigDecimal breachfeerate = new BigDecimal(XFCommon.COMMON_BREACHFEERATE);
-//
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-//            Date date = sdf.parse(chargeoffdate);
-//
-//            //根据用户输入日期取得逾期帐单还款日
-//            Calendar cal = Calendar.getInstance();
-//            cal.setTime(date);
-//            cal.set(Calendar.DAY_OF_MONTH, XFCommon.COMMON_CHARGEOFFDATE);
-//            cal.add(Calendar.MONTH, 1);
-//            java.sql.Date OverduePayBackDate = new java.sql.Date(cal.getTime().getTime());
-//
-//            for (int i = 0; i < xfactcutpaydetls.length; i++) {
-//                journalno = xfactcutpaydetls[i].getJournalno();
-//                cutpaydetl = detlDao.findByPrimaryKey(journalno);
-//                detlPk.setJournalno(journalno);
-//
-//                cutpaydetl.setPaidupamt(cutpaydetl.getPaybackamt());
-//
-//                cutpaydetl.setPaidupdate(date);
-//
-//                cutpaydetl.setBillstatus(XFBillStatus.BILLSTATUS_CUTPAY_SUCCESS);
-//
-//                detlDao.update(detlPk, cutpaydetl);
-//
-//                //更新主帐单
-//                mainPk.setContractno(cutpaydetl.getContractno());
-//                mainPk.setPoano(cutpaydetl.getPoano());
-//                cutpaymain = mainDao.findByPrimaryKey(mainPk);
-//
-//                //TODO:事务处理 判断 cutpaymain 为NULL情况
-//
-//                if (cutpaydetl.getBilltype().equals("0")) {     //明细帐单为正常帐单
-//                    if (cutpaymain.getClosedcd().equals("0")) {
-//                        cutpaymain.setClosedcd("1");
-//                        cutpaymain.setCloseddate(date);
-//                        if (cutpaymain.getOverduecd().equals("1")) { //主帐单已置逾期标志时，计算机滞纳金以及根据日期计算违约金
-//                            //滞纳金
-//                            BigDecimal latefee = cutpaydetl.getPaybackamt().multiply(latefeerate);
-//                            latefee = latefee.setScale(2, BigDecimal.ROUND_HALF_UP);
-//
-//                            if (latefee.compareTo(new BigDecimal(10)) == -1) {
-//                                latefee = new BigDecimal(10);
-//                            }
-//                            cutpaymain.setOdbLatefee(latefee);
-//
-//                            //违约金 按天数计算
-//                            long days = (date.getTime() - cutpaymain.getPaybackdate().getTime()) / (24 * 60 * 60 * 1000);
-//                            BigDecimal breachfee = cutpaydetl.getPaybackamt().multiply(breachfeerate);
-//                            breachfee = breachfee.multiply(new BigDecimal(days)).setScale(2, BigDecimal.ROUND_HALF_UP);
-//                            cutpaymain.setOdbBreachfee(breachfee);
-//
-//                            //设置逾期后总金额
-//                            cutpaymain.setOdbPaybackamt(latefee.add(breachfee));
-//                            //设置逾期金额的还款时间
-//                            cutpaymain.setOdbPaybackdate(OverduePayBackDate);
-//                        }
-//                        mainDao.update(mainPk, cutpaymain);
-//                    }
-//                } else if (cutpaydetl.getBilltype().equals("1")) {    //明细帐单为逾期帐单
-//                    if (cutpaymain.getOdbClosedcd().equals("0")) {
-//                        cutpaymain.setOdbClosedcd("1");
-//                        cutpaymain.setOdbCloseddate(date);
-//                        mainDao.update(mainPk, cutpaymain);
-//                    }
-//                } else if (cutpaydetl.getBilltype().equals("2")) {    //明细帐单为提前还款帐单
-//                    //遍历本合同主帐单中所有已置“提前还款核准标志” 的记录
-//                    //TODO：修改？
-//                }
-//            }
-//            conn.commit();
-//        } catch (Exception e) {
-//            Debug.debug(e);
-//            try {
-//                if (conn != null) {
-//                    conn.rollback();
-//                }
-//            } catch (Exception ex) {
-//                Debug.debug(ex);
-//            }
-//            throw new XfactcutpaydetlDaoException("Exception: " + e.getMessage(), e);
-//        } finally {
-//            try {
-//                if (conn != null) {
-//                    conn.close();
-//                }
-//            } catch (Exception ex) {
-//                Debug.debug(ex);
-//            }
-//        }
-//
-//    }
 
     public void setCutpayDetlPaidupSuccessBatch(Xfactcutpaydetl[] xfactcutpaydetls) throws XfactcutpaydetlDaoException {
 
@@ -653,10 +528,43 @@ public class BillsManager {
             
     }
 
-    /*
-    单笔扣款成功后的处理
-    */
+    /**
+     * 2010/11/18  新信贷上机
+     * @param journalno
+     * @throws XfactcutpaydetlDaoException
+     */
     public void setCutpayDetlPaidupSuccess(String journalno) throws XfactcutpaydetlDaoException {
+
+        Connection conn = null;
+
+        try {
+            DatabaseConnection dc = new DatabaseConnection();
+            conn = dc.getConnection();
+            XfactcutpaydetlDao detlDao = XfactcutpaydetlDaoFactory.create(conn);
+            XfactcutpaydetlPk detlPk = new XfactcutpaydetlPk();
+            Xfactcutpaydetl cutpaydetl = null;
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Date date = sdf.parse(chargeoffdate);
+
+            cutpaydetl = detlDao.findByPrimaryKey(journalno);
+            detlPk.setJournalno(journalno);
+
+            cutpaydetl.setPaidupamt(cutpaydetl.getPaybackamt());
+            cutpaydetl.setPaidupdate(date);
+            cutpaydetl.setBillstatus(XFBillStatus.BILLSTATUS_CUTPAY_SUCCESS);
+
+            detlDao.update(detlPk, cutpaydetl);
+        } catch (Exception e) {
+            throw new XfactcutpaydetlDaoException("Exception: " + e.getMessage(), e);
+        }
+    }
+
+
+    /*
+    单笔扣款成功后的处理   2010/10/21 之后 废弃
+    */
+    public void setCutpayDetlPaidupSuccess_20101021(String journalno) throws XfactcutpaydetlDaoException {
 
         Connection conn = null;
 

@@ -11,7 +11,7 @@ import zt.cms.xf.newcms.domain.T100104.T100104Response;
 
 
 /**
- * Created by IntelliJ IDEA.
+ * 提前还款回写
  * User: zhanrui
  * Date: 2010-8-27
  * Time: 13:22:35

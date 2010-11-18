@@ -164,7 +164,7 @@ public class SBSManager {
 
                     if (!formcode.equals("T531")) {     //异常情况处理
                         cutpaydetls[i].setFailurereason("SBS入帐失败：FORMCODE=" + formcode);
-                        cutpaydetls[i].setBillstatus(XFBillStatus.BILLSTATUS_CORE_FAILED);
+                        //cutpaydetls[i].setBillstatus(XFBillStatus.BILLSTATUS_CORE_FAILED);
                     } else {
                         cutpaydetls[i].setFailurereason("SBS入帐成功：FORMCODE=" + formcode);
                         cutpaydetls[i].setBillstatus(XFBillStatus.BILLSTATUS_CORE_SUCCESS);
