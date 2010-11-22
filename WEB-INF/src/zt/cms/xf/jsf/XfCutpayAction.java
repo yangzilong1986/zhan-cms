@@ -2,15 +2,11 @@ package zt.cms.xf.jsf;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import zt.cms.xf.common.constant.FDBillStatus;
 import zt.cms.xf.common.constant.XFBillStatus;
-import zt.cms.xf.common.dao.FdcutpaydetlDao;
 import zt.cms.xf.common.dao.XfactcutpaydetlDao;
-import zt.cms.xf.common.dto.Fdcutpaydetl;
-import zt.cms.xf.common.dto.FdcutpaydetlPk;
 import zt.cms.xf.common.dto.Xfactcutpaydetl;
+import zt.cms.xf.common.dto.XfactcutpaydetlPk;
 import zt.cms.xf.common.exceptions.XfactcutpaydetlDaoException;
-import zt.cms.xf.common.factory.FdcutpaydetlDaoFactory;
 import zt.cms.xf.common.factory.XfactcutpaydetlDaoFactory;
 import zt.cms.xf.newcms.controllers.T100102CTL;
 import zt.cms.xf.newcms.controllers.T100104CTL;
@@ -18,9 +14,6 @@ import zt.cms.xf.newcms.domain.T100102.T100102RequestList;
 import zt.cms.xf.newcms.domain.T100102.T100102RequestRecord;
 import zt.cms.xf.newcms.domain.T100104.T100104RequestList;
 import zt.cms.xf.newcms.domain.T100104.T100104RequestRecord;
-import zt.platform.db.DatabaseConnection;
-import zt.platform.form.util.event.ErrorMessages;
-import zt.platform.utils.Debug;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -29,6 +22,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by IntelliJ IDEA.
@@ -44,7 +38,7 @@ public class XfCutpayAction {
     private static final Logger logger = LoggerFactory.getLogger(XfCutpayAction.class);
 
     private Xfactcutpaydetl[] detlList;
-    private Xfactcutpaydetl detlRecord;
+    private Xfactcutpaydetl detlRecord = new Xfactcutpaydetl();
     private Xfactcutpaydetl[] selectedRecords;
     private Xfactcutpaydetl selectedRecord;
 
@@ -64,7 +58,7 @@ public class XfCutpayAction {
     @PostConstruct
     public void init() {
         try {
-            detlList = getCutPayDetlListByCCB();
+            detlList = getAllRecordsByStatus();
             countAmt(detlList);
             totalcount = detlList.length;
         } catch (XfactcutpaydetlDaoException e) {
@@ -75,27 +69,35 @@ public class XfCutpayAction {
         }
     }
 
-    private Xfactcutpaydetl[] getCutPayDetlListByCCB() throws XfactcutpaydetlDaoException {
-//        DatabaseConnection conn = null;
-//        Connection sqlconn = null;
+    public String query() {
         try {
-
-//            conn = MyDB.getInstance().apGetConn();
-//            sqlconn = conn.getConnection();
-
-            XfactcutpaydetlDao detlDao = XfactcutpaydetlDaoFactory.create();
-
-            String sql = "billstatus = " + XFBillStatus.BILLSTATUS_CORE_SUCCESS +
-                    " order by journalno";
-
-            return detlDao.findByDynamicWhere(sql, null);
-
-        } catch (Exception e) {
-            Debug.debug(e);
-            throw new XfactcutpaydetlDaoException("Exception: " + e.getMessage(), e);
-        } finally {
-//            MyDB.getInstance().releaseDBConn();
+            detlList = getRecordsByWhere();
+        } catch (XfactcutpaydetlDaoException e) {
+            logger.error("查询时出现错误。");
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "查询时出现错误。", "检索数据库出现问题。"));
         }
+        return null;
+    }
+
+    public String reset(){
+        this.detlRecord = new Xfactcutpaydetl();
+        return null;
+    }
+    private Xfactcutpaydetl[] getAllRecordsByStatus() throws XfactcutpaydetlDaoException {
+        XfactcutpaydetlDao detlDao = XfactcutpaydetlDaoFactory.create();
+        String sql = "billstatus = " + XFBillStatus.BILLSTATUS_CORE_SUCCESS +
+                " order by journalno";
+        return detlDao.findByDynamicWhere(sql, null);
+    }
+    private Xfactcutpaydetl[] getRecordsByWhere() throws XfactcutpaydetlDaoException {
+        XfactcutpaydetlDao detlDao = XfactcutpaydetlDaoFactory.create();
+        String sql = "billstatus = " + XFBillStatus.BILLSTATUS_CORE_SUCCESS +
+                " and clientname like '%" + detlRecord.getClientname() + "%' " +
+                " and contractno like '%" +  detlRecord.getContractno() + "%' " +
+                " order by journalno";
+        return detlDao.findByDynamicWhere(sql, null);
     }
 
     private void initAmt() {
@@ -115,23 +117,54 @@ public class XfCutpayAction {
         }
     }
 
-    public String writeback(ActionEvent e) {
+    public String writebackAll(ActionEvent e) {
 
-        if (selectedRecords.length == 0) {
-            FacesContext context = FacesContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        if (selectedRecords.length > 0) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "回写信贷系统出现错误。", "未选择明细记录。"));
+                    "回写时出现错误。", "请勿选择明细记录。"));
             return null;
         }
-        logger.info("aaa" + selectedRecords.length);
-        String journalno;
-        for (Xfactcutpaydetl record : selectedRecords) {
-            journalno = record.getJournalno();
-        }
+        startWriteBack(this.detlList);
         return null;
     }
 
+    public String writebackMulti() {
 
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        if (selectedRecords.length == 0) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "回写时出现错误。", "未选择明细记录。"));
+            return null;
+        }
+
+        startWriteBack(selectedRecords);
+        return null;
+        
+    }
+
+    private void startWriteBack(Xfactcutpaydetl[] detls) {
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        try {
+            int result = processWriteBack(detls);
+            if (result != detls.length) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "回写结果。", "成功笔数：" + result + "  失败笔数：" + (detls.length - result)));
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "回写新信贷系统成功。", "  笔数：" + result));
+            }
+        } catch (Exception e) {
+            logger.error("回写时出现错误。", e);
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "回写时出现错误。", null));
+        }
+        init();
+
+    }
 
     /*
     20101020 单笔处理
@@ -143,62 +176,58 @@ public class XfCutpayAction {
 
         int count = 0;
 
-        try {
-            if (detls != null && detls.length > 0) {
-                T100102CTL t100102ctl = new T100102CTL();
-                T100104CTL t100104ctl = new T100104CTL();
-                FdcutpaydetlDao detlDao = FdcutpaydetlDaoFactory.create();
-                FdcutpaydetlPk cutpaydetlPk = new FdcutpaydetlPk();
+        T100102CTL t100102ctl = new T100102CTL();
+        T100104CTL t100104ctl = new T100104CTL();
+        XfactcutpaydetlDao detlDao = XfactcutpaydetlDaoFactory.create();
+        XfactcutpaydetlPk cutpaydetlPk = new XfactcutpaydetlPk();
 
-                for (Xfactcutpaydetl detl : detls) {
-                    if (!detl.getBillstatus().equals(FDBillStatus.SBS_ACCOUNT_SUCCESS)) {
-                        logger.error("状态检查失败");
-                        continue;
-                    }
-                    boolean txResult = false;
-                    if (detl.getBilltype().equals("0")) { //正常还款
-                        T100102RequestRecord recordT102 = new T100102RequestRecord();
-                        recordT102.setStdjjh(detl.());
-                        recordT102.setStdqch(detl.getGthtjhJhxh());
-                        recordT102.setStdjhkkr(detl.getGthtjhDate());
-                        //1-成功 2-失败
-                        recordT102.setStdkkjg("1");
-                        T100102RequestList t100102list = new T100102RequestList();
-                        t100102list.add(recordT102);
-                        //单笔发送处理
-                        txResult = t100102ctl.start(t100102list);
-                    }else if (detl.getBilltype().equals("2")){ //提前还款
-                        T100104RequestRecord recordT104 = new T100104RequestRecord();
-                        recordT104.setStdjjh(detl.getGthtjhHtnm());
-                        recordT104.setStdqch(detl.getGthtjhJhxh());
-                        recordT104.setStdjhkkr(detl.getGthtjhDate());
-                        //1-成功 2-失败
-                        recordT104.setStdkkjg("1");
-                        T100104RequestList t100104list = new T100104RequestList();
-                        t100104list.add(recordT104);
-                        //单笔发送处理
-                        txResult = t100104ctl.start(t100104list);
-                    }
-
-                    if (txResult) {
-                        cutpaydetlPk.setSeqno(detl.getSeqno());
-                        detl.setBillstatus(FDBillStatus.FD_WRITEBACK_SUCCESS);
-                        detlDao.update(cutpaydetlPk, detl);
-                        count++;
-                    }
-                }
-            } else {
-                logger.info("无符合SBS入帐条件的明细帐单记录");
+        for (Xfactcutpaydetl detl : detls) {
+            if (!detl.getBillstatus().equals(XFBillStatus.BILLSTATUS_CORE_SUCCESS)) {
+                logger.error("状态检查失败" + detl.getJournalno());
+                continue;
             }
-        } catch (Exception e) {
-            logger.error(e);
-            msgs.add("回写新信贷系统时出现错误。成功处理笔数:"+count);
-            return -1;
+            boolean txResult = false;
+            if (detl.getBilltype().equals("0")) { //正常还款
+                T100102RequestRecord recordT102 = new T100102RequestRecord();
+                recordT102.setStdjjh(detl.getRecvact());
+                recordT102.setStdqch(detl.getPoano().toString());
+                recordT102.setStdjhkkr(new SimpleDateFormat("yyyyMMdd").format(detl.getPaybackdate()));
+                //1-成功 2-失败
+                recordT102.setStdkkjg("1");
+                T100102RequestList t100102list = new T100102RequestList();
+                t100102list.add(recordT102);
+                //单笔发送处理
+                txResult = t100102ctl.start(t100102list);
+            } else if (detl.getBilltype().equals("2")) { //提前还款
+                T100104RequestRecord recordT104 = new T100104RequestRecord();
+                recordT104.setStdjjh(detl.getRecvact());
+                recordT104.setStdqch(detl.getPoano().toString());
+                recordT104.setStdjhkkr(new SimpleDateFormat("yyyyMMdd").format(detl.getPaybackdate()));
+                //1-成功 2-失败
+                recordT104.setStdkkjg("1");
+                T100104RequestList t100104list = new T100104RequestList();
+                t100104list.add(recordT104);
+                //单笔发送处理
+                txResult = t100104ctl.start(t100104list);
+            }
+
+            if (txResult) {
+                cutpaydetlPk.setJournalno(detl.getJournalno());
+                detl.setBillstatus(XFBillStatus.FD_WRITEBACK_SUCCESS);
+                detlDao.update(cutpaydetlPk, detl);
+                count++;
+            }
         }
+
         return count;
     }
 
-
+    public String deleteRecord(){
+        String contractno = selectedRecord.getContractno();
+        
+        query();
+        return null;
+    }
     //====================================================================================
 
     public Xfactcutpaydetl[] getDetlList() {

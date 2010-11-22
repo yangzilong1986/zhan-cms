@@ -14,7 +14,7 @@ import java.util.List;
 
 
 /**
- * Created by IntelliJ IDEA.
+ * 正常还款 提取 还款记录
  * User: zhanrui
  * Date: 2010-8-27
  * Time: 13:22:35
