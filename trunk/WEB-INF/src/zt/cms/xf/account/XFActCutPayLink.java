@@ -181,6 +181,9 @@ public class XFActCutPayLink extends FormActions {
                 String journalno = chargeoffdate + StringUtils.leftPad(Integer.toString(maxno), 5, "0");
                 xfactcutpaydetl.setJournalno(journalno);
 
+                //借据号（暂存放在收款帐号字段）
+                xfactcutpaydetl.setRecvact(recvRecord.getStdjjh());
+
                 xfactcutpaydetl.setContractno(recvRecord.getStdhth());
                 xfactcutpaydetl.setClientno(recvRecord.getStdkhh());
                 xfactcutpaydetl.setClientname(recvRecord.getStdkhmc());

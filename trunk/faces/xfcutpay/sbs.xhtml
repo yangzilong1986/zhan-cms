@@ -13,23 +13,20 @@
     <div id="header">
         <!--style="padding:20px  0  20px  0;border-bottom:solid  1px  blue">-->
         <div>
-            <p:messages showDetail="true"/>
+            <p:messages id="inputmsgs" showDetail="true"/>
             <p:panel header="住房按揭正常还款记录查询条件">
                 <h:form>
-                    <h:panelGrid columns="2" style="text-align:left">
+                    <h:panelGrid columns="2" cellspacing="5">
                         <h:outputLabel value="合同号:" for="hth"/>
-                        <h:inputText id="hth" size="30" value="#{xfCutpayAction.detlRecord.contractno}"/>
+                        <h:inputText id="hth" size="40" value="#{xfCutpayAction.detlRecord.contractno}"/>
 
                         <h:outputLabel value="客户名称:" for="khmc"/>
-                        <h:inputText id="khmc" size="30" value="#{xfCutpayAction.detlRecord.clientname}"/>
+                        <h:inputText id="khmc" size="40" value="#{xfCutpayAction.detlRecord.clientname}"/>
 
-                    </h:panelGrid>
-                    <h:panelGrid columns="1" style="text-align:left;padding:10px 0  0 80px"
-                                 width="300px">
+                        <h:outputText value="" />
                         <h:panelGroup>
-                            <p:commandButton id="qrybtn" value="查询" action="#{xfCutpayAction.query}" ajax="false"
-                                             style="width:100px"/>
-                            <p:commandButton value="重置" type="reset" ajax="false" style="width:100px"/>
+                            <p:commandButton id="qrybtn" value="查询" action="#{xfCutpayAction.query}" ajax="false" />
+                            <p:commandButton value="重置" type="reset" ajax="false"/>
                         </h:panelGroup>
                     </h:panelGrid>
                 </h:form>
@@ -41,7 +38,7 @@
         <p:tabView>
             <p:tab title="住房按揭代扣记录">
                 <h:form>
-                    <p:messages/>
+                    <p:messages id="msgs" showDetail="true"/>
 
                     <p:dataTable id="pdt" height="200"
                                  value="#{xfCutpayAction.detlList}" var="record"
@@ -140,36 +137,16 @@
 
                     </p:dataTable>
 
-                    <p:dialog header="正常还款记录明细" widgetVar="FDRecordDialog" width="650" height="600">
-                        <h:panelGrid id="display" columns="2" cellpadding="4">
-
-                            <f:facet name="header">
-                                明细
-                            </f:facet>
-
-                            <h:outputText value="合同号:"/>
-                            <h:outputText value="#{T100101.selectedRecord.stdhth}"/>
-
-                            <h:outputText value="姓名:"/>
-                            <h:outputText value="#{T100101.selectedRecord.stdkhmc}"/>
-
-                            <h:outputText value="客户号:"/>
-                            <h:outputText value="#{T100101.selectedRecord.stdkhh}"/>
-
-                            <h:outputText value="借据号:"/>
-                            <h:outputText value="#{T100101.selectedRecord.stdjjh}"/>
-                        </h:panelGrid>
-                    </p:dialog>
                     <br/>
                     <p:menubar >
                         <p:submenu>
                             <f:facet name="label">
-                                <p:menuitem value="【套平】" actionListener="#{xfCutpayAction.writeback}"/>
+                                <p:menuitem value="【全部回写】" actionListener="#{xfCutpayAction.writebackAll}" update="msgs"/>
                             </f:facet>
                         </p:submenu>
                         <p:submenu>
                             <f:facet name="label">
-                                <p:menuitem value="【套修改】"/>
+                                <p:menuitem value="【多笔回写】" action="#{xfCutpayAction.writebackMulti}" update="msgs"/>
                             </f:facet>
                         </p:submenu>
                     </p:menubar>

@@ -14,7 +14,7 @@ import java.util.List;
 
 
 /**
- * Created by IntelliJ IDEA.
+ * 提前还款 提取 还款记录  （消费信贷 暂无此类交易 2010/11/20）
  * User: zhanrui
  * Date: 2010-8-27
  * Time: 13:22:35

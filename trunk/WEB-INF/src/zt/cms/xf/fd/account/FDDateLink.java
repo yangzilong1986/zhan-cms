@@ -570,11 +570,13 @@ public class FDDateLink extends FormActions {
                 ps.setString(3, record.getStdkhmc());
                 ps.setString(4, record.getStdhth());
                 ps.setString(5, record.getStdjhhkr());
-//                if (preflag.equals("0")) {
-                ps.setDouble(6, Double.valueOf(record.getStdfxje()));  //·£Ï¢
-//                }else{
-//                    ps.setDouble(6, 0);
-//                }
+
+                String fxje = record.getStdfxje();
+                if (StringUtils.isEmpty(fxje)) {
+                    fxje = "0";
+                }
+                ps.setDouble(6, Double.valueOf(fxje));  //·£Ï¢
+
                 ps.setDouble(7, Double.valueOf(record.getStdhkje()));
                 ps.setDouble(8, Double.valueOf(record.getStdhkbj()));
                 ps.setDouble(9, Double.valueOf(record.getStdhklx()));
