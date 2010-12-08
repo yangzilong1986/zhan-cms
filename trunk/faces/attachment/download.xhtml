@@ -12,11 +12,35 @@
     <ui:define name="content">
         <div class="entry" style="margin-top:30px">
             <h:form>
-                <p:messages showDetail="true"/>
+                <p:messages id="msgs" showDetail="true"/>
 
                 <p:panel header="消费信贷申请单附件下载">
-                    <br/>
-                    appno=#{attachmentDownload.appno}
+                    <h:panelGrid columns="1" cellpadding="0" cellspacing="5">
+                        <h:outputLabel value="申请单号:" for="appno"/>
+                        <h:inputText id="appno" size="40" value="#{attachmentDownload.appno}" disabled="true"/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value="申请人姓名:" for="name"/>
+                        <h:inputText id="name" size="40" value="#{attachmentDownload.name}" disabled="true"/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value="申请日期:" for="clientid"/>
+                        <h:inputText id="clientid" size="40" value="#{attachmentDownload.clientid}" disabled="true"/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value="申请日期:" for="appdate"/>
+                        <h:inputText id="appdate" size="40" value="#{attachmentDownload.appdate}" disabled="true"/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+
+                        <p:commandButton value="申请单附件下载" ajax="false" update="msgs">
+                            <p:fileDownload value="#{attachmentDownload.file}"/>
+                        </p:commandButton>
+                    </h:panelGrid>
                 </p:panel>
             </h:form>
 

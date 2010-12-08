@@ -55,7 +55,8 @@ public class T201001CTL  extends BaseCTL implements java.io.Serializable {
 //        request.initHeader("0200", "201001", "3");
 
         //组包体
-        T201001Request request = getAppFormInfo("4113241986060409140001");
+        //T201001Request request = getAppFormInfo("4113241986060409140001");
+        T201001Request request = getAppFormInfo("3702251969052900300001");
         request.initHeader("0200", "201001", "3");
         System.out.println(request);
 
@@ -151,7 +152,8 @@ public class T201001CTL  extends BaseCTL implements java.io.Serializable {
             while (recordSet.next()) {
                 //reqRecord.setStdsqdh(recordSet.getString("appno"));    //申请单号
                 reqRecord.setStdsqdh(AppFormNo);    //申请单号
-                reqRecord.setStdurl("http://192.168.91.20/faces/dnldfile.xhtml?appno=" + AppFormNo);    //文件URL  TODO 参数化
+//                reqRecord.setStdurl("http://192.168.91.20/faces/dnldfile.xhtml?appno=" + AppFormNo);    //文件URL  TODO 参数化
+                reqRecord.setStdurl("http://10.143.19.203：7001/faces/attachment/download.xhtml?appno=" + AppFormNo);    //文件URL  TODO 参数化
                 reqRecord.setStdkhxm(recordSet.getString("name"));    //客户姓名
                 reqRecord.setStdzjlx(recordSet.getString("idtype"));    //证件类型
                 reqRecord.setStdzjhm(recordSet.getString("id"));    //证件号码
