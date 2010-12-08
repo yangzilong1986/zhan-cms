@@ -17,103 +17,13 @@
 
                     <div style="padding-left:20px">
                         <!--<h:commandButton id="post" style="padding:3px;width:100px;" value="提交响应" action="txn1000"/>-->
-                        <h:commandButton id="post" style="padding:3px;width:100px;" value="提交查询"
-                                         action="about"/>
+                        <h:commandButton id="post" style="padding:3px;width:100px;"
+                                         value="提交查询"
+                                         action="#{T201001.start}"/>
                     </div>
 
                 </h:form>
             </div>
-        </div>
-
-        <div style="padding:15px" >
-                    <h:form>
-                        <p:dataTable var="response" value="#{T100101.allFDRecords}"
-                                     paginator="true" style="width:2400px">
-                            <f:facet name="header">
-                                还款记录清单
-                            </f:facet>
-                            <!--<p:dataTable var="car" value="#{searchService.allRecords}">-->
-                            <p:column style="width:15px">
-                                <f:facet name="header">
-                                    合同号
-                                </f:facet>
-                                <h:outputText value="#{response.stdhth}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    期次号
-                                </f:facet>
-                                <h:outputText value="#{response.stdqch}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    客户号
-                                </f:facet>
-                                <h:outputText value="#{response.stdkhh}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    客户名称
-                                </f:facet>
-                                <h:outputText value="#{response.stdkhmc}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    还款金额
-                                </f:facet>
-                                <h:outputText value="#{response.stdhkje}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    还款本金
-                                </f:facet>
-                                <h:outputText value="#{response.stdhkbj}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    还款利息
-                                </f:facet>
-                                <h:outputText value="#{response.stdhklx}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    贷款帐号
-                                </f:facet>
-                                <h:outputText value="#{response.stddkzh}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    扣款帐号
-                                </f:facet>
-                                <h:outputText value="#{response.stdhkzh}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    地区
-                                </f:facet>
-                                <h:outputText value="#{response.stddqh}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    代扣银行
-                                </f:facet>
-                                <h:outputText value="#{response.stdyhh}"/>
-                            </p:column>
-
-
-                        </p:dataTable>
-                    </h:form>
-
         </div>
 
 

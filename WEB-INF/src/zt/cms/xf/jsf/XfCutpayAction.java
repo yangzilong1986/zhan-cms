@@ -1,5 +1,6 @@
 package zt.cms.xf.jsf;
 
+import org.primefaces.component.datatable.DataTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import zt.cms.xf.common.constant.XFBillStatus;
@@ -18,7 +19,7 @@ import zt.cms.xf.newcms.domain.T100104.T100104RequestRecord;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import java.math.BigDecimal;
@@ -33,7 +34,7 @@ import java.text.SimpleDateFormat;
  */
 @ManagedBean
 //@SessionScoped
-@RequestScoped
+@ViewScoped
 public class XfCutpayAction {
     private static final Logger logger = LoggerFactory.getLogger(XfCutpayAction.class);
 
@@ -71,6 +72,11 @@ public class XfCutpayAction {
 
     public String query() {
         try {
+            DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent("form:pdt");
+            dataTable.setFirst(0);
+            dataTable.setPage(1);
+//            dataTable.setLiveScroll(true);
+//            dataTable.setPaginator(false);
             detlList = getRecordsByWhere();
         } catch (XfactcutpaydetlDaoException e) {
             logger.error("查询时出现错误。");
@@ -81,21 +87,23 @@ public class XfCutpayAction {
         return null;
     }
 
-    public String reset(){
+    public String reset() {
         this.detlRecord = new Xfactcutpaydetl();
         return null;
     }
+
     private Xfactcutpaydetl[] getAllRecordsByStatus() throws XfactcutpaydetlDaoException {
         XfactcutpaydetlDao detlDao = XfactcutpaydetlDaoFactory.create();
         String sql = "billstatus = " + XFBillStatus.BILLSTATUS_CORE_SUCCESS +
                 " order by journalno";
         return detlDao.findByDynamicWhere(sql, null);
     }
+
     private Xfactcutpaydetl[] getRecordsByWhere() throws XfactcutpaydetlDaoException {
         XfactcutpaydetlDao detlDao = XfactcutpaydetlDaoFactory.create();
         String sql = "billstatus = " + XFBillStatus.BILLSTATUS_CORE_SUCCESS +
                 " and clientname like '%" + detlRecord.getClientname() + "%' " +
-                " and contractno like '%" +  detlRecord.getContractno() + "%' " +
+                " and contractno like '%" + detlRecord.getContractno() + "%' " +
                 " order by journalno";
         return detlDao.findByDynamicWhere(sql, null);
     }
@@ -127,6 +135,7 @@ public class XfCutpayAction {
             return null;
         }
         startWriteBack(this.detlList);
+        init();
         return null;
     }
 
@@ -141,8 +150,9 @@ public class XfCutpayAction {
         }
 
         startWriteBack(selectedRecords);
+        init();
         return null;
-        
+
     }
 
     private void startWriteBack(Xfactcutpaydetl[] detls) {
@@ -222,9 +232,9 @@ public class XfCutpayAction {
         return count;
     }
 
-    public String deleteRecord(){
+    public String deleteRecord() {
         String contractno = selectedRecord.getContractno();
-        
+
         query();
         return null;
     }
