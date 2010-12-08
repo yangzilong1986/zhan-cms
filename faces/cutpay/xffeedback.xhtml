@@ -10,12 +10,12 @@
 </ui:define>
 
 <ui:define name="content">
+    <h:form id="form">
     <div id="header">
         <!--style="padding:20px  0  20px  0;border-bottom:solid  1px  blue">-->
         <div>
             <p:messages id="inputmsgs" showDetail="true"/>
             <p:panel header="住房按揭正常还款记录查询条件">
-                <h:form>
                     <h:panelGrid columns="2" cellspacing="5">
                         <h:outputLabel value="合同号:" for="hth"/>
                         <h:inputText id="hth" size="40" value="#{xfCutpayAction.detlRecord.contractno}"/>
@@ -25,22 +25,23 @@
 
                         <h:outputText value="" />
                         <h:panelGroup>
-                            <p:commandButton id="qrybtn" value="查询" action="#{xfCutpayAction.query}" ajax="false" />
+                            <p:commandButton id="qrybtn" value="查询" action="#{xfCutpayAction.query}" update="datapanel">
+                            </p:commandButton>
                             <p:commandButton value="重置" type="reset" ajax="false"/>
                         </h:panelGroup>
                     </h:panelGrid>
-                </h:form>
+                <!--</h:form>-->
             </p:panel>
         </div>
     </div>
 
-    <div style="padding-top:15px">
-        <p:tabView>
+    <div style="padding-top:15px" id="tabdiv">
+        <p:tabView id="tabview">
             <p:tab title="住房按揭代扣记录">
-                <h:form>
+                <!--<h:form>-->
                     <p:messages id="msgs" showDetail="true"/>
-
-                    <p:dataTable id="pdt" height="200"
+                    <p:panel id="datapanel">
+                    <p:dataTable id="pdt" height="200" dynamic="true"
                                  value="#{xfCutpayAction.detlList}" var="record"
                                  selection="#{xfCutpayAction.selectedRecords}"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -136,7 +137,8 @@
                         </p:column>
 
                     </p:dataTable>
-
+                    </p:panel>
+                
                     <br/>
                     <p:menubar >
                         <p:submenu>
@@ -151,7 +153,6 @@
                         </p:submenu>
                     </p:menubar>
 
-                </h:form>
 
             </p:tab>
 
@@ -162,6 +163,7 @@
 
 
     </div>
+    </h:form>
 
 
 </ui:define>
