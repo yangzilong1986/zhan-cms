@@ -5,48 +5,62 @@
                 xmlns:p="http://primefaces.prime.com.tr/ui"
                 template="/templates/ui.xhtml">
 
-<ui:define name="head">
+    <ui:define name="head">
 
-</ui:define>
+    </ui:define>
 
-<ui:define name="content">
-    <h:form id="form">
-    <div id="header">
-        <!--style="padding:20px  0  20px  0;border-bottom:solid  1px  blue">-->
-        <div>
-            <p:messages id="inputmsgs" showDetail="true"/>
-            <p:panel header="住房按揭正常还款记录查询条件">
-                    <h:panelGrid columns="2" cellspacing="5">
-                        <h:outputLabel value="合同号:" for="hth"/>
-                        <h:inputText id="hth" size="40" value="#{xfCutpayAction.detlRecord.contractno}"/>
+    <ui:define name="content">
+        <h:form id="form">
+            <div id="header">
+                <!--style="padding:20px  0  20px  0;border-bottom:solid  1px  blue">-->
+                <div>
+                    <p:messages id="inputmsgs" showDetail="true"/>
+                    <p:panel header="住房按揭正常还款记录查询条件">
+                        <h:panelGrid columns="2" cellspacing="5">
+                            <h:outputLabel value="合同号:" for="hth"/>
+                            <h:inputText id="hth" size="40" value="#{xfCutpayAction.detlRecord.contractno}"/>
 
-                        <h:outputLabel value="客户名称:" for="khmc"/>
-                        <h:inputText id="khmc" size="40" value="#{xfCutpayAction.detlRecord.clientname}"/>
+                            <h:outputLabel value="客户名称:" for="khmc"/>
+                            <h:inputText id="khmc" size="40" value="#{xfCutpayAction.detlRecord.clientname}"/>
 
-                        <h:outputText value="" />
-                        <h:panelGroup>
-                            <p:commandButton id="qrybtn" value="查询" action="#{xfCutpayAction.query}" update="datapanel">
-                            </p:commandButton>
-                            <p:commandButton value="重置" type="reset" ajax="false"/>
-                        </h:panelGroup>
-                    </h:panelGrid>
-                <!--</h:form>-->
-            </p:panel>
-        </div>
-    </div>
+                            <h:outputText value=""/>
+                            <h:panelGroup>
+                                <p:commandButton id="qrybtn" value="查询" action="#{xfCutpayAction.query}"
+                                                 update="datapanel">
+                                </p:commandButton>
+                                <p:commandButton value="重置" type="reset" ajax="false"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <!--</h:form>-->
+                    </p:panel>
+                </div>
+            </div>
 
-    <div style="padding-top:15px" id="tabdiv">
-        <p:tabView id="tabview">
-            <p:tab title="住房按揭代扣记录">
-                <!--<h:form>-->
-                    <p:messages id="msgs" showDetail="true"/>
-                    <p:panel id="datapanel">
+            <br/>
+
+            <p:menubar>
+                <p:submenu>
+                    <f:facet name="label">
+                        <p:menuitem value="【全部回写】" actionListener="#{xfCutpayAction.writebackAll}" update="msgs" ajax="false"/>
+                    </f:facet>
+                </p:submenu>
+                <p:submenu>
+                    <f:facet name="label">
+                        <p:menuitem value="【多笔回写】" action="#{xfCutpayAction.writebackMulti}" update="msgs" ajax="false"/>
+                    </f:facet>
+                </p:submenu>
+            </p:menubar>
+
+
+            <div style="padding-top:15px" id="tabdiv">
+                <p:messages id="msgs" showDetail="true"/>
+                <p:panel id="datapanel">
                     <p:dataTable id="pdt" height="200" dynamic="true"
                                  value="#{xfCutpayAction.detlList}" var="record"
                                  selection="#{xfCutpayAction.selectedRecords}"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  paginator="true" rows="10" paginatorPosition="both"
-                                 rowsPerPageTemplate="100,50,30,15,5"
+                                 rowsPerPageTemplate="100,50,30,10,5"
                                  emptyMessage="数据记录为空...">
 
                         <f:facet name="header">
@@ -137,35 +151,11 @@
                         </p:column>
 
                     </p:dataTable>
-                    </p:panel>
-                
-                    <br/>
-                    <p:menubar >
-                        <p:submenu>
-                            <f:facet name="label">
-                                <p:menuitem value="【全部回写】" actionListener="#{xfCutpayAction.writebackAll}" update="msgs"/>
-                            </f:facet>
-                        </p:submenu>
-                        <p:submenu>
-                            <f:facet name="label">
-                                <p:menuitem value="【多笔回写】" action="#{xfCutpayAction.writebackMulti}" update="msgs"/>
-                            </f:facet>
-                        </p:submenu>
-                    </p:menubar>
+                </p:panel>
 
+            </div>
+        </h:form>
 
-            </p:tab>
-
-            <p:tab title="消费信贷代扣记录">
-                ....
-            </p:tab>
-        </p:tabView>
-
-
-    </div>
-    </h:form>
-
-
-</ui:define>
+    </ui:define>
 
 </ui:composition>
