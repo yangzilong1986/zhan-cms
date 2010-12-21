@@ -7,8 +7,9 @@ import org.primefaces.event.SelectEvent;
 import zt.cms.xf.newcms.controllers.T100101CTL;
 import zt.cms.xf.newcms.domain.T100101.T100101ResponseRecord;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
@@ -24,7 +25,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @ManagedBean(name = "T100101")
-@SessionScoped
+@ViewScoped
 //@RequestScoped
 public class T100101Bean implements Serializable {
 //    private DataModel model;
@@ -62,23 +63,35 @@ public class T100101Bean implements Serializable {
         initAmt();
         responseFDList = new ArrayList<T100101ResponseRecord>();
 
+        boolean result = true;
         for (T100101ResponseRecord record : fdList) {
             String tmpStr = record.getStddqh();
             String regioncdTmp, bankcdTmp, nameTmp;
             if (tmpStr == null || tmpStr.equals("null")) {
-                throw new RuntimeException("地区代号转换有误");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "地区及代扣银行未设置！", "姓名：" + record.getStdkhmc() + " 合同编号：" + record.getStdhth()));
+                result = false;
+                continue;
             } else {
                 String[] code = tmpStr.split("-");
-                record.setStddqh(code[0].trim());
-                record.setStdyhh(code[1].trim());
-            }
+                if (code.length != 2) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "地区或代扣银行设置错误！", "姓名：" + record.getStdkhmc() + " 合同编号：" + record.getStdhth() + " 备注：" + tmpStr));
 
+                    result = false;
+                    continue;
+                } else {
+                    record.setStddqh(code[0].trim());
+                    record.setStdyhh(code[1].trim());
+                }
+            }
             responseFDList.add(record);
             totalcount++;
             countAmt(record);
-
         }
-
+        if (!result) {
+            throw new RuntimeException("地区代号转换有误");
+        }
     }
 
     private void initFilters() {
@@ -98,37 +111,43 @@ public class T100101Bean implements Serializable {
     }
 
     public String query() {
+        try {
+            initList();
 
-        initList();
-
-        String hth, dqh, khmc;
-        dqh = responseRecord.getStddqh();
-        hth = responseRecord.getStdhth();
-        khmc = responseRecord.getStdkhmc();
-        totalcount = 0;
-        initAmt();
-        List<T100101ResponseRecord> newResponseFDList = new ArrayList<T100101ResponseRecord>();
-        for (T100101ResponseRecord record : responseFDList) {
-            if (StringUtils.isNotEmpty(hth)) {
-                if (!record.getStdhth().equals(hth)) {
-                    continue;
+            String hth, dqh, khmc;
+            dqh = responseRecord.getStddqh();
+            hth = responseRecord.getStdhth();
+            khmc = responseRecord.getStdkhmc();
+            totalcount = 0;
+            initAmt();
+            List<T100101ResponseRecord> newResponseFDList = new ArrayList<T100101ResponseRecord>();
+            for (T100101ResponseRecord record : responseFDList) {
+                if (StringUtils.isNotEmpty(hth)) {
+                    if (!record.getStdhth().equals(hth)) {
+                        continue;
+                    }
                 }
-            }
-            if (StringUtils.isNotEmpty(khmc)) {
-                if (!record.getStdkhmc().equals(khmc)) {
-                    continue;
+                if (StringUtils.isNotEmpty(khmc)) {
+                    if (!record.getStdkhmc().equals(khmc)) {
+                        continue;
+                    }
                 }
-            }
-            if (StringUtils.isNotEmpty(dqh)) {
-                if (!record.getStddqh().equals(dqh)) {
-                    continue;
+                if (StringUtils.isNotEmpty(dqh)) {
+                    if (!record.getStddqh().equals(dqh)) {
+                        continue;
+                    }
                 }
+                newResponseFDList.add(record);
+                totalcount++;
+                countAmt(record);
             }
-            newResponseFDList.add(record);
-            totalcount++;
-            countAmt(record);
+            responseFDList = newResponseFDList;
+        } catch (Exception e) {
+            logger.error("查询", e);
+            this.responseFDList = new ArrayList();
+            initAmt();
+            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "查询错误！", ""));
         }
-        responseFDList = newResponseFDList;
         return null;
     }
 
