@@ -4,6 +4,7 @@ package zt.platform.user;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * ²Ëµ¥
@@ -120,4 +121,60 @@ public class MenuBean
             throw e;
         }
     }
+
+    /**
+     * 20100820 zhanrui
+     *
+     * @param operatorId
+     * @return
+     * @throws Exception
+     */
+    public String generateJsonStream(String operatorId, String target)
+            throws Exception {
+
+        database = new DatabaseAgent();
+
+        List<MenuItemBean> menuItems = database.getMenuItems(operatorId,target);
+
+        TreeNode treenode = new TreeNode();
+        treenode.setId("0");
+
+        assembleTreeNode(treenode, menuItems);
+
+        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(treenode);
+        String json = jsonObject.toString();
+
+        json = json.replaceAll("\"(\\w+)\"(\\s*:\\s*)", "$1$2");
+        return json;
+    }
+
+    private void assembleTreeNode(TreeNode treenode, List<MenuItemBean> menuItems) {
+
+        for (MenuItemBean item : menuItems) {
+            if (item.getMenuItemPId().equals(treenode.getId())) {
+                TreeNode node = new TreeNode();
+                node.setId(item.getMenuItemId());
+                node.setText(item.getLabel());
+                node.setTooltip(item.getDescription());
+                TreeUserDataBean udb = new TreeUserDataBean("url", item.getUrl());
+                node.addUserData(udb);
+                udb = new TreeUserDataBean("description", item.getDescription());
+                node.addUserData(udb);
+                treenode.addItem(node);
+                assembleTreeNode(node, menuItems);
+            }
+        }
+    }
+    
+
+     public static void main(String argv[]) {
+        try {
+            MenuBean mb = new MenuBean();
+            System.out.println(mb.generateStream("ceshi"));
+//            System.out.println(mb.generateJsonStream("9999", "default"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

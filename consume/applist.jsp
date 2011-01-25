@@ -308,7 +308,7 @@ Description:  消费信贷-个人消费分期付款申请列表。
                             <table border="0" cellspacing="0" cellpadding="0" width="330" align="center"
                                    style="height: 20px; border:none; font-weight:normal; font-size: 12px; color:#004080;font-family:'微软雅黑';">
                                 <tr>
-                                    <td width="30%">分期咨询电话：<span style="color:#FF0066">0532-88939384，88939383</span>&nbsp;&nbsp;邮编：266101<br>
+                                    <td width="30%">分期咨询电话：<span style="color:#FF0066">0532-88939904</span>&nbsp;&nbsp;邮编：266101<br>
                                         地址：山东省青岛市海尔路1号海尔工业园K座金融中心405室
                                     </td>
                                 </tr>

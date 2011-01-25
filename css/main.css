@@ -1,115 +1,305 @@
 body {
-	background-attachment: fixed;
-	background-position: right bottom;
-	background-repeat: repeat;
-	font-size: 9pt;
-	scrollbar-face-color: #cccccc;
-	scrollbar-highlight-color: #F4F4F7;
-	scrollbar-shadow-color: #fcfcfc;
-	scrollbar-3dlight-color: #fcfcfc;
-	scrollbar-arrow-color: #D98609;
-	scrollbar-track-color: #fcfcfc;
-	scrollbar-darkshadow-color: #CED1D5;
-	scrollbar-base-color: #cccccc
+    background-attachment: fixed;
+    background-position: right bottom;
+    background-repeat: repeat;
+    font-size: 9pt;
+/*scrollbar-face-color: #cccccc;*/
+/*scrollbar-highlight-color: #F4F4F7;*/
+/*scrollbar-shadow-color: #fcfcfc;*/
+/*scrollbar-3dlight-color: #fcfcfc;*/
+/*scrollbar-arrow-color: #D98609;*/
+/*scrollbar-track-color: #fcfcfc;*/
+/*scrollbar-darkshadow-color: #CED1D5;*/
+/*scrollbar-base-color: #cccccc*/
 }
 
-table {  font-family: "宋体"; font-size: 9pt; font-style: normal; line-height:14pt;color:"#000000"}
+table {
+    font-family: "宋体";
+    font-size: 9pt;
+    font-style: normal;
+    line-height: 14pt;
+    color: "#000000"
+}
 
-table.ListTitleTable1{background: #B0B0B0}
-.ListTitleTable1_tr0{background: #AAAAAA;height:22}
+table.ListTitleTable1 {
+    background: #B0B0B0
+}
 
-table.ListTitleTable2{background: #FFFFFF}
-.ListTitleTable2_tr0{background: #FFFFFF;height:30}
-.ListTitleTable2_tr1{background: #AAAAAA;height:22}
+.ListTitleTable1_tr0 {
+    background: #AAAAAA;
+    height: 22
+}
 
-table.ListQueryTable1{background: #DDDDDD}
-.ListQueryTable1_tr0{background: #DDDDDD;height:22}
+table.ListTitleTable2 {
+    background: #FFFFFF
+}
 
-table.ListQueryTable2{background: #DDDDDD}
-.ListQueryTable2_tr0{background: #DDDDDD;height:22}
+.ListTitleTable2_tr0 {
+    background: #FFFFFF;
+    height: 30
+}
 
-table.ListDataTable1{background: #B0B0B0}
-.ListDataTable1_tr0{background: #AAAAAA;height:19; background-image:url(/images/listtr0back.jpg)}
-.ListDataTable1_mtr{background: #FBCF56;height:19}
-.ListDataTable1_tr1{background: #FFFFFF;height:19}
-.ListDataTable1_tr1_mouseovr{background: #E0E0E0;height:19}
-.ListDataTable1_tr1_mouseout{background: #FFFFFF;height:19}
+.ListTitleTable2_tr1 {
+    background: #AAAAAA;
+    height: 22
+}
 
-table.ListDataTable2{background: #B0B0B0}
-.ListDataTable2_tr0{background: #AAAAAA;height:19; background-image:url(/images/listtr0back.jpg)}
-.ListDataTable2_mtr{background: #FBCF56;height:19}
-.ListDataTable2_tr1{background: #FFFFFF;height:19}
-.ListDataTable2_tr1_mouseovr{background: #E0E0E0;height:19}
-.ListDataTable2_tr1_mouseout{background: #FFFFFF;height:19}
+table.ListQueryTable1 {
+    background: #DDDDDD
+}
 
-table.PageDataTable1{background: #EEEEEE}
-.PageDataTable1_tr1{}
-.PageDataTable1_td1{}
-.PageDataTable1_trn{}
-.PageDataTable1_tdn{}
+.ListQueryTable1_tr0 {
+    background: #DDDDDD;
+    height: 22
+}
 
-table.PageMessageTable1{}
-.PageMessageTable1_tr0{background: #EEEEEE;height:20}
-.PageMessageTable1_td0{}
-.PageMessageTable1_tr1{background: #FFFFFF;height:5}
-.PageMessageTable1_td1{}
+table.ListQueryTable2 {
+    background: #DDDDDD
+}
 
-.readonly {font-size: 10pt; color: #888888;background: #F7F7F7}
+.ListQueryTable2_tr0 {
+    background: #DDDDDD;
+    height: 22
+}
 
-.bigtol {font-family: "黑体"; font-size: 12pt; color: #000000}
+table.ListDataTable1 {
+    background: #B0B0B0
+}
 
-A.relogin:visited {color: #FFFFFF;text-decoration:none}
-A.relogin:active {color: #FFFFFF;text-decoration:none}
-A.relogin:link {color: #FFFFFF;text-decoration:none}
-A.relogin:hover{color: red;text-decoration:none}
-A.button:visited {color: blue;text-decoration:none}
-A.button:active {color: blue;text-decoration:none}
-A.button:link {color: blue;text-decoration:none}
-A.button:hover{color: red;text-decoration:none}
-A.menu:visited {color: blue;text-decoration:none}
-A.menu:active {color: blue;text-decoration:none}
-A.menu:link {color: blue;text-decoration:none}
-A.menu:hover{color: red;text-decoration:none}
-A.list:visited {color: blue;text-decoration:none}
-A.list:active {color: blue;text-decoration:none}
-A.list:link {color: blue;text-decoration:none}
-A.list:hover{color: red;text-decoration:underline}
-A.rellink:visited {color: green;text-decoration:none}
-A.rellink:active {color: green;text-decoration:none}
-A.rellink:link {color: green;text-decoration:none}
-A.rellink:hover{color: red;text-decoration:underline}
+.ListDataTable1_tr0 {
+    background: #AAAAAA;
+    height: 19;
+    background-image: url(/images/listtr0back.jpg)
+}
+
+.ListDataTable1_mtr {
+    background: #FBCF56;
+    height: 19
+}
+
+.ListDataTable1_tr1 {
+    background: #FFFFFF;
+    height: 19
+}
+
+.ListDataTable1_tr1_mouseovr {
+    background: #E0E0E0;
+    height: 19
+}
+
+.ListDataTable1_tr1_mouseout {
+    background: #FFFFFF;
+    height: 19
+}
+
+table.ListDataTable2 {
+    background: #B0B0B0
+}
+
+.ListDataTable2_tr0 {
+    background: #AAAAAA;
+    height: 19;
+    background-image: url(/images/listtr0back.jpg)
+}
+
+.ListDataTable2_mtr {
+    background: #FBCF56;
+    height: 19
+}
+
+.ListDataTable2_tr1 {
+    background: #FFFFFF;
+    height: 19
+}
+
+.ListDataTable2_tr1_mouseovr {
+    background: #E0E0E0;
+    height: 19
+}
+
+.ListDataTable2_tr1_mouseout {
+    background: #FFFFFF;
+    height: 19
+}
+
+table.PageDataTable1 {
+    background: #EEEEEE
+}
+
+.PageDataTable1_tr1 {
+}
+
+.PageDataTable1_td1 {
+}
+
+.PageDataTable1_trn {
+}
+
+.PageDataTable1_tdn {
+}
+
+table.PageMessageTable1 {
+}
+
+.PageMessageTable1_tr0 {
+    background: #EEEEEE;
+    height: 20
+}
+
+.PageMessageTable1_td0 {
+}
+
+.PageMessageTable1_tr1 {
+    background: #FFFFFF;
+    height: 5
+}
+
+.PageMessageTable1_td1 {
+}
+
+.readonly {
+    font-size: 10pt;
+    color: #888888;
+    background: #F7F7F7
+}
+
+.bigtol {
+    font-family: "黑体";
+    font-size: 12pt;
+    color: #000000
+}
+
+A.relogin:visited {
+    color: #FFFFFF;
+    text-decoration: none
+}
+
+A.relogin:active {
+    color: #FFFFFF;
+    text-decoration: none
+}
+
+A.relogin:link {
+    color: #FFFFFF;
+    text-decoration: none
+}
+
+A.relogin:hover {
+    color: red;
+    text-decoration: none
+}
+
+A.button:visited {
+    color: blue;
+    text-decoration: none
+}
+
+A.button:active {
+    color: blue;
+    text-decoration: none
+}
+
+A.button:link {
+    color: blue;
+    text-decoration: none
+}
+
+A.button:hover {
+    color: red;
+    text-decoration: none
+}
+
+A.menu:visited {
+    color: blue;
+    text-decoration: none
+}
+
+A.menu:active {
+    color: blue;
+    text-decoration: none
+}
+
+A.menu:link {
+    color: blue;
+    text-decoration: none
+}
+
+A.menu:hover {
+    color: red;
+    text-decoration: none
+}
+
+A.list:visited {
+    color: blue;
+    text-decoration: none
+}
+
+A.list:active {
+    color: blue;
+    text-decoration: none
+}
+
+A.list:link {
+    color: blue;
+    text-decoration: none
+}
+
+A.list:hover {
+    color: red;
+    text-decoration: underline
+}
+
+A.rellink:visited {
+    color: green;
+    text-decoration: none
+}
+
+A.rellink:active {
+    color: green;
+    text-decoration: none
+}
+
+A.rellink:link {
+    color: green;
+    text-decoration: none
+}
+
+A.rellink:hover {
+    color: red;
+    text-decoration: underline
+}
 
 input.button_on2 {
-	font-family: "宋体";
-	font-size: 9pt;
-	color: #ffffff;
-	margin: 0px;
-	padding: 0px;
-	height: 24px;
-	width: 56px;
-	background-image: url(../images/mouseon.jpg);
-	border: 0px;
+    font-family: "宋体";
+    font-size: 9pt;
+    color: #ffffff;
+    margin: 0px;
+    padding: 0px;
+    height: 24px;
+    width: 56px;
+    background-image: url(../images/mouseon.jpg);
+    border: 0px;
 }
 
 input.button_off2 {
-	font-family: "宋体";
-	font-size: 9pt;
-	color: #000000;
-	margin: 0px;
-	padding: 0px;
-	height: 24px;
-	width: 56px;
-	background-image: url(../images/mouseoff.jpg);
-	border: 0px;
+    font-family: "宋体";
+    font-size: 9pt;
+    color: #000000;
+    margin: 0px;
+    padding: 0px;
+    height: 24px;
+    width: 56px;
+    background-image: url(../images/mouseoff.jpg);
+    border: 0px;
 }
+
 .input1 /** input的风格控制，和背景色一样 */
 {
     background: #EEEEEE;
-     color:#000000;
-     border-right: #EEEEEE 0px solid;
-     border-top: #EEEEEE 0px solid;
-     border-left: #EEEEEE 0px solid;
-     border-bottom:#EEEEEE 0px solid;
+    color: #000000;
+    border-right: #EEEEEE 0px solid;
+    border-top: #EEEEEE 0px solid;
+    border-left: #EEEEEE 0px solid;
+    border-bottom: #EEEEEE 0px solid;
 
-   
 }

@@ -208,7 +208,7 @@
 <td width="598" align="center" valign="middle">
 <div align="left">
 <p align="left" class="mytext" style='line-height:150%'><span class="mytext_bold" style="line-height:150%">尊敬的<%=info.getClientname()%>先生（小姐）：</span></p>
-<p align="left" class="mytext" style='line-height:150%'>　　欢迎您成为海尔集团财务有限责任公司（以下简称：海尔财务公司）的分期付款客户!从现在您就可以体验分期付款带给您的超值服务!若您在分期过程中需要帮助,请致电0532-88939383，0532-88939384。<br>
+<p align="left" class="mytext" style='line-height:150%'>　　欢迎您成为海尔集团财务有限责任公司（以下简称：海尔财务公司）的分期付款客户!从现在您就可以体验分期付款带给您的超值服务!若您在分期过程中需要帮助,请致电0532-88939904。<br>
   　　您于<u><%=dateformat.format(info.getAppdate())%></u>向<u><%=info.getPartnername()%>
     </u>申请分期购买<u><%=info.getCommname()%>
       </u>,商品总价款￥<u><span
@@ -243,7 +243,7 @@
 <div align="left" >
 <p>  <span class="STYLE10">★感谢广大客户对海尔集团的长期支持，为保障您的消费安全，提请注意以下事项：<br>
   1.妥善保管个人资料:切勿将个人信息告诉他人。<br>
-  2.警惕电话欺诈：我公司主动致电您本人时，除进行必要的核对外，一般不会主动询问其他不必要的资料，如遇可疑情况，烦请致电0532-88939384,0532-88939383客服热线通知我公司。<br>
+  2.警惕电话欺诈：我公司主动致电您本人时，除进行必要的核对外，一般不会主动询问其他不必要的资料，如遇可疑情况，烦请致电0532-88939904客服热线通知我公司。<br>
   3.警惕网络诈骗：切勿将自己的个人账户信息等透露给第三方。注意可疑电子邮件，不要回复或提供个人账户信息。</span></p>
 </div>  
   
