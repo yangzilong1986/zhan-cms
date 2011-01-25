@@ -12,8 +12,7 @@ import java.util.logging.Logger;
  * @version 1.3
  *          最后修改日期：2003-10-28-13:43
  */
-public class MenuItemBean
-        implements Serializable {
+public class MenuItemBean implements Serializable {
     private static Logger logger = Logger.getLogger("zt.platform.user.MenuItemBean");
     /**
      * The nodeid for this node.
@@ -22,6 +21,15 @@ public class MenuItemBean
 
     public String getMenuItemId() {
         return (this.menuItemId);
+    }
+    private String menuItemPId = null;
+
+    public String getMenuItemPId() {
+        return menuItemPId;
+    }
+
+    public void setMenuItemPId(String menuItemPId) {
+        this.menuItemPId = menuItemPId;
     }
 
     /**
@@ -64,7 +72,17 @@ public class MenuItemBean
         this.url = url;
     }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////// Constructors
+    public String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////// Constructors
 
     /**
      * Constructor: Creates an empty Node object
@@ -83,6 +101,16 @@ public class MenuItemBean
         this.label = label;
         this.isLeaf = isLeaf;
         this.url = url;
+    }
+
+    public MenuItemBean(String menuItemId, String menuItemPId, String label, String isLeaf, String url,String description) {
+        super();
+        this.menuItemId = menuItemId;
+        this.menuItemPId = menuItemPId;
+        this.label = label;
+        this.isLeaf = isLeaf;
+        this.url = url;
+        this.description = description;
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

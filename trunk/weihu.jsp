@@ -72,7 +72,7 @@
                 系统维护中，暂时停止服务。。。<P><span style="color:#FFCC00; font-size: 30px; "></span></P>
             </div>
             <div id="contact"
-                 style="height: 20px; WIDTH: 400px; left:60%; z-index: 2; position:relative; top: 240px;font-weight:normal; font-size: 12px; color:#FFCC00;font-family:'微软雅黑';">欢迎随时致电业务咨询电话 <span style="color:#FFCC00">0532-88939384</span>，我们将竭诚为您服务！</div>
+                 style="height: 20px; WIDTH: 400px; left:60%; z-index: 2; position:relative; top: 240px;font-weight:normal; font-size: 12px; color:#FFCC00;font-family:'微软雅黑';">欢迎随时致电业务咨询电话 <span style="color:#FFCC00">0532-88939904</span>，我们将竭诚为您服务！</div>
         </td>
     </tr>
 </table>

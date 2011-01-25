@@ -5,7 +5,7 @@
   </component>
   <component name="ArtifactManager">
     <artifact type="exploded-war" build-on-make="true" name="CMS-WLS9:Web">
-      <output-path>$PROJECT_DIR$/../out/artifacts/cms</output-path>
+      <output-path>$PROJECT_DIR$/../../out/artifacts/cms</output-path>
       <root id="root">
         <element id="javaee-facet-resources" facet="CMS-WLS9/web/Web" />
         <element id="directory" name="WEB-INF">
@@ -38,6 +38,14 @@
             <element id="library" level="project" name="apche-common" />
             <element id="library" level="project" name="apache-httpclient" />
             <element id="library" level="project" name="apache-mina" />
+            <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/xstream-1.3.1.jar" />
+            <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/groovy-all-1.7.5.jar" />
+            <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/wls.jsf.di.jar" />
+            <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/jsf-impl.jar" />
+            <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/jsf-api.jar" />
+            <element id="file-copy" path="$APPLICATION_HOME_DIR$/lib/junit-4.7.jar" />
+            <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/icefaces-compat.jar" />
+            <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/primefaces-2.2.jar" />
           </element>
         </element>
       </root>
@@ -124,6 +132,14 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$" charset="GBK" />
     <file url="file://$PROJECT_DIR$/WEB-INF/src/com/bill99/encrypt/MD5.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/faces/FDCutpayDetail.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/about.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/attachment/download.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/cutpay/t100101.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/cutpay/t100103.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/cutpay/xffeedback.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/t100101-1.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/templates/ui.xhtml" charset="UTF-8" />
   </component>
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
@@ -168,6 +184,9 @@
     <option name="HEAP_SIZE" />
     <option name="LOCALE" />
     <option name="OPEN_IN_BROWSER" value="true" />
+  </component>
+  <component name="JsfProjectComponent">
+    <option name="faceletsSupport" value="ENABLED" />
   </component>
   <component name="Palette2">
     <group name="Swing">
@@ -302,7 +321,7 @@
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/../out" />
+    <output url="file://$PROJECT_DIR$/../../out" />
   </component>
   <component name="ResourceManagerContainer">
     <option name="myResourceBundles">
@@ -349,13 +368,6 @@
     <option name="autoscrollingFromSource" value="false" />
   </component>
   <component name="libraryTable">
-    <library name="platform">
-      <CLASSES />
-      <JAVADOC />
-      <SOURCES>
-        <root url="file://$PROJECT_DIR$/WEB-INF/classes/zt/platform" />
-      </SOURCES>
-    </library>
     <library name="apche-common">
       <CLASSES>
         <root url="jar://$PROJECT_DIR$/WEB-INF/lib/commons-codec-1.3.jar!/" />

@@ -284,7 +284,7 @@ color:#333333"><%=info.getClientid()%></span></p>
                                                                                            xml:lang="EN-US">&nbsp; </span>青岛市高科园海尔路海尔园 </span></p>
 
         <p class="abc"><span class="abc" style='font-size:10.5pt;font-family:Arial'>联系电话：<span lang="EN-US"
-                                                                                             xml:lang="EN-US">&nbsp; 0532-88939384 </span></span> </p>
+                                                                                             xml:lang="EN-US">&nbsp; 0532-88939904 </span></span> </p>
 
         <p class="abc"><span class="abc" style='font-size:10.5pt;font-family:Arial'>邮政编码：<span lang="EN-US"
                                                                                              xml:lang="EN-US">&nbsp; 266101 </span></span> </p>

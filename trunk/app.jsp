@@ -206,7 +206,7 @@
                         </div>
                         <div id="contact"
                              style="height: 20px; WIDTH: 400px; left:2%; z-index: 2; position:relative; top: 230px;font-weight:normal; font-size: 12px; color:#FFCC00;font-family:'微软雅黑';">
-                            欢迎随时致电业务咨询电话 <span style="color:#FFCC00">0532-88939384</span>，我们将竭诚为您服务！
+                            欢迎随时致电业务咨询电话 <span style="color:#FFCC00">0532-88939904</span>，我们将竭诚为您服务！
                         </div>
                     </td>
                 </tr>

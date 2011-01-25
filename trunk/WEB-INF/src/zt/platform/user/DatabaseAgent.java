@@ -474,6 +474,121 @@ public class DatabaseAgent {
         return menuItemsForThisUser;
     }
 
+
+    /**
+     * 20100820 zhanrui   取得某操作员所有菜单项
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<MenuItemBean> getMenuItems(String username, String targetMachine) throws Exception {
+
+        String whereStr = null;
+        if (targetMachine == null) {
+            //TODO log error
+            throw new RuntimeException("参数错误。");
+        }
+
+        if (targetMachine.equals("default")) {
+             whereStr = " and (m.targetmachine is null or m.targetmachine = 'default') ";
+        }else{
+             whereStr = " and (m.targetmachine = '" + targetMachine + "') ";
+        }
+        
+        String SQL_GetMenuItemsForAUser = "" +
+                "SELECT distinct " +
+                "m.menuid AS menuItemId, " +
+                "m.PARENTID AS menuItemPId, " +
+                "m.DESCRIPTION AS menuItemDescription, " +
+                "m.label AS menuItemLabel, " +
+                "m.isleaf AS menuItemIsLeaf, " +
+                "m.action AS menuItemUrl, m.funclvl,m.disporder " +
+                "FROM ptuserrole r, " +
+                "ptroleresource rs, " +
+                "ptresource s, " +
+                "ptmenu m " +
+                "WHERE r.username = '" + username + "' " +
+                "and rs.roleid = r.roleid " +
+                "and s.resourceid = rs.resourceid " +
+                "and s.type = '4' " +
+                "and m.menuid = s.\"RESOURCE\" " + whereStr +
+                " order by funclvl, DispOrder";
+
+        //MenuItemBean[] menuItemsForThisUser = null;
+        List<MenuItemBean> menuItemsForThisUser = new ArrayList();
+        ConnectionManager cm = null;
+        DatabaseConnection dc = null;
+        RecordSet rs = null;
+
+        try {
+            cm = ConnectionManager.getInstance();
+            dc = cm.getConnection();
+            rs = dc.executeQuery(SQL_GetMenuItemsForAUser);
+
+            List listTemp = new ArrayList();
+            while (rs.next()) {
+                String menuItemId = null;
+                if (rs.getString("menuItemId") != null) {
+                    menuItemId = rs.getString("menuItemId").trim();
+                } else {
+                    menuItemId = "";
+                }
+
+                String menuItemPId = "0";
+                if (rs.getString("menuItemPId") != null) {
+                    menuItemPId = rs.getString("menuItemPId").trim();
+                } else {
+                    menuItemPId = "0";
+                }
+
+                String menuItemDescription = null;
+                if (rs.getString("menuItemDescription") != null) {
+                    menuItemDescription = rs.getString("menuItemDescription").trim();
+                } else {
+                    menuItemDescription = "#";
+                }
+
+                String menuItemLabel = null;
+                if (rs.getString("menuItemLabel") != null) {
+                    menuItemLabel = dbut.fromDB(rs.getString("menuItemLabel").trim());
+                } else {
+                    menuItemLabel = "";
+                }
+
+                String menuItemIsLeaf = null;
+                if (rs.getString("menuItemIsLeaf") != null) {
+                    menuItemIsLeaf = rs.getString("menuItemIsLeaf").trim();
+                } else {
+                    menuItemIsLeaf = "";
+                }
+
+                String menuItemUrl = null;
+                if (rs.getString("menuItemUrl") != null) {
+                    menuItemUrl = rs.getString("menuItemUrl").trim();
+                } else {
+                    menuItemUrl = "#";
+                }
+
+                listTemp.add(new MenuItemBean(menuItemId, menuItemPId, menuItemLabel, menuItemIsLeaf,
+                        menuItemUrl,menuItemDescription));
+            }
+
+            //menuItemsForThisUser = new MenuItemBean[listTemp.size()];
+            for (int i = 0; i < listTemp.size(); i++) {
+                menuItemsForThisUser.add((MenuItemBean) listTemp.get(i));
+            }
+            cm.releaseConnection(dc);
+        }
+        catch (Exception ex) {
+            System.err.println(
+                    "Wrong, when data retrieving.   Place zt.platform.user.DatabaseAgent.getMenuItems(String username, int menuItemsLevel).    [" +
+                            ex + "] ");
+        }
+
+        return menuItemsForThisUser;
+    }
+
+
     public boolean checkUrl(String username, String url) throws Exception {
 
         String SQL_GetMenuItemsForAUser = "" +

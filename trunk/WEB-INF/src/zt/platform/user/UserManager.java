@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import javax.security.auth.login.LoginException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,20 @@ public class UserManager
     private String userid = null;
     private String[] roles = new String[]{};
     private String xmlString = null;
+
+    //当前权限下的全部菜单
+	private String jsonString = null;
+
+    /*
+    20110120 zhanrui
+    当前权限下的按照targetmachine分类的菜单项
+    目前只分为两大类
+    1、default：主要是业务菜单（targetmachine 为空或 为default）
+    2、system：主要是系统管理相关菜单
+     */
+    private Map jsonMap = new HashMap();
+
+
     private boolean isLogin = false;
     private Resources resources;
     private User user;
@@ -96,6 +111,11 @@ public class UserManager
             return null;
         }
     }
+
+    public String getJsonString(String target){
+        return (String)this.jsonMap.get(target);
+    }
+
 
     /**
      * 用户签到，验证username+passwd是否正确
@@ -190,6 +210,9 @@ public class UserManager
         try {
             mb = new MenuBean();
             this.xmlString = mb.generateStream(username);
+            this.jsonMap.put("default", mb.generateJsonStream(username, "default"));
+            this.jsonMap.put("system", mb.generateJsonStream(username, "system"));
+
         }
         catch (Exception ex) {
             logger.error("init user menus exception:" + ex.getMessage());

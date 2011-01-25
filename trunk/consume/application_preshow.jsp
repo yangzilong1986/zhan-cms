@@ -699,7 +699,7 @@
                                style="border-style: none; border-color: inherit; border-width: medium; height: 20px; font-weight: normal; font-size: 12px; color: #004080; "
                                class="style4">
                             <tr>
-                                <td width="30%">分期咨询电话：<span style="color: #FF0066">0532-88939384，88939383</span>&nbsp;
+                                <td width="30%">分期咨询电话：<span style="color: #FF0066">0532-88939904</span>&nbsp;
                                     邮编：266101<br>
                                     地址：山东省青岛市海尔路1号海尔工业园K座金融中心405室
                                 </td>
