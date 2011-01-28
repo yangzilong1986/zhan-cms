@@ -1,9 +1,9 @@
 package zt.cms.xf.newcms.services;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.primefaces.event.SelectEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import zt.cms.xf.newcms.controllers.T100101CTL;
 import zt.cms.xf.newcms.domain.T100101.T100101ResponseRecord;
 
@@ -32,7 +32,7 @@ public class T100101Bean implements Serializable {
 //    private LazyDataModel<T100101ResponseRecord> lazyModel;
     private T100101ResponseRecord selectedRecord;
 
-    private Log logger = LogFactory.getLog(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     private T100101ResponseRecord responseRecord = new T100101ResponseRecord();
     List<T100101ResponseRecord> responseFDList;
     List<T100101ResponseRecord> responseXFList;
