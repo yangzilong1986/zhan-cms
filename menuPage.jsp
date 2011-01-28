@@ -56,7 +56,7 @@
             dhxAccord.addItem("a3", "用户信息");
             dhxAccord.addItem("a4", "帮助信息");
             dhxAccord.openItem("a1");
-            dhxAccord._enableOpenEffect = true;
+            dhxAccord._enableOpenEffect = false;
 
             dhxAccord.cells("a1").setIcon("accord_biz.png");
             dhxAccord.cells("a2").setIcon("accord_manage.png");
