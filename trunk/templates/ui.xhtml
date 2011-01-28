@@ -14,6 +14,28 @@
         <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
         <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/themes/hot-sneaks/skin.css"/>
         <!--<link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/themes/aristo/skin.css"/>-->
+
+
+        <script type="text/javascript">
+            /* <![CDATA[ */
+            jQuery(function() {
+                jQuery(document).bind('ajaxComplete', function(event, xhr) {
+                    var timeoutpage = xhr.getResponseHeader('X-ERROR-PAGE');
+                    if (timeoutpage != null && timeoutpage != '') {
+                        alert('操作员超时，请重新登录！');
+                        if (top) {
+                            top.location.href = timeoutpage + '/login.jsp';
+                        } else {
+                            location.href = timeoutpage + '/login.jsp';
+                        }
+                        //window.location = timeoutpage;
+                    }
+                });
+            });
+            /* ]]> */
+        </script>
+        
+
         <ui:insert name="head"> </ui:insert>
     </h:head>
 
