@@ -12,82 +12,31 @@
     <ui:define name="content">
         <p:messages id="msgs" showDetail="true"/>
         <h:form id="form">
-            <div id="header">
-                <!--style="padding:20px  0  20px  0;border-bottom:solid  1px  blue">-->
-                <div>
-                    <p:panel header="查询条件">
-                        <h:panelGrid columns="2" cellspacing="5">
-                            <h:outputLabel value="合同号:" for="hth"/>
-                            <h:inputText id="hth" size="40" value="#{xfCutpayAction.detlRecord.contractno}"/>
 
-                            <h:outputLabel value="客户名称:" for="khmc"/>
-                            <h:inputText  id="khmc" size="40" value="#{xfCutpayAction.detlRecord.clientname}"/>
-
-                            <h:outputText value=""/>
-                            <h:panelGroup>
-                                <p:commandButton id="qrybtn" value="查询" action="#{xfCutpayAction.query}"
-                                                 update="datapanel">
-                                </p:commandButton>
-                                <p:commandButton value="重置" type="reset" ajax="false"/>
-                            </h:panelGroup>
-                        </h:panelGrid>
-                        <!--</h:form>-->
-                    </p:panel>
-                </div>
-            </div>
 
             <br/>
-
 
             <p:toolbar>
                 <p:toolbarGroup align="left">
                     <p:divider/>
                     <p:commandButton type="push" value="全部回写" image="ui-icon-document"
-                                     action="#{xfCutpayAction.writebackAll}" update="msgs"
+                                     action="#{xfFeedbackAction.writebackAll}" update="msgs"
                                      ajax="false"/>
                     <p:divider/>
                     <p:commandButton type="push" value="多笔回写" image="ui-icon-disk"
-                                     action="#{xfCutpayAction.writebackMulti}" update="msgs"
+                                     action="#{xfFeedbackAction.writebackMulti}" update="msgs"
                                      ajax="false"/>
                 </p:toolbarGroup>
-
-                <p:divider/>
-<!--
-                <p:toolbarGroup align="right">
-                    <p:menuButton value="导航">
-                        <p:menuitem value="返回桌面" url="http://www.primefaces.org"/>
-                        <p:menuitem value="ShowCase"
-                                    url="http://www.primefaces.org/showcase"/>
-                        <p:menuitem value="TouchFaces"
-                                    url="http://www.primefaces.org/showcase/touch"/>
-                    </p:menuButton>
-                </p:toolbarGroup>
--->
-
             </p:toolbar>
 
-
-
-            <div style="padding-top:5px" id="tabdiv">
-                <!--<p:panel id="datapanel">-->
-                <p:dataTable id="pdt" height="200" dynamic="true"
-                             value="#{xfCutpayAction.detlList}" var="record"
-                             selection="#{xfCutpayAction.selectedRecords}"
+            <div style="padding-top:10px" id="tabdiv">
+                <p:dataTable id="pdt"  dynamic="true"
+                             value="#{xfFeedbackAction.detlList}" var="record"
+                             selection="#{xfFeedbackAction.selectedRecords}"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              paginator="true" rows="15" paginatorPosition="bottom"
                              rowsPerPageTemplate="100,50,30,15,5"
                              emptyMessage="数据记录为空...">
-
-<!--                    <f:facet name="bottom">
-                        <h:outputText value="记录总笔数：#{xfCutpayAction.totalcount}" />
-
-                        <p:spacer width="10"/>
-                        总金额：
-                        <h:outputText value="#{xfCutpayAction.totalamt}">
-                            <f:convertNumber type="number" pattern="#,###,###,###,###.##"/>
-                        </h:outputText>
-                    </f:facet>-->
-
                     <p:column selectionMode="multiple"/>
                     <p:column sortBy="#{record.contractno}">
                         <f:facet name="header">
@@ -111,7 +60,6 @@
                     </p:column>
                     <p:column style="text-align:right">
                         <f:facet name="header">
-                            <!--还款金额-->
                             <h:outputText value="还款金额" style="text-align:left"/>
                         </f:facet>
                         <h:outputText value="#{record.paybackamt}">
@@ -162,14 +110,12 @@
                     </p:column>
 
                     <p:column headerText="操作" style="width:50px;text-align:center">
-                        <h:commandLink immediate="true" value="删除" action="#{xfCutpayAction.deleteRecord}">
+                        <h:commandLink immediate="true" value="删除" action="#{xfFeedbackAction.deleteRecord}">
                             <f:setPropertyActionListener value="#{record}"
-                                                         target="#{xfCutpayAction.selectedRecord}"/>
+                                                         target="#{xfFeedbackAction.selectedRecord}"/>
                         </h:commandLink>
                     </p:column>
-
                 </p:dataTable>
-                <!--</p:panel>-->
             </div>
         </h:form>
 
