@@ -8,7 +8,7 @@ import zt.cms.xf.newcms.controllers.T100103CTL;
 import zt.cms.xf.newcms.domain.T100103.T100103ResponseRecord;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
@@ -24,7 +24,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @ManagedBean(name = "T100103")
-@SessionScoped
+@ViewScoped
 //@RequestScoped
 public class T100103Bean implements Serializable {
 //    private DataModel model;

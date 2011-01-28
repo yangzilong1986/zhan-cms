@@ -27,6 +27,7 @@ public class T100103CTL  extends BaseCTL implements java.io.Serializable {
     private T100103ResponseRecord responseRecord = new T100103ResponseRecord();
     List<T100103ResponseRecord> responseFDList = new ArrayList();
     List<T100103ResponseRecord> responseXFList = new ArrayList();
+    List<T100103ResponseRecord> responseGMList = new ArrayList();
 
 
     public T100103ResponseRecord getResponseRecord() {
@@ -53,6 +54,14 @@ public class T100103CTL  extends BaseCTL implements java.io.Serializable {
         this.responseXFList = responseXFList;
     }
 
+    public List<T100103ResponseRecord> getResponseGMList() {
+        return responseGMList;
+    }
+
+    public void setResponseGMList(List<T100103ResponseRecord> responseGMList) {
+        this.responseGMList = responseGMList;
+    }
+
     public final static void main(String[] args) throws Exception {
 
         T100103CTL ctl = new T100103CTL();
@@ -76,6 +85,14 @@ public class T100103CTL  extends BaseCTL implements java.io.Serializable {
         return this.getResponseXFList();
 
     }
+
+    public List<T100103ResponseRecord> getAllGRMFRecords() {
+        //查询 房贷/消费信贷/个人买方信贷（1/2/3） 数据
+        setResponseGMList(start("3"));
+        return this.getResponseGMList();
+
+    }
+
 
     public String query() {
         setResponseFDList(start("1"));
