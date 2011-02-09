@@ -59,29 +59,27 @@ public class NewCmsManager {
     }
 
     public String doPostXml(String xmlStr) {
-
         logger.info("发送报文： " + xmlStr);
-
         String responseBody = null;
-
+        String errmsg = "";
         try {
-
             StringEntity xmlSE = new StringEntity(xmlStr, "GBK");
             httppost.setEntity(xmlSE);
-
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             //responseBody = null;
-            
             responseBody = httpclient.execute(httppost, responseHandler);
         } catch (UnsupportedEncodingException e) {
-            logger.error("报文格式转换错误", e);
-            throw new RuntimeException(e);
+            errmsg = "与信贷系统的接口通讯报文格式转换错误!";
+            logger.error(errmsg, e);
+            throw new RuntimeException(errmsg,e);
         } catch (IOException e) {
-            logger.error("通讯错误!", e);
-            throw new RuntimeException(e);
+            errmsg = "与信贷系统的接口通讯连接错误!";
+            logger.error(errmsg, e);
+            throw new RuntimeException(errmsg,e);
         } catch (Exception e) {
-            logger.error("通讯错误!", e);
-            throw new RuntimeException(e);
+            errmsg = "与信贷系统的接口的通讯错误!";
+            logger.error(errmsg, e);
+            throw new RuntimeException(errmsg,e);
         } finally {
             //TODO  close conn
         }

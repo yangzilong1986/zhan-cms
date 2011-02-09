@@ -16,7 +16,7 @@ public class T100103ResponseRecord {
     String   stdhkje;
     String   stdhkbj;
     String   stdhklx;
-    String   stdjhhkr;
+    String   stdjhhkr;  //计划还款日
     String   stdhth;
     String   stdhkzh; //还款帐号
     String   stddqh;  //地区号

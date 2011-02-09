@@ -10,6 +10,24 @@
         <session-timeout>360</session-timeout>
     </session-config>
 
+
+    <filter>
+        <filter-name>LoginCheckFilter</filter-name>
+        <filter-class>
+            pub.auth.LoginCheckFilter
+        </filter-class>
+        <init-param>
+            <param-name>loginPage</param-name>
+            <param-value>/timeout.jsp</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoginCheckFilter</filter-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </filter-mapping>
+
+    
+
     <!--richfaces-->
     <!--
         <context-param>
