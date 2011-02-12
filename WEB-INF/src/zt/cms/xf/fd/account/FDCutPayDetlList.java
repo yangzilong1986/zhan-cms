@@ -284,6 +284,9 @@ public class FDCutPayDetlList extends FormActions {
                 fdcutpaydetl = detlDao.findByPrimaryKey(seqno);
                 FdcutpaydetlPk detlPk = new FdcutpaydetlPk(seqno);
                 fdcutpaydetl.setBillstatus(billstatus);//设置状态
+
+                //对于提前
+
                 detlDao.update(detlPk, fdcutpaydetl);
                 totalamt = totalamt.add(fdcutpaydetl.getGthtjhJhje());
                 count++;
