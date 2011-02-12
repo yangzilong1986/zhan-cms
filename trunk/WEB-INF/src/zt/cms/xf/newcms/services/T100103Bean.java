@@ -5,8 +5,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.primefaces.event.SelectEvent;
 import zt.cms.xf.newcms.controllers.T100103CTL;
+import zt.cms.xf.newcms.controllers.T100104CTL;
 import zt.cms.xf.newcms.domain.T100103.T100103ResponseRecord;
+import zt.cms.xf.newcms.domain.T100104.T100104RequestList;
+import zt.cms.xf.newcms.domain.T100104.T100104RequestRecord;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -25,11 +29,10 @@ import java.util.List;
  */
 @ManagedBean(name = "T100103")
 @ViewScoped
-//@RequestScoped
 public class T100103Bean implements Serializable {
-//    private DataModel model;
-//    private LazyDataModel<T100101ResponseRecord> lazyModel;
+
     private T100103ResponseRecord selectedRecord;
+    private T100103ResponseRecord[] selectedRecords;
 
     private Log logger = LogFactory.getLog(this.getClass());
     private T100103ResponseRecord responseRecord = new T100103ResponseRecord();
@@ -145,6 +148,112 @@ public class T100103Bean implements Serializable {
         return "FDCutpayDetail?faces-redirect=true";
     }
 
+
+    //回写处理（利息锁定）
+    public String writebackAll() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (this.responseFDList == null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "利息锁定时出现错误。", "请首先进行还款记录查询。"));
+
+            return null;
+        }
+        if (selectedRecords.length > 0) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "利息锁定时出现错误。", "请勿选择明细记录。"));
+            return null;
+        }
+        T100103ResponseRecord[] records = new T100103ResponseRecord[this.responseFDList.size()];
+        startWriteBack(this.responseFDList.toArray(records));
+        //init();
+        return null;
+    }
+
+    public String writebackMulti() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        if (selectedRecords.length == 0) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "利息锁定时出现错误。", "未选择明细记录。"));
+            return null;
+        }
+
+        startWriteBack(selectedRecords);
+        //init();
+        return null;
+
+    }
+
+    private void startWriteBack(T100103ResponseRecord[] detls) {
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        try {
+            int result = processWriteBack(detls);
+            if (result != detls.length) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "新信贷系统利息锁定结果。", "成功笔数：" + result + "  失败笔数：" + (detls.length - result)));
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "新信贷系统利息锁定成功。", "  笔数：" + result));
+            }
+        } catch (Exception e) {
+            logger.error("利息锁定时出现错误。", e);
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "利息锁定时出现错误。", null));
+        }
+        //init();
+
+    }
+
+    /*
+    20101020 单笔处理
+    查询房贷系统的扣款记录表，对SBS入帐成功的记录进行回写（to 新信贷）
+    返回成功处理笔数
+     */
+
+    public int processWriteBack(T100103ResponseRecord[] detls) throws Exception {
+
+        int count = 0;
+
+        T100104CTL t100104ctl = new T100104CTL();
+
+        for (T100103ResponseRecord detl : detls) {
+/*
+            if (!detl.getBillstatus().equals(XFBillStatus.BILLSTATUS_CORE_SUCCESS)) {
+                logger.error("状态检查失败" + detl.getJournalno());
+                continue;
+            }
+*/
+            boolean txResult = false;
+            T100104RequestRecord record = new T100104RequestRecord();
+            record.setStdjjh(detl.getStdjjh());
+            record.setStdqch(detl.getStdqch());
+            record.setStdjhkkr(detl.getStdjhhkr());
+            //1-成功 2-失败  3-利息锁定
+            record.setStdkkjg("3");
+            T100104RequestList list = new T100104RequestList();
+            list.add(record);
+            //单笔发送处理
+            txResult = t100104ctl.start(list);
+
+            if (txResult) {
+//                cutpaydetlPk.setJournalno(detl.getJournalno());
+//                detl.setBillstatus(XFBillStatus.FD_WRITEBACK_SUCCESS);
+//                detlDao.update(cutpaydetlPk, detl);
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+
+
+
+
+
+
     //==============================================================
 
 //    public LazyDataModel<T100103ResponseRecord> getLazyModel() {
@@ -223,4 +332,11 @@ public class T100103Bean implements Serializable {
         this.regionNames = regionNames;
     }
 
+    public T100103ResponseRecord[] getSelectedRecords() {
+        return selectedRecords;
+    }
+
+    public void setSelectedRecords(T100103ResponseRecord[] selectedRecords) {
+        this.selectedRecords = selectedRecords;
+    }
 }
