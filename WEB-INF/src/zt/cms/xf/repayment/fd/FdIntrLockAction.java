@@ -1,4 +1,4 @@
-package zt.cms.xf.repayment.grmf;
+package zt.cms.xf.repayment.fd;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -8,6 +8,7 @@ import zt.cms.xf.newcms.controllers.T100104CTL;
 import zt.cms.xf.newcms.domain.T100103.T100103ResponseRecord;
 import zt.cms.xf.newcms.domain.T100104.T100104RequestList;
 import zt.cms.xf.newcms.domain.T100104.T100104RequestRecord;
+import zt.cms.xf.repayment.grmf.GmRepayDetlBean;
 import zt.platform.db.ConnectionManager;
 import zt.platform.db.DatabaseConnection;
 import zt.platform.db.RecordSet;
@@ -26,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 查询信贷系统中 个人买方信贷 的当前代扣数据  （提前还款）
+ * 当天提前还款记录锁定
  * User: zhanrui
  * Date: 2011-1-27
  * Time: 10:59:40
@@ -34,7 +35,7 @@ import java.util.List;
  */
 @ManagedBean
 @ViewScoped
-public class GmPreRepayAction {
+public class FdIntrLockAction {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -55,7 +56,6 @@ public class GmPreRepayAction {
     private T100103ResponseRecord[] selectedRecords;
     private T100103ResponseRecord selectedRecord;
 
-    private String tableTitle;
 
     public List<GmRepayDetlBean> getDbrecords() {
         return dbrecords;
@@ -141,14 +141,7 @@ public class GmPreRepayAction {
         this.selectedRecord = selectedRecord;
     }
 
-    public String getTableTitle() {
-        return tableTitle;
-    }
-
-    public void setTableTitle(String tableTitle) {
-        this.tableTitle = tableTitle;
-    }
-//==========================================================================
+    //==========================================================================
 
     @PostConstruct
     public void init() {
@@ -396,7 +389,6 @@ public class GmPreRepayAction {
         for (GmRepayDetlBean record : this.dbrecords){
              this.totalamt = this.totalamt.add(record.getRepaymentamt());
         }
-        this.tableTitle = "总笔数:"+totalcount+"／总金额:" + totalamt.setScale(2,BigDecimal.ROUND_HALF_UP).toString();
     }
 
     public String writebackAll() {

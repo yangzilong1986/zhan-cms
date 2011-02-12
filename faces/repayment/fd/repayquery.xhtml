@@ -20,7 +20,7 @@
             <p:messages id="msgs" showDetail="true"/>
             <p:panel header="住房按揭正常还款记录查询条件">
                 <h:form>
-                    <h:panelGrid columns="2" style="text-align:left" cellpadding="3px">
+                    <h:panelGrid columns="2" style="text-align:left" >
                         <h:outputLabel value="合同号:" for="hth"/>
                         <h:inputText id="hth" size="30" value="#{T100101.responseRecord.stdhth}"/>
 
@@ -29,7 +29,7 @@
 
 
                         <h:outputLabel value="地区:" for="dqh"/>
-                        <h:selectOneMenu id="dqh" value="#{T100101.responseRecord.stddqh}" style="width:120px">
+                        <h:selectOneMenu id="dqh" value="#{T100101.responseRecord.stddqh}" style="width:100px">
                             <f:selectItems value="#{T100101.regionOptions}"/>
                         </h:selectOneMenu>
                         <h:outputText/>
@@ -51,7 +51,7 @@
                              selectionMode="single"
                              rowSelectListener="#{T100101.onRowSelectNavigate}"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="5,15,30,100">
+                             rowsPerPageTemplate="15,30,50,100" emptyMessage="数据记录为空...">
                     <f:facet name="header">
                         还款记录清单
                     </f:facet>

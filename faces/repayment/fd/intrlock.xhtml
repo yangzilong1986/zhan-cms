@@ -33,7 +33,7 @@
                 <p:dataTable id="pdt" height="200" dynamic="true"
                              value="#{gmPreRepayAction.dbrecords}" var="record"
                              selection="#{gmPreRepayAction.selectedRecords}"
-                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             paginatorTemplate="#{gmPreRepayAction.tableTitle} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              paginator="true" rows="30" paginatorPosition="bottom"
                              rowsPerPageTemplate="100,50,30,15"
                              emptyMessage="数据记录为空...">

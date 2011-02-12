@@ -92,15 +92,14 @@ public class FDDateLink extends FormActions {
 
         if (lastbutton.equals("GETCUTPAYBUTTON")) {
             instance.getFormBean().getElement("GETFDDATABUTTON").setComponetTp(15);
-            instance.getFormBean().getElement("CHECKFDDATABUTTON").setComponetTp(15);
-//            instance.getFormBean().getElement("CHECKFDDATABUTTON").setComponetTp(6);
+//            instance.getFormBean().getElement("CHECKFDDATABUTTON").setComponetTp(15);
         } else if (lastbutton.equals("GENERATEPKGBUTTON")) {
             instance.getFormBean().getElement("GENERATEPKGBUTTON").setComponetTp(15);
         } else if (lastbutton.equals("SENDPKGBUTTON")) {
             instance.getFormBean().getElement("SENDPKGBUTTON").setComponetTp(15);
         } else if (lastbutton.equals("GETPRECUTPAYBUTTON")) {
             instance.getFormBean().getElement("GETFDPREDATABUTTON").setComponetTp(15);
-            instance.getFormBean().getElement("CHECKFDPREDATABUTTON").setComponetTp(15);
+//            instance.getFormBean().getElement("CHECKFDPREDATABUTTON").setComponetTp(15);
         } else if (lastbutton.equals("FDACCOUNTBUTTON")) {
             instance.getFormBean().getElement("FDACCOUNTBUTTON").setComponetTp(15);
         } else if (lastbutton.equals("XFACCOUNTBUTTON")) {
@@ -216,13 +215,13 @@ public class FDDateLink extends FormActions {
         if (button.equals("CHECKFDDATABUTTON")) {
             ctx.setRequestAtrribute("flag", "1");
             ctx.setRequestAtrribute("isback", "0");
-            ctx.setTarget("/faces/cutpay/t100101.xhtml");
+            ctx.setTarget("/faces/repayment/fd/t100101.xhtml");
             instance.setReadonly(true);
         }
         if (button.equals("CHECKFDPREDATABUTTON")) {
             ctx.setRequestAtrribute("flag", "1");
             ctx.setRequestAtrribute("isback", "0");
-            ctx.setTarget("/faces/cutpay/t100103.xhtml");
+            ctx.setTarget("/faces/repayment/fd/t100103.xhtml");
             instance.setReadonly(true);
         }
 
