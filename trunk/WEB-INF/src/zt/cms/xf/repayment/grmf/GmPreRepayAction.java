@@ -56,6 +56,10 @@ public class GmPreRepayAction {
     private T100103ResponseRecord selectedRecord;
 
 
+    public List<GmRepayDetlBean> getDbrecords() {
+        return dbrecords;
+    }
+
     public List<T100103ResponseRecord> getResponseMFList() {
         return responseMFList;
     }
@@ -140,7 +144,9 @@ public class GmPreRepayAction {
 
     @PostConstruct
     public void init() {
+        selectRecords();
         initAmt();
+        sumRecords();
     }
 
     public String query() {
@@ -170,6 +176,7 @@ public class GmPreRepayAction {
             //dbrecords = transform(responseMFList);
             insertRecords();
             selectRecords();
+            sumRecords();
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
         }
@@ -182,8 +189,6 @@ public class GmPreRepayAction {
      * @return
      */
     private void insertRecords() {
-        List<GmRepayDetlBean> records = new ArrayList();
-
 
         String inputdate = new SimpleDateFormat("yyyyMMdd").format(new Date());
 
@@ -276,8 +281,8 @@ public class GmPreRepayAction {
                 ps.setString(16, bankcdTmp);//客户开户银行代码 中行：104  建行：105   enum=Bank
 
                 ps.setString(17, "0");//帐单状态               enum=FDBillStatus
-                ps.setDate(18, (java.sql.Date) (new Date()));//房贷系统帐单获取时间  (应用服务器的系统时间)
-                //ps.setDate(18, new java.sql.Date(new Date().getTime()));
+//                ps.setDate(18, (java.sql.Date) (new Date()));//房贷系统帐单获取时间  (应用服务器的系统时间)
+                ps.setDate(18, new java.sql.Date(new Date().getTime()));    //房贷系统帐单获取时间  (应用服务器的系统时间)
 
                 ps.setString(19, "");//扣款失败原因
                 ps.setString(20, "");//备注
@@ -293,7 +298,7 @@ public class GmPreRepayAction {
 
             for (int i = 0; i < results.length; i++) {
                 if (results[i] < 0) {
-                    throw new RuntimeException("将接口记录存入本地表中时出现错误。");
+                    //throw new RuntimeException("将接口记录存入本地表中时出现错误。");
                 }
             }
             conn.commit();
@@ -321,7 +326,54 @@ public class GmPreRepayAction {
     }
 
     private void selectRecords() {
-        
+        dbrecords = new ArrayList<GmRepayDetlBean>();
+        ConnectionManager cm = null;
+        DatabaseConnection conn = null;
+        RecordSet rs = null;
+        String sql = "select t.* from gmrepaydetl t where preflag='1' and billstatus = '0' and bankcd='105'";
+
+        try {
+            cm = ConnectionManager.getInstance();
+            conn = cm.getConnection();
+            rs = conn.executeQuery(sql);
+            while (rs.next()){
+                GmRepayDetlBean record = new GmRepayDetlBean();
+                record.setSeqno(rs.getString("seqno"));
+                record.setIouno(rs.getString("iouno"));
+                record.setIssueno(rs.getString("issueno"));
+                record.setContractno(rs.getString("contractno"));
+                record.setClientno(rs.getString("clientno"));
+                record.setClientname(rs.getString("clientname"));
+                record.setLoanactno(rs.getString("loanactno"));
+                record.setRepaymentactno(rs.getString("repaymentactno"));
+                record.setRepaymentamt(new BigDecimal(rs.getDouble("repaymentamt")));
+                record.setPrincipalamt(new BigDecimal(rs.getDouble("principalamt")));
+                record.setInterestamt(new BigDecimal(rs.getDouble("interestamt")));
+                record.setPenaltyamt(new BigDecimal(rs.getDouble("penaltyamt")));
+                record.setOtheramt(new BigDecimal(rs.getDouble("otheramt")));
+                record.setRepaymentdate(rs.getString("repaymentdate"));
+                record.setRegioncd(rs.getString("regioncd"));
+                record.setBankcd(rs.getString("bankcd"));
+                record.setBillstatus(rs.getString("billstatus"));
+                record.setCreatetime(rs.getCalendar("createtime").getTime());
+                record.setFailreason(rs.getString("failreason"));
+                record.setRemark(rs.getString("remark"));
+                record.setPreflag(rs.getString("preflag"));
+                record.setJournalno(rs.getString("journalno"));
+                dbrecords.add(record);
+            }
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                    conn.getConnection().close();
+                } catch (SQLException e) {
+                    logger.error("Connection closed error!", e);
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
     }
 
     private void initAmt() {
@@ -329,6 +381,13 @@ public class GmPreRepayAction {
         totalPrincipalAmt = new BigDecimal(0);
         totalInterestAmt = new BigDecimal(0);
         totalFxjeAmt = new BigDecimal(0);
+    }
+
+    private void sumRecords(){
+        this.totalcount = dbrecords.size();
+        for (GmRepayDetlBean record : this.dbrecords){
+             this.totalamt = this.totalamt.add(record.getRepaymentamt());
+        }
     }
 
     public String writebackAll() {
