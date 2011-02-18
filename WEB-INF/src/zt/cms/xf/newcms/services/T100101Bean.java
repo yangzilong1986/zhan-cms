@@ -58,7 +58,15 @@ public class T100101Bean implements Serializable {
     }
 
     private void initList() {
-        List<T100101ResponseRecord> fdList = t100101ctl.getAllFDRecords();
+        FacesContext context = FacesContext.getCurrentInstance();
+        List<T100101ResponseRecord> fdList=null;
+        try {
+             fdList= t100101ctl.getAllFDRecords();
+        } catch (Exception e) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "与新信贷的接口出现错误。", "请咨询系统管理人员。"));
+            throw new RuntimeException("与新信贷的接口出现错误.");
+        }
         totalcount = 0;
         initAmt();
         responseFDList = new ArrayList<T100101ResponseRecord>();
@@ -90,6 +98,7 @@ public class T100101Bean implements Serializable {
             countAmt(record);
         }
         if (!result) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"地区代号转换有误",""));
             throw new RuntimeException("地区代号转换有误");
         }
     }
