@@ -44,8 +44,9 @@
             <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/jsf-impl.jar" />
             <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/jsf-api.jar" />
             <element id="file-copy" path="$APPLICATION_HOME_DIR$/lib/junit-4.7.jar" />
-            <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/icefaces-compat.jar" />
-            <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/primefaces-2.2.jar" />
+            <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/ezmorph-1.0.6.jar" />
+            <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/json-lib-2.3-jdk15.jar" />
+            <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/lib/primefaces-2.2.RC2.jar" />
           </element>
         </element>
       </root>
@@ -132,13 +133,18 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$" charset="GBK" />
     <file url="file://$PROJECT_DIR$/WEB-INF/src/com/bill99/encrypt/MD5.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/faces/FDCutpayDetail.xhtml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/faces/about.xhtml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/faces/attachment/download.xhtml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/faces/cutpay/t100101.xhtml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/faces/cutpay/t100103.xhtml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/faces/cutpay/xffeedback.xhtml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/faces/t100101-1.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/repayment/fd/intrlock.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/repayment/fd/prerepayquery.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/repayment/fd/repayquery.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/repayment/grmf/prerepayhandler.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/repayment/grmf/prerepayquery.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/repayment/grmf/repayhandler.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/repayment/grmf/repayquery.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/repayment/xf/xffeedback.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/test/FDCutpayDetail.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/test/about.xhtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/faces/test/t100101-1.xhtml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/templates/ui.xhtml" charset="UTF-8" />
   </component>
   <component name="EntryPointsManager">

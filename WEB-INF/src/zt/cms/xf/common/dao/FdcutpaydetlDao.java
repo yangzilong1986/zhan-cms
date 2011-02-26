@@ -8,10 +8,12 @@
 
 package zt.cms.xf.common.dao;
 
+import zt.cms.xf.common.dto.Fdcutpaydetl;
+import zt.cms.xf.common.dto.FdcutpaydetlPk;
+import zt.cms.xf.common.exceptions.FdcutpaydetlDaoException;
+
 import java.math.BigDecimal;
 import java.util.Date;
-import zt.cms.xf.common.dto.*;
-import zt.cms.xf.common.exceptions.*;
 
 public interface FdcutpaydetlDao
 {
@@ -149,6 +151,11 @@ public interface FdcutpaydetlDao
 	 * Returns all rows from the FDCUTPAYDETL table that match the criteria 'BANKCD = :bankcd'.
 	 */
 	public Fdcutpaydetl[] findWhereBankcdEquals(String bankcd) throws FdcutpaydetlDaoException;
+
+	/** 
+	 * Returns all rows from the FDCUTPAYDETL table that match the criteria 'LOCKSTATUS = :lockstatus'.
+	 */
+	public Fdcutpaydetl[] findWhereLockstatusEquals(String lockstatus) throws FdcutpaydetlDaoException;
 
 	/** 
 	 * Sets the value of maxRows

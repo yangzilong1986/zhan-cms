@@ -46,11 +46,19 @@
                     <p:toolbarGroup align="left">
                         <p:divider/>
                         <p:commandButton type="push" value="全部利息锁定" image="ui-icon-query"
-                                         action="#{T100103.writebackAll}" update="msgs"
+                                         action="#{T100103.doLockAll}" update="msgs"
                                          ajax="false"/>
                         <p:divider/>
                         <p:commandButton type="push" value="多笔利息锁定" image="ui-icon-query"
-                                         action="#{T100103.writebackMulti}" update="msgs"
+                                         action="#{T100103.doLockMulti}" update="msgs"
+                                         ajax="false"/>
+                        <p:divider/>
+                        <p:commandButton type="push" value="全部利息解锁" image="ui-icon-query"
+                                         action="#{T100103.doUnlockAll}" update="msgs"
+                                         ajax="false"/>
+                        <p:divider/>
+                        <p:commandButton type="push" value="多笔利息解锁" image="ui-icon-query"
+                                         action="#{T100103.doUnlockMulti}" update="msgs"
                                          ajax="false"/>
                         <p:divider/>
                     </p:toolbarGroup>
@@ -133,6 +141,12 @@
                             银行
                         </f:facet>
                         <h:outputText value="#{response.stdyhh}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            是否锁定
+                        </f:facet>
+                        <h:outputText value="#{response.stdsfsd}"/>
                     </p:column>
                 </p:dataTable>
 

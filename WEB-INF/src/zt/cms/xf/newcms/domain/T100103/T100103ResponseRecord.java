@@ -22,6 +22,8 @@ public class T100103ResponseRecord {
     String   stddqh;  //地区号
     String   stdyhh;  //银行号
 
+    String   stdsfsd; //是否已锁定 1-是 2 -否 add by lvgp 2011-2-12
+
     public String getStdjjh() {
         return stdjjh;
     }
@@ -126,4 +128,11 @@ public class T100103ResponseRecord {
         this.stdyhh = stdyhh;
     }
 
+    public String getStdsfsd() {
+        return stdsfsd;
+    }
+
+    public void setStdsfsd(String stdsfsd) {
+        this.stdsfsd = stdsfsd;
+    }
 }

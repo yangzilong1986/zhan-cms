@@ -1,0 +1,21 @@
+<project default="build">
+  <target name="build">
+    <delete dir="classes" />
+    <mkdir dir="classes" />
+    <javac destdir="classes">
+      <src path="src" />
+      <classpath>
+        <pathelement location="C:\MyProgramFiles\FireStormDAO-4.0.1\jars\hibernate3.jar" />
+        <pathelement location="F:\svn-haiercms\source\trunk\WEB-INF\lib\ojdbc14_g.jar" />
+        <pathelement location="C:\MyProgramFiles\FireStormDAO-4.0.1\jars\j2ee.jar" />
+        <pathelement location="C:\MyProgramFiles\FireStormDAO-4.0.1\jars\log4j-1.2.8.jar" />
+      </classpath>
+    </javac>
+    <jar jarfile="cms.jar" baseDir="classes">
+      <metainf dir="conf" />
+    </jar>
+    <ear destfile="cms.ear" appxml="application.xml">
+      <fileset dir="." includes="cms*.jar,cms*.war" />
+    </ear>
+  </target>
+</project>
