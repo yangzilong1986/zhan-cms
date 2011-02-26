@@ -165,7 +165,7 @@ public class T100103Bean implements Serializable {
 
 
     //回写处理（利息锁定）
-    public String writebackAll() {
+    public String doLockAll() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (this.responseFDList == null) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -179,12 +179,47 @@ public class T100103Bean implements Serializable {
             return null;
         }
         T100103ResponseRecord[] records = new T100103ResponseRecord[this.responseFDList.size()];
-        startWriteBack(this.responseFDList.toArray(records));
+        startWriteBack(this.responseFDList.toArray(records),"3");
         //init();
         return null;
     }
 
-    public String writebackMulti() {
+    public String doLockMulti() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        if (selectedRecords.length == 0) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "利息解锁时出现错误。", "未选择明细记录。"));
+            return null;
+        }
+
+        startWriteBack(selectedRecords,"3");
+        //init();
+        return null;
+
+    }
+
+    public String doUnlockAll() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (this.responseFDList == null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "利息解锁时出现错误。", "请首先进行还款记录查询。"));
+
+            return null;
+        }
+        if (selectedRecords.length > 0) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "利息解锁时出现错误。", "请勿选择明细记录。"));
+            return null;
+        }
+        T100103ResponseRecord[] records = new T100103ResponseRecord[this.responseFDList.size()];
+        startWriteBack(this.responseFDList.toArray(records),"2");
+        //init();
+        return null;
+    }
+
+    public String doUnlockMulti() {
 
         FacesContext context = FacesContext.getCurrentInstance();
 
@@ -194,17 +229,17 @@ public class T100103Bean implements Serializable {
             return null;
         }
 
-        startWriteBack(selectedRecords);
+        startWriteBack(selectedRecords,"2");
         //init();
         return null;
 
     }
 
-    private void startWriteBack(T100103ResponseRecord[] detls) {
+    private void startWriteBack(T100103ResponseRecord[] detls, String option) {
         FacesContext context = FacesContext.getCurrentInstance();
 
         try {
-            int result = processWriteBack(detls);
+            int result = processWriteBack(detls, option);
             if (result != detls.length) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                         "新信贷系统利息锁定结果。", "成功笔数：" + result + "  失败笔数：" + (detls.length - result)));
@@ -221,13 +256,22 @@ public class T100103Bean implements Serializable {
 
     }
 
-    /*
-    20101020 单笔处理
-    查询房贷系统的扣款记录表，对SBS入帐成功的记录进行回写（to 新信贷）
-    返回成功处理笔数
+    /**
+     *  20101020 单笔处理
+     * @param detls
+     * @param option   1-成功 2-失败(利息解锁)  3-利息锁定
+     * @return
+     * @throws Exception
      */
 
-    public int processWriteBack(T100103ResponseRecord[] detls) throws Exception {
+    public int processWriteBack(T100103ResponseRecord[] detls, String option) throws Exception {
+
+        if ((!"1".equals(option))
+                &&(!"2".equals(option))
+                &&(!"3".equals(option))
+                ) {
+            throw new RuntimeException("参数错误！");
+        }
 
         int count = 0;
 
@@ -245,8 +289,8 @@ public class T100103Bean implements Serializable {
             record.setStdjjh(detl.getStdjjh());
             record.setStdqch(detl.getStdqch());
             record.setStdjhkkr(detl.getStdjhhkr());
-            //1-成功 2-失败  3-利息锁定
-            record.setStdkkjg("3");
+            //1-成功 2-失败(利息解锁)  3-利息锁定
+            record.setStdkkjg(option);
             T100104RequestList list = new T100104RequestList();
             list.add(record);
             //单笔发送处理
