@@ -10,6 +10,7 @@ import zt.cms.xf.common.dao.FdcutpaydetlDao;
 import zt.cms.xf.common.dao.XfactcutpaydetlDao;
 import zt.cms.xf.common.dao.XfifbankdetlDao;
 import zt.cms.xf.common.dto.*;
+import zt.cms.xf.common.exceptions.FdcutpaydetlDaoException;
 import zt.cms.xf.common.exceptions.XfifbankdetlDaoException;
 import zt.cms.xf.common.factory.FdcutpaydetlDaoFactory;
 import zt.cms.xf.common.factory.XfactcutpaydetlDaoFactory;
@@ -17,6 +18,9 @@ import zt.cms.xf.common.factory.XfifbankdetlDaoFactory;
 import zt.cms.xf.gateway.BatchQueryResult;
 import zt.cms.xf.gateway.CtgManager;
 import zt.cms.xf.gateway.CutpayFailRecord;
+import zt.cms.xf.newcms.controllers.T100104CTL;
+import zt.cms.xf.newcms.domain.T100104.T100104RequestList;
+import zt.cms.xf.newcms.domain.T100104.T100104RequestRecord;
 import zt.cmsi.mydb.MyDB;
 import zt.platform.db.DatabaseConnection;
 import zt.platform.form.control.FormActions;
@@ -146,6 +150,8 @@ public class XFIFCCBDetlPage extends FormActions {
                             count = processXFCutpayRecord(conn, txndate, result, msgs);
                         } else if ("2".equals(systemtype)) {      //房贷系统
                             count = processFDCutpayRecord(result, msgs);
+                            //对于提前还款的扣款失败记录，需进行利息解锁处理
+                            processLockRecord(msgs);
                         }
 
                         if (count <= 0) {
@@ -427,6 +433,7 @@ public class XFIFCCBDetlPage extends FormActions {
     /*
     根据代扣查询交易的结果对FDCUTPAYDETL表中的明细扣款记录进行处理
      */
+
     int processFDCutpayRecord(BatchQueryResult result, ErrorMessages msgs) throws Exception {
 
         try {
@@ -450,8 +457,8 @@ public class XFIFCCBDetlPage extends FormActions {
             } else {
                 int count = 0;
 
-                for (CutpayFailRecord record :failrecords){
-                    logger.info("银行返回扣款失败记录:" + record.getActnam()+" " +record.getTxnamt() + "失败原因："+record.getReason());
+                for (CutpayFailRecord record : failrecords) {
+                    logger.info("银行返回扣款失败记录:" + record.getActnam() + " " + record.getTxnamt() + "失败原因：" + record.getReason());
                 }
 
                 for (int i = 0; i < cutpaydetls.length; i++) {
@@ -497,6 +504,7 @@ public class XFIFCCBDetlPage extends FormActions {
     /*
      根据代扣查询交易的结果对XFACTCUTPAYDETL表中的明细扣款记录进行处理
       */
+
     int processXFCutpayRecord(DatabaseConnection conn, String txndate, BatchQueryResult result, ErrorMessages msgs) throws Exception {
 
         try {
@@ -566,6 +574,51 @@ public class XFIFCCBDetlPage extends FormActions {
         return Integer.parseInt(result.getSuccnt()) + Integer.parseInt(result.getCurcnt());
     }
 
+    /**
+     * 对于提前还款的扣款失败记录，需进行利息解锁处理     2011/2/27 zhanrui
+     *
+     * @param msgs
+     */
+
+    private void processLockRecord(ErrorMessages msgs) {
+
+        Fdcutpaydetl[] cutpaydetls = new Fdcutpaydetl[0];
+        try {
+            String sqlwhere = " journalno = " + journalno;  //不管明细数据的状态是否已发送发送。
+            FdcutpaydetlDao detldao = FdcutpaydetlDaoFactory.create();
+            cutpaydetls = detldao.findByDynamicWhere(sqlwhere, null);
+            FdcutpaydetlPk detlpk = null;
+        } catch (FdcutpaydetlDaoException e) {
+            logger.error("数据库操作错误！", e);
+            throw new RuntimeException("数据库操作错误！", e);
+        }
+
+        T100104CTL t100104ctl = new T100104CTL();
+
+        for (Fdcutpaydetl cutpaydetl : cutpaydetls) {
+            if (cutpaydetl.getBillstatus().equals(FDBillStatus.CUTPAY_FAILD)) {
+                boolean txResult = false;
+                T100104RequestRecord record = new T100104RequestRecord();
+                record.setStdjjh(cutpaydetl.getGthtjhHtnm());
+                record.setStdqch(cutpaydetl.getGthtjhJhxh());
+                record.setStdjhkkr(cutpaydetl.getGthtjhDate());
+                //1-成功 2-失败(利息解锁)  3-利息锁定
+                record.setStdkkjg("2");
+                T100104RequestList list = new T100104RequestList();
+                list.add(record);
+                //单笔发送处理
+                txResult = t100104ctl.start(list);
+
+                if (!txResult) {
+                    msgs.add("对信贷系统进行锁定操作时返回解锁失败！");
+                    logger.error("对信贷系统进行锁定操作时返回解锁失败！");
+                    throw new RuntimeException("对信贷系统进行锁定操作时返回解锁失败");
+                }
+            }
+        }
+
+    }
+
 
     /*
    获取报错应答报文中的错误信息
@@ -588,6 +641,7 @@ public class XFIFCCBDetlPage extends FormActions {
     /*
     对Xfifbankdetl表中STATUS&LOG字段进行更新
      */
+
     private void updateTable_XFIFBANKDETL_StatusAndLog(String journalno, String status, String log) {
         XfifbankdetlDao detldao = null;
         Xfifbankdetl bankdetl = null;
@@ -614,6 +668,7 @@ public class XFIFCCBDetlPage extends FormActions {
     /*
    对查询返回结果包中的数据进行检查
     */
+
     private boolean checkQueryResult(BatchQueryResult result, ErrorMessages msgs, String systemtype) throws Exception {
 
         List<CutpayFailRecord> failrecord = result.getAll();
@@ -696,6 +751,7 @@ public class XFIFCCBDetlPage extends FormActions {
     /*
    根据当前通讯包的流水号，更新房贷明细表FDCUTPAYDETL明细记录状态
     */
+
     private int changeFDCutpayDetlRecordsStatus(String status) {
         int count = 0;
         try {
@@ -723,6 +779,7 @@ public class XFIFCCBDetlPage extends FormActions {
     /*
     根据当前通讯包的流水号，更新消费信贷明细表XFACTCUTPAYDETL明细记录状态
      */
+
     private int changeXFCutpayDetlRecordsStatus(String status) {
         int count = 0;
         try {

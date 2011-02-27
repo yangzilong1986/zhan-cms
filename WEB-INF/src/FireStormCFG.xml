@@ -20,6 +20,7 @@
     <filter-list>
       <filter>FDACTNOINFO</filter>
       <filter>FDCUTPAYDETL</filter>
+      <filter>FDCUTPAYDETLTEMP</filter>
       <filter>XFACTCUTPAYDETL</filter>
       <filter>XFACTCUTPAYMAIN</filter>
       <filter>XFACTINFOMAIN</filter>
@@ -9049,7 +9050,7 @@
             <sql-name>GTHTJH_DATE</sql-name>
             <sql-type>VARCHAR2</sql-type>
             <jdbc-type>VARCHAR</jdbc-type>
-            <jdbc-precision>8</jdbc-precision>
+            <jdbc-precision>60</jdbc-precision>
             <jdbc-scale>0</jdbc-scale>
             <nullable>false</nullable>
             <unique>false</unique>
@@ -9217,7 +9218,7 @@
             <sql-name>GTHTJH_HTNM</sql-name>
             <sql-type>VARCHAR2</sql-type>
             <jdbc-type>VARCHAR</jdbc-type>
-            <jdbc-precision>6</jdbc-precision>
+            <jdbc-precision>100</jdbc-precision>
             <jdbc-scale>0</jdbc-scale>
             <nullable>true</nullable>
             <unique>false</unique>
@@ -9274,6 +9275,20 @@
             <sql-type>VARCHAR2</sql-type>
             <jdbc-type>VARCHAR</jdbc-type>
             <jdbc-precision>3</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>lockstatus</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>LOCKSTATUS</sql-name>
+            <sql-type>VARCHAR2</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>2</jdbc-precision>
             <jdbc-scale>0</jdbc-scale>
             <nullable>true</nullable>
             <unique>false</unique>
@@ -9381,7 +9396,7 @@
                 <java-name>gthtjhDate</java-name>
                 <java-type>java.lang.String</java-type>
                 <jdbc-type>VARCHAR</jdbc-type>
-                <jdbc-precision>8</jdbc-precision>
+                <jdbc-precision>60</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
@@ -9573,7 +9588,7 @@
                 <java-name>gthtjhHtnm</java-name>
                 <java-type>java.lang.String</java-type>
                 <jdbc-type>VARCHAR</jdbc-type>
-                <jdbc-precision>6</jdbc-precision>
+                <jdbc-precision>100</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
@@ -9642,27 +9657,169 @@
               </parameter>
             </parameter-list>
           </finder>
+          <finder>
+            <name>findWhereLockstatusEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>LOCKSTATUS = :lockstatus</where>
+            <order-by>LOCKSTATUS</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>lockstatus</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>2</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
         </finder-list>
       </table>
       <table>
-        <sql-name>FDACTNOINFO</sql-name>
-        <java-name>Fdactnoinfo</java-name>
+        <sql-name>FDCUTPAYDETLTEMP</sql-name>
+        <java-name>Fdcutpaydetltemp</java-name>
         <primary-key>
           <column-list>
-            <column>CONTRACTNO</column>
+            <column>SEQNO</column>
           </column-list>
         </primary-key>
         <column-list>
           <column>
-            <java-name>actno</java-name>
+            <java-name>seqno</java-name>
             <java-type>java.lang.String</java-type>
             <java-default-value />
-            <sql-name>ACTNO</sql-name>
+            <sql-name>SEQNO</sql-name>
+            <sql-type>VARCHAR2</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>15</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>xdkhzdKhbh</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>XDKHZD_KHBH</sql-name>
+            <sql-type>VARCHAR2</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>30</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>xdkhzdKhmc</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>XDKHZD_KHMC</sql-name>
+            <sql-type>VARCHAR2</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>30</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>gthtjhHtbh</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>GTHTJH_HTBH</sql-name>
             <sql-type>VARCHAR2</sql-type>
             <jdbc-type>VARCHAR</jdbc-type>
             <jdbc-precision>20</jdbc-precision>
             <jdbc-scale>0</jdbc-scale>
             <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>gthtjhDate</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>GTHTJH_DATE</sql-name>
+            <sql-type>VARCHAR2</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>60</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>gthtjhLl</java-name>
+            <java-type>java.math.BigDecimal</java-type>
+            <java-default-value />
+            <sql-name>GTHTJH_LL</sql-name>
+            <sql-type>NUMBER</sql-type>
+            <jdbc-type>DECIMAL</jdbc-type>
+            <jdbc-precision>22</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>gthtjhJhje</java-name>
+            <java-type>java.math.BigDecimal</java-type>
+            <java-default-value />
+            <sql-name>GTHTJH_JHJE</sql-name>
+            <sql-type>NUMBER</sql-type>
+            <jdbc-type>DECIMAL</jdbc-type>
+            <jdbc-precision>22</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>gthtjhBjje</java-name>
+            <java-type>java.math.BigDecimal</java-type>
+            <java-default-value />
+            <sql-name>GTHTJH_BJJE</sql-name>
+            <sql-type>NUMBER</sql-type>
+            <jdbc-type>DECIMAL</jdbc-type>
+            <jdbc-precision>22</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>gthtjhLxje</java-name>
+            <java-type>java.math.BigDecimal</java-type>
+            <java-default-value />
+            <sql-name>GTHTJH_LXJE</sql-name>
+            <sql-type>NUMBER</sql-type>
+            <jdbc-type>DECIMAL</jdbc-type>
+            <jdbc-precision>22</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>gthtbZhbh</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>GTHTB_ZHBH</sql-name>
+            <sql-type>VARCHAR2</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>31</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
             <unique>false</unique>
             <auto-increment>false</auto-increment>
             <sequence-name />
@@ -9674,46 +9831,32 @@
             <sql-name>CUTPAYACTNO</sql-name>
             <sql-type>VARCHAR2</sql-type>
             <jdbc-type>VARCHAR</jdbc-type>
-            <jdbc-precision>20</jdbc-precision>
+            <jdbc-precision>31</jdbc-precision>
             <jdbc-scale>0</jdbc-scale>
-            <nullable>false</nullable>
+            <nullable>true</nullable>
             <unique>false</unique>
             <auto-increment>false</auto-increment>
             <sequence-name />
           </column>
           <column>
-            <java-name>contractno</java-name>
+            <java-name>billstatus</java-name>
             <java-type>java.lang.String</java-type>
             <java-default-value />
-            <sql-name>CONTRACTNO</sql-name>
+            <sql-name>BILLSTATUS</sql-name>
             <sql-type>VARCHAR2</sql-type>
             <jdbc-type>VARCHAR</jdbc-type>
-            <jdbc-precision>20</jdbc-precision>
+            <jdbc-precision>2</jdbc-precision>
             <jdbc-scale>0</jdbc-scale>
-            <nullable>false</nullable>
+            <nullable>true</nullable>
             <unique>false</unique>
             <auto-increment>false</auto-increment>
             <sequence-name />
           </column>
           <column>
-            <java-name>name</java-name>
-            <java-type>java.lang.String</java-type>
-            <java-default-value />
-            <sql-name>NAME</sql-name>
-            <sql-type>VARCHAR2</sql-type>
-            <jdbc-type>VARCHAR</jdbc-type>
-            <jdbc-precision>20</jdbc-precision>
-            <jdbc-scale>0</jdbc-scale>
-            <nullable>false</nullable>
-            <unique>false</unique>
-            <auto-increment>false</auto-increment>
-            <sequence-name />
-          </column>
-          <column>
-            <java-name>startdate</java-name>
+            <java-name>createtime</java-name>
             <java-type>java.util.Date</java-type>
             <java-default-value />
-            <sql-name>STARTDATE</sql-name>
+            <sql-name>CREATETIME</sql-name>
             <sql-type>DATE</sql-type>
             <jdbc-type>TIMESTAMP</jdbc-type>
             <jdbc-precision>7</jdbc-precision>
@@ -9724,13 +9867,13 @@
             <sequence-name />
           </column>
           <column>
-            <java-name>enddate</java-name>
-            <java-type>java.util.Date</java-type>
+            <java-name>failreason</java-name>
+            <java-type>java.lang.String</java-type>
             <java-default-value />
-            <sql-name>ENDDATE</sql-name>
-            <sql-type>DATE</sql-type>
-            <jdbc-type>TIMESTAMP</jdbc-type>
-            <jdbc-precision>7</jdbc-precision>
+            <sql-name>FAILREASON</sql-name>
+            <sql-type>VARCHAR2</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>80</jdbc-precision>
             <jdbc-scale>0</jdbc-scale>
             <nullable>true</nullable>
             <unique>false</unique>
@@ -9738,27 +9881,41 @@
             <sequence-name />
           </column>
           <column>
-            <java-name>actnostatus</java-name>
+            <java-name>remark</java-name>
             <java-type>java.lang.String</java-type>
             <java-default-value />
-            <sql-name>ACTNOSTATUS</sql-name>
+            <sql-name>REMARK</sql-name>
             <sql-type>VARCHAR2</sql-type>
             <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>200</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>preflag</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>PREFLAG</sql-name>
+            <sql-type>CHAR</sql-type>
+            <jdbc-type>CHAR</jdbc-type>
             <jdbc-precision>1</jdbc-precision>
             <jdbc-scale>0</jdbc-scale>
-            <nullable>true</nullable>
+            <nullable>false</nullable>
             <unique>false</unique>
             <auto-increment>false</auto-increment>
             <sequence-name />
           </column>
           <column>
-            <java-name>creatorid</java-name>
+            <java-name>gthtjhHtnm</java-name>
             <java-type>java.lang.String</java-type>
             <java-default-value />
-            <sql-name>CREATORID</sql-name>
+            <sql-name>GTHTJH_HTNM</sql-name>
             <sql-type>VARCHAR2</sql-type>
             <jdbc-type>VARCHAR</jdbc-type>
-            <jdbc-precision>12</jdbc-precision>
+            <jdbc-precision>100</jdbc-precision>
             <jdbc-scale>0</jdbc-scale>
             <nullable>true</nullable>
             <unique>false</unique>
@@ -9766,27 +9923,13 @@
             <sequence-name />
           </column>
           <column>
-            <java-name>createdate</java-name>
-            <java-type>java.util.Date</java-type>
-            <java-default-value />
-            <sql-name>CREATEDATE</sql-name>
-            <sql-type>DATE</sql-type>
-            <jdbc-type>TIMESTAMP</jdbc-type>
-            <jdbc-precision>7</jdbc-precision>
-            <jdbc-scale>0</jdbc-scale>
-            <nullable>true</nullable>
-            <unique>false</unique>
-            <auto-increment>false</auto-increment>
-            <sequence-name />
-          </column>
-          <column>
-            <java-name>createform</java-name>
+            <java-name>gthtjhJhxh</java-name>
             <java-type>java.lang.String</java-type>
             <java-default-value />
-            <sql-name>CREATEFORM</sql-name>
+            <sql-name>GTHTJH_JHXH</sql-name>
             <sql-type>VARCHAR2</sql-type>
             <jdbc-type>VARCHAR</jdbc-type>
-            <jdbc-precision>30</jdbc-precision>
+            <jdbc-precision>5</jdbc-precision>
             <jdbc-scale>0</jdbc-scale>
             <nullable>true</nullable>
             <unique>false</unique>
@@ -9794,41 +9937,13 @@
             <sequence-name />
           </column>
           <column>
-            <java-name>updatorid</java-name>
+            <java-name>journalno</java-name>
             <java-type>java.lang.String</java-type>
             <java-default-value />
-            <sql-name>UPDATORID</sql-name>
+            <sql-name>JOURNALNO</sql-name>
             <sql-type>VARCHAR2</sql-type>
             <jdbc-type>VARCHAR</jdbc-type>
-            <jdbc-precision>12</jdbc-precision>
-            <jdbc-scale>0</jdbc-scale>
-            <nullable>true</nullable>
-            <unique>false</unique>
-            <auto-increment>false</auto-increment>
-            <sequence-name />
-          </column>
-          <column>
-            <java-name>updatedate</java-name>
-            <java-type>java.util.Date</java-type>
-            <java-default-value />
-            <sql-name>UPDATEDATE</sql-name>
-            <sql-type>DATE</sql-type>
-            <jdbc-type>TIMESTAMP</jdbc-type>
-            <jdbc-precision>7</jdbc-precision>
-            <jdbc-scale>0</jdbc-scale>
-            <nullable>true</nullable>
-            <unique>false</unique>
-            <auto-increment>false</auto-increment>
-            <sequence-name />
-          </column>
-          <column>
-            <java-name>updateform</java-name>
-            <java-type>java.lang.String</java-type>
-            <java-default-value />
-            <sql-name>UPDATEFORM</sql-name>
-            <sql-type>VARCHAR2</sql-type>
-            <jdbc-type>VARCHAR</jdbc-type>
-            <jdbc-precision>30</jdbc-precision>
+            <jdbc-precision>16</jdbc-precision>
             <jdbc-scale>0</jdbc-scale>
             <nullable>true</nullable>
             <unique>false</unique>
@@ -9864,13 +9979,13 @@
             <sequence-name />
           </column>
           <column>
-            <java-name>customerid</java-name>
+            <java-name>lockstatus</java-name>
             <java-type>java.lang.String</java-type>
             <java-default-value />
-            <sql-name>CUSTOMERID</sql-name>
+            <sql-name>LOCKSTATUS</sql-name>
             <sql-type>VARCHAR2</sql-type>
             <jdbc-type>VARCHAR</jdbc-type>
-            <jdbc-precision>22</jdbc-precision>
+            <jdbc-precision>2</jdbc-precision>
             <jdbc-scale>0</jdbc-scale>
             <nullable>true</nullable>
             <unique>false</unique>
@@ -9882,15 +9997,15 @@
           <finder>
             <name>findByPrimaryKey</name>
             <multi-finder>false</multi-finder>
-            <where>CONTRACTNO = :contractno</where>
+            <where>SEQNO = :seqno</where>
             <order-by />
             <query-type>WHERE</query-type>
             <parameter-list>
               <parameter>
-                <java-name>contractno</java-name>
+                <java-name>seqno</java-name>
                 <java-type>java.lang.String</java-type>
                 <jdbc-type>VARCHAR</jdbc-type>
-                <jdbc-precision>20</jdbc-precision>
+                <jdbc-precision>15</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
@@ -9899,22 +10014,166 @@
             <name>findAll</name>
             <multi-finder>true</multi-finder>
             <where />
-            <order-by>CONTRACTNO</order-by>
+            <order-by>SEQNO</order-by>
             <query-type>WHERE</query-type>
             <parameter-list />
           </finder>
           <finder>
-            <name>findWhereActnoEquals</name>
+            <name>findWhereSeqnoEquals</name>
             <multi-finder>true</multi-finder>
-            <where>ACTNO = :actno</where>
-            <order-by>ACTNO</order-by>
+            <where>SEQNO = :seqno</where>
+            <order-by>SEQNO</order-by>
             <query-type>WHERE</query-type>
             <parameter-list>
               <parameter>
-                <java-name>actno</java-name>
+                <java-name>seqno</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>15</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereXdkhzdKhbhEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>XDKHZD_KHBH = :xdkhzdKhbh</where>
+            <order-by>XDKHZD_KHBH</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>xdkhzdKhbh</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>30</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereXdkhzdKhmcEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>XDKHZD_KHMC = :xdkhzdKhmc</where>
+            <order-by>XDKHZD_KHMC</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>xdkhzdKhmc</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>30</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereGthtjhHtbhEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>GTHTJH_HTBH = :gthtjhHtbh</where>
+            <order-by>GTHTJH_HTBH</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>gthtjhHtbh</java-name>
                 <java-type>java.lang.String</java-type>
                 <jdbc-type>VARCHAR</jdbc-type>
                 <jdbc-precision>20</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereGthtjhDateEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>GTHTJH_DATE = :gthtjhDate</where>
+            <order-by>GTHTJH_DATE</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>gthtjhDate</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>60</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereGthtjhLlEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>GTHTJH_LL = :gthtjhLl</where>
+            <order-by>GTHTJH_LL</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>gthtjhLl</java-name>
+                <java-type>java.math.BigDecimal</java-type>
+                <jdbc-type>DECIMAL</jdbc-type>
+                <jdbc-precision>22</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereGthtjhJhjeEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>GTHTJH_JHJE = :gthtjhJhje</where>
+            <order-by>GTHTJH_JHJE</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>gthtjhJhje</java-name>
+                <java-type>java.math.BigDecimal</java-type>
+                <jdbc-type>DECIMAL</jdbc-type>
+                <jdbc-precision>22</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereGthtjhBjjeEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>GTHTJH_BJJE = :gthtjhBjje</where>
+            <order-by>GTHTJH_BJJE</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>gthtjhBjje</java-name>
+                <java-type>java.math.BigDecimal</java-type>
+                <jdbc-type>DECIMAL</jdbc-type>
+                <jdbc-precision>22</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereGthtjhLxjeEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>GTHTJH_LXJE = :gthtjhLxje</where>
+            <order-by>GTHTJH_LXJE</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>gthtjhLxje</java-name>
+                <java-type>java.math.BigDecimal</java-type>
+                <jdbc-type>DECIMAL</jdbc-type>
+                <jdbc-precision>22</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereGthtbZhbhEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>GTHTB_ZHBH = :gthtbZhbh</where>
+            <order-by>GTHTB_ZHBH</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>gthtbZhbh</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>31</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
@@ -9930,52 +10189,36 @@
                 <java-name>cutpayactno</java-name>
                 <java-type>java.lang.String</java-type>
                 <jdbc-type>VARCHAR</jdbc-type>
-                <jdbc-precision>20</jdbc-precision>
+                <jdbc-precision>31</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
           </finder>
           <finder>
-            <name>findWhereContractnoEquals</name>
+            <name>findWhereBillstatusEquals</name>
             <multi-finder>true</multi-finder>
-            <where>CONTRACTNO = :contractno</where>
-            <order-by>CONTRACTNO</order-by>
+            <where>BILLSTATUS = :billstatus</where>
+            <order-by>BILLSTATUS</order-by>
             <query-type>WHERE</query-type>
             <parameter-list>
               <parameter>
-                <java-name>contractno</java-name>
+                <java-name>billstatus</java-name>
                 <java-type>java.lang.String</java-type>
                 <jdbc-type>VARCHAR</jdbc-type>
-                <jdbc-precision>20</jdbc-precision>
+                <jdbc-precision>2</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
           </finder>
           <finder>
-            <name>findWhereNameEquals</name>
+            <name>findWhereCreatetimeEquals</name>
             <multi-finder>true</multi-finder>
-            <where>NAME = :name</where>
-            <order-by>NAME</order-by>
+            <where>CREATETIME = :createtime</where>
+            <order-by>CREATETIME</order-by>
             <query-type>WHERE</query-type>
             <parameter-list>
               <parameter>
-                <java-name>name</java-name>
-                <java-type>java.lang.String</java-type>
-                <jdbc-type>VARCHAR</jdbc-type>
-                <jdbc-precision>20</jdbc-precision>
-                <jdbc-scale>0</jdbc-scale>
-              </parameter>
-            </parameter-list>
-          </finder>
-          <finder>
-            <name>findWhereStartdateEquals</name>
-            <multi-finder>true</multi-finder>
-            <where>STARTDATE = :startdate</where>
-            <order-by>STARTDATE</order-by>
-            <query-type>WHERE</query-type>
-            <parameter-list>
-              <parameter>
-                <java-name>startdate</java-name>
+                <java-name>createtime</java-name>
                 <java-type>java.util.Date</java-type>
                 <jdbc-type>TIMESTAMP</jdbc-type>
                 <jdbc-precision>7</jdbc-precision>
@@ -9984,129 +10227,97 @@
             </parameter-list>
           </finder>
           <finder>
-            <name>findWhereEnddateEquals</name>
+            <name>findWhereFailreasonEquals</name>
             <multi-finder>true</multi-finder>
-            <where>ENDDATE = :enddate</where>
-            <order-by>ENDDATE</order-by>
+            <where>FAILREASON = :failreason</where>
+            <order-by>FAILREASON</order-by>
             <query-type>WHERE</query-type>
             <parameter-list>
               <parameter>
-                <java-name>enddate</java-name>
-                <java-type>java.util.Date</java-type>
-                <jdbc-type>TIMESTAMP</jdbc-type>
-                <jdbc-precision>7</jdbc-precision>
+                <java-name>failreason</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>80</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
           </finder>
           <finder>
-            <name>findWhereActnostatusEquals</name>
+            <name>findWhereRemarkEquals</name>
             <multi-finder>true</multi-finder>
-            <where>ACTNOSTATUS = :actnostatus</where>
-            <order-by>ACTNOSTATUS</order-by>
+            <where>REMARK = :remark</where>
+            <order-by>REMARK</order-by>
             <query-type>WHERE</query-type>
             <parameter-list>
               <parameter>
-                <java-name>actnostatus</java-name>
+                <java-name>remark</java-name>
                 <java-type>java.lang.String</java-type>
                 <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>200</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWherePreflagEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>PREFLAG = :preflag</where>
+            <order-by>PREFLAG</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>preflag</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>CHAR</jdbc-type>
                 <jdbc-precision>1</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
           </finder>
           <finder>
-            <name>findWhereCreatoridEquals</name>
+            <name>findWhereGthtjhHtnmEquals</name>
             <multi-finder>true</multi-finder>
-            <where>CREATORID = :creatorid</where>
-            <order-by>CREATORID</order-by>
+            <where>GTHTJH_HTNM = :gthtjhHtnm</where>
+            <order-by>GTHTJH_HTNM</order-by>
             <query-type>WHERE</query-type>
             <parameter-list>
               <parameter>
-                <java-name>creatorid</java-name>
+                <java-name>gthtjhHtnm</java-name>
                 <java-type>java.lang.String</java-type>
                 <jdbc-type>VARCHAR</jdbc-type>
-                <jdbc-precision>12</jdbc-precision>
+                <jdbc-precision>100</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
           </finder>
           <finder>
-            <name>findWhereCreatedateEquals</name>
+            <name>findWhereGthtjhJhxhEquals</name>
             <multi-finder>true</multi-finder>
-            <where>CREATEDATE = :createdate</where>
-            <order-by>CREATEDATE</order-by>
+            <where>GTHTJH_JHXH = :gthtjhJhxh</where>
+            <order-by>GTHTJH_JHXH</order-by>
             <query-type>WHERE</query-type>
             <parameter-list>
               <parameter>
-                <java-name>createdate</java-name>
-                <java-type>java.util.Date</java-type>
-                <jdbc-type>TIMESTAMP</jdbc-type>
-                <jdbc-precision>7</jdbc-precision>
-                <jdbc-scale>0</jdbc-scale>
-              </parameter>
-            </parameter-list>
-          </finder>
-          <finder>
-            <name>findWhereCreateformEquals</name>
-            <multi-finder>true</multi-finder>
-            <where>CREATEFORM = :createform</where>
-            <order-by>CREATEFORM</order-by>
-            <query-type>WHERE</query-type>
-            <parameter-list>
-              <parameter>
-                <java-name>createform</java-name>
+                <java-name>gthtjhJhxh</java-name>
                 <java-type>java.lang.String</java-type>
                 <jdbc-type>VARCHAR</jdbc-type>
-                <jdbc-precision>30</jdbc-precision>
+                <jdbc-precision>5</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
           </finder>
           <finder>
-            <name>findWhereUpdatoridEquals</name>
+            <name>findWhereJournalnoEquals</name>
             <multi-finder>true</multi-finder>
-            <where>UPDATORID = :updatorid</where>
-            <order-by>UPDATORID</order-by>
+            <where>JOURNALNO = :journalno</where>
+            <order-by>JOURNALNO</order-by>
             <query-type>WHERE</query-type>
             <parameter-list>
               <parameter>
-                <java-name>updatorid</java-name>
+                <java-name>journalno</java-name>
                 <java-type>java.lang.String</java-type>
                 <jdbc-type>VARCHAR</jdbc-type>
-                <jdbc-precision>12</jdbc-precision>
-                <jdbc-scale>0</jdbc-scale>
-              </parameter>
-            </parameter-list>
-          </finder>
-          <finder>
-            <name>findWhereUpdatedateEquals</name>
-            <multi-finder>true</multi-finder>
-            <where>UPDATEDATE = :updatedate</where>
-            <order-by>UPDATEDATE</order-by>
-            <query-type>WHERE</query-type>
-            <parameter-list>
-              <parameter>
-                <java-name>updatedate</java-name>
-                <java-type>java.util.Date</java-type>
-                <jdbc-type>TIMESTAMP</jdbc-type>
-                <jdbc-precision>7</jdbc-precision>
-                <jdbc-scale>0</jdbc-scale>
-              </parameter>
-            </parameter-list>
-          </finder>
-          <finder>
-            <name>findWhereUpdateformEquals</name>
-            <multi-finder>true</multi-finder>
-            <where>UPDATEFORM = :updateform</where>
-            <order-by>UPDATEFORM</order-by>
-            <query-type>WHERE</query-type>
-            <parameter-list>
-              <parameter>
-                <java-name>updateform</java-name>
-                <java-type>java.lang.String</java-type>
-                <jdbc-type>VARCHAR</jdbc-type>
-                <jdbc-precision>30</jdbc-precision>
+                <jdbc-precision>16</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
@@ -10144,17 +10355,17 @@
             </parameter-list>
           </finder>
           <finder>
-            <name>findWhereCustomeridEquals</name>
+            <name>findWhereLockstatusEquals</name>
             <multi-finder>true</multi-finder>
-            <where>CUSTOMERID = :customerid</where>
-            <order-by>CUSTOMERID</order-by>
+            <where>LOCKSTATUS = :lockstatus</where>
+            <order-by>LOCKSTATUS</order-by>
             <query-type>WHERE</query-type>
             <parameter-list>
               <parameter>
-                <java-name>customerid</java-name>
+                <java-name>lockstatus</java-name>
                 <java-type>java.lang.String</java-type>
                 <jdbc-type>VARCHAR</jdbc-type>
-                <jdbc-precision>22</jdbc-precision>
+                <jdbc-precision>2</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
@@ -11879,7 +12090,7 @@
     </custom-sql-list>
   </database>
   <provider-options>
-    <default-codegen-provider>j2ee</default-codegen-provider>
+    <default-codegen-provider>j2se</default-codegen-provider>
     <provider name="j2ee">
       <property key="app-name" value="myapp" />
       <property key="dao-strategy" value="jdbc" />

@@ -22,8 +22,11 @@ import zt.cms.xf.common.factory.XfifbankdetlDaoFactory;
 import zt.cms.xf.newcms.controllers.BaseCTL;
 import zt.cms.xf.newcms.controllers.T100101CTL;
 import zt.cms.xf.newcms.controllers.T100103CTL;
+import zt.cms.xf.newcms.controllers.T100104CTL;
 import zt.cms.xf.newcms.domain.T100101.T100101ResponseRecord;
 import zt.cms.xf.newcms.domain.T100103.T100103ResponseRecord;
+import zt.cms.xf.newcms.domain.T100104.T100104RequestList;
+import zt.cms.xf.newcms.domain.T100104.T100104RequestRecord;
 import zt.cmsi.mydb.MyDB;
 import zt.platform.db.DatabaseConnection;
 import zt.platform.db.RecordSet;
@@ -536,11 +539,11 @@ public class FDDateLink extends FormActions {
             sql = "insert into fdcutpaydetltemp " +
                     "(seqno,xdkhzd_khbh,xdkhzd_khmc,gthtjh_htbh,gthtjh_date,gthtjh_ll,gthtjh_jhje,gthtjh_bjje,gthtjh_lxje," +
                     "gthtb_zhbh,cutpayactno,billstatus,createtime,failreason,remark,preflag," +
-                    "gthtjh_htnm,gthtjh_jhxh,journalno,regioncd,bankcd) " +
+                    "gthtjh_htnm,gthtjh_jhxh,journalno,regioncd,bankcd,lockstatus) " +
                     "values" +
                     "(?,?,?,?,?,?,?,?,?," +
                     "?,?,?,?,?,?,?," +
-                    "?,?,?,?,?) ";
+                    "?,?,?,?,?,?) ";
 
             logger.info("sql=" + sql);
             ps = conn.getPreparedStatement(sql);
@@ -598,6 +601,7 @@ public class FDDateLink extends FormActions {
                 //begin
                 ps.setString(20, regioncdTmp);
                 ps.setString(21, bankcdTmp);
+                ps.setString(22," ");   //20110227 zhanrui  新增
                 //end
 
                 ps.addBatch();
@@ -655,7 +659,7 @@ public class FDDateLink extends FormActions {
     private int getNewPreFDSystemData(DatabaseConnection conn, ErrorMessages msgs, String button,
                                       String regioncd, String bankcd) throws Exception {
 
-        String preflag = "1";
+       String preflag = "1";
 
         //事务开始
 
@@ -666,6 +670,16 @@ public class FDDateLink extends FormActions {
         ctl = new T100103CTL();
         //查询 房贷/消费信贷（1/2） 数据
         List<T100103ResponseRecord> recvList = ctl.start("1");
+
+        //先检查在信贷系统中是否存在已锁定的记录
+        for (T100103ResponseRecord record : recvList) {
+            if (!StringUtils.isEmpty(record.getStdsfsd())) {
+                if (record.getStdsfsd().equals("1")) {
+                    msgs.add("信贷系统中仍存在利息已经锁定的扣款记录，请查询！");
+                    return  -1;
+                }
+            }
+        }
 
         //核对本地帐户表信息
         int rtn = 0;
@@ -696,11 +710,11 @@ public class FDDateLink extends FormActions {
             sql = "insert into fdcutpaydetltemp " +
                     "(seqno,xdkhzd_khbh,xdkhzd_khmc,gthtjh_htbh,gthtjh_date,gthtjh_ll,gthtjh_jhje,gthtjh_bjje,gthtjh_lxje," +
                     "gthtb_zhbh,cutpayactno,billstatus,createtime,failreason,remark,preflag," +
-                    "gthtjh_htnm,gthtjh_jhxh,journalno,regioncd,bankcd) " +
+                    "gthtjh_htnm,gthtjh_jhxh,journalno,regioncd,bankcd,lockstatus) " +
                     "values" +
                     "(?,?,?,?,?,?,?,?,?," +
                     "?,?,?,?,?,?,?," +
-                    "?,?,?,?,?) ";
+                    "?,?,?,?,?,?) ";
 
             logger.info("sql=" + sql);
             ps = conn.getPreparedStatement(sql);
@@ -748,6 +762,8 @@ public class FDDateLink extends FormActions {
 
                 ps.setString(20, regioncdTmp);
                 ps.setString(21, bankcdTmp);
+//                ps.setString(22, record.getStdsfsd()); //20110227 zhanrui  新增
+                ps.setString(22, "1"); //20110227 zhanrui  新增  (锁定状态)
                 //end
 
                 ps.addBatch();
@@ -763,8 +779,11 @@ public class FDDateLink extends FormActions {
                 return -1;
             }
 
-            conn.commit();
 
+            //20110227 zhanrui 获取后直接锁定
+            lockRecordToCms(recvList,"3");
+
+            conn.commit();
 
             sql = "select count(*),sum(gthtjh_jhje) from  fdcutpaydetl " + " where billstatus = " + FDBillStatus.SEND_PENDING;
             rs = conn.executeQuery(sql);
@@ -777,7 +796,7 @@ public class FDDateLink extends FormActions {
         } catch (Exception e) {
             conn.rollback();
             msgs.add("发生异常：" + e.getMessage());
-            Debug.debug(e);
+            logger.error("发生异常：",e);
             throw new Exception(e);
         } finally {
             if (ps != null) {
@@ -789,6 +808,52 @@ public class FDDateLink extends FormActions {
             MyDB.getInstance().releaseDBConn();
         }
         return rtn;
+    }
+
+    /**
+     *  20101020 单笔处理
+     * @param detls
+     * @param option   1-成功 2-失败(利息解锁)  3-利息锁定
+     * @return
+     * @throws Exception
+     */
+
+    private void lockRecordToCms(List<T100103ResponseRecord> detls, String option) {
+        if ((!"1".equals(option))
+                &&(!"2".equals(option))
+                &&(!"3".equals(option))
+                ) {
+            logger.error("参数错误！");
+            throw new RuntimeException("参数错误！");
+        }
+
+        int count = 0;
+
+        T100104CTL t100104ctl = new T100104CTL();
+
+        for (T100103ResponseRecord detl : detls) {
+            boolean txResult = false;
+            T100104RequestRecord record = new T100104RequestRecord();
+            record.setStdjjh(detl.getStdjjh());
+            record.setStdqch(detl.getStdqch());
+            record.setStdjhkkr(detl.getStdjhhkr());
+            //1-成功 2-失败(利息解锁)  3-利息锁定
+            record.setStdkkjg(option);
+            T100104RequestList list = new T100104RequestList();
+            list.add(record);
+            //单笔发送处理
+            txResult = t100104ctl.start(list);
+
+            if (txResult) {
+                count++;
+            }else{
+                logger.error("对信贷系统进行锁定操作时返回锁定失败！");
+                throw new RuntimeException("对信贷系统进行锁定操作时返回锁定失败");
+            }
+        }
+
+        return;
+
     }
 
 
