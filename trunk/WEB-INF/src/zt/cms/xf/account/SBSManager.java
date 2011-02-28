@@ -15,7 +15,6 @@ import zt.cms.xf.gateway.CtgManager;
 import zt.platform.form.util.event.ErrorMessages;
 import zt.platform.utils.Debug;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +58,11 @@ public class SBSManager {
 
                     list.add("+" + StringUtils.leftPad(cutpaydetls[i].getGthtjhBjje().setScale(2).toString(), 16, '0'));     //本金金额
                     list.add("+" + StringUtils.leftPad(cutpaydetls[i].getGthtjhLxje().setScale(2).toString(), 16, '0'));     //利息金额
-                    list.add("+" + StringUtils.leftPad(new BigDecimal(cutpaydetls[i].getGthtjhLl()).setScale(2).toString(), 16, '0'));     //罚息金额
-                    //list.add("+0000000000000.00");     //违约金金额
+
+                    //TODO java.lang.ArithmeticException: Rounding necessary
+                    //list.add("+" + StringUtils.leftPad(new BigDecimal(cutpaydetls[i].getGthtjhLl()).setScale(2).toString(), 16, '0'));     //罚息金额
+
+                    list.add("+0000000000000.00");     //违约金金额
                     list.add("+0000000000000.00");     //手续费金额
 
                     /*
