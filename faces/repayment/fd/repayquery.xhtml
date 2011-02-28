@@ -10,17 +10,18 @@
     </ui:define>
 
     <ui:define name="content">
-        <div style="padding:10px 20px">
+        <h:form>
 
-            <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
-            <p:dialog modal="true" widgetVar="statusDialog" header="数据读取中..." draggable="false" closable="false">
-                <p:graphicImage value="/images/ajaxloadingbar.gif"/>
-            </p:dialog>
+            <div style="padding:10px 20px">
 
-            <p:messages id="msgs" showDetail="true"/>
-            <p:panel header="住房按揭正常还款记录查询条件">
-                <h:form>
-                    <h:panelGrid columns="2" style="text-align:left" >
+                <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+                <p:dialog modal="true" widgetVar="statusDialog" header="数据读取中..." draggable="false" closable="false">
+                    <p:graphicImage value="/images/ajaxloadingbar.gif"/>
+                </p:dialog>
+
+                <p:messages id="msgs" showDetail="true"/>
+                <p:panel id="querypanel" header="住房按揭正常还款记录查询条件">
+                    <h:panelGrid columns="2" style="text-align:left">
                         <h:outputLabel value="合同号:" for="hth"/>
                         <h:inputText id="hth" size="30" value="#{T100101.responseRecord.stdhth}"/>
 
@@ -34,18 +35,22 @@
                         </h:selectOneMenu>
                         <h:outputText/>
                         <h:panelGroup>
-                            <p:commandButton id="qrybtn" value="查询" action="#{T100101.query}" update="msgs,datatable"/>
+                            <p:commandButton id="qrybtn" value="查询" action="#{T100101.query}" update="msgs,tbl,querypanel"/>
+                            <p:commandButton id="excel" value="导出" ajax="false" rendered="#{T100101.totalcount != 0}">
+                                <p:dataExporter type="xls" target="tbl" fileName="repayquery"
+                                                postProcessor="#{T100101.postProcessXLS}"/>
+                            </p:commandButton>
                             <p:commandButton value="重置" type="reset"/>
                         </h:panelGroup>
 
                     </h:panelGrid>
-                </h:form>
-            </p:panel>
-        </div>
+                    <!--</h:form>-->
+                </p:panel>
+            </div>
 
-        <div style="padding:0 20px ">
-            <h:form id="datatable">
-                <p:dataTable var="response" value="#{T100101.responseFDList}"
+            <div style="padding:0 20px ">
+                <!--<h:form id="datatable">-->
+                <p:dataTable id="tbl" var="response" value="#{T100101.responseFDList}"
                              paginator="true" rows="15"
                              selection="#{T100101.selectedRecord}"
                              selectionMode="single"
@@ -79,8 +84,7 @@
                     </p:column>
                     <p:column style="text-align:right">
                         <f:facet name="header">
-                            <!--还款金额-->
-                            <h:outputText value="还款金额" style="text-align:left"/>
+                            <h:outputText value="还款金额"/>
                         </f:facet>
                         <h:outputText value="#{response.stdhkje}"/>
                         <f:facet name="footer">
@@ -140,6 +144,7 @@
                         <h:outputText value="#{response.stdyhh}"/>
                     </p:column>
                 </p:dataTable>
+
                 <p:dialog header="正常还款记录明细" widgetVar="FDRecordDialog" width="650" height="600">
                     <h:panelGrid id="display" columns="2" cellpadding="4">
 
@@ -162,8 +167,8 @@
                 </p:dialog>
 
 
-            </h:form>
-        </div>
+            </div>
+        </h:form>
 
     </ui:define>
 

@@ -1,6 +1,8 @@
 package zt.cms.xf.newcms.services;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,9 +61,9 @@ public class T100101Bean implements Serializable {
 
     private void initList() {
         FacesContext context = FacesContext.getCurrentInstance();
-        List<T100101ResponseRecord> fdList=null;
+        List<T100101ResponseRecord> fdList = null;
         try {
-             fdList= t100101ctl.getAllFDRecords();
+            fdList = t100101ctl.getAllFDRecords();
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "与新信贷的接口出现错误。", "请咨询系统管理人员。"));
@@ -98,7 +100,7 @@ public class T100101Bean implements Serializable {
             countAmt(record);
         }
         if (!result) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"地区代号转换有误",""));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "地区代号转换有误", ""));
             throw new RuntimeException("地区代号转换有误");
         }
     }
@@ -186,6 +188,31 @@ public class T100101Bean implements Serializable {
         return "FDCutpayDetail?faces-redirect=true";
     }
 
+
+    public void postProcessXLS(Object document) {
+/*
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        if (this.totalcount == 0) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "无查询结果数据。", "请先执行查询功能。"));
+            return;
+        }
+*/
+        HSSFWorkbook wb = (HSSFWorkbook) document;
+        HSSFSheet sheet = wb.getSheetAt(0);
+        HSSFRow header = sheet.getRow(0);
+
+        HSSFCellStyle cellStyle = wb.createCellStyle();
+        cellStyle.setFillForegroundColor(HSSFColor.GREEN.index);
+        cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+
+        for (int i = 0; i < header.getPhysicalNumberOfCells(); i++) {
+            HSSFCell cell = header.getCell(i);
+
+            cell.setCellStyle(cellStyle);
+        }
+    }
     //==============================================================
 
 //    public LazyDataModel<T100101ResponseRecord> getLazyModel() {
