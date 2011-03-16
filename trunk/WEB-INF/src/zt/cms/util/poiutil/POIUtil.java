@@ -341,7 +341,7 @@ public class POIUtil {
     public CellReference[] getCellReference(HSSFWorkbook workbook) {
         AreaReference aref = getDataAreaReference(workbook);
         if (aref == null) return null;
-        return aref.getAllReferencedCells();
+        return (CellReference[]) aref.getAllReferencedCells();
     }
 
     /**

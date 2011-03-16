@@ -672,6 +672,7 @@ public class FDDateLink extends FormActions {
         List<T100103ResponseRecord> recvList = ctl.start("1");
 
         //先检查在信贷系统中是否存在已锁定的记录
+        /*
         for (T100103ResponseRecord record : recvList) {
             if (!StringUtils.isEmpty(record.getStdsfsd())) {
                 if (record.getStdsfsd().equals("1")) {
@@ -680,7 +681,8 @@ public class FDDateLink extends FormActions {
                 }
             }
         }
-
+        */
+        
         //核对本地帐户表信息
         int rtn = 0;
         RecordSet rs = null;

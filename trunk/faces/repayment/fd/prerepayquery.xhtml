@@ -49,7 +49,7 @@
                                          action="#{T100103.doLockAll}" update="msgs"
                                          ajax="false"/>
                         <p:divider/>
-                        <p:commandButton type="push" value="多笔利息锁定" image="ui-icon-query"
+                        <p:commandButton type="push" value="单笔利息锁定" image="ui-icon-query"
                                          action="#{T100103.doLockMulti}" update="msgs"
                                          ajax="false"/>
                         <p:divider/>
@@ -57,7 +57,7 @@
                                          action="#{T100103.doUnlockAll}" update="msgs"
                                          ajax="false"/>
                         <p:divider/>
-                        <p:commandButton type="push" value="多笔利息解锁" image="ui-icon-query"
+                        <p:commandButton type="push" value="单笔利息解锁" image="ui-icon-query"
                                          action="#{T100103.doUnlockMulti}" update="msgs"
                                          ajax="false"/>
                         <p:divider/>
@@ -146,7 +146,7 @@
                         <f:facet name="header">
                             是否锁定
                         </f:facet>
-                        <h:outputText value="#{response.stdsfsd}"/>
+                        <h:outputText value="#{response.locked}"/>
                     </p:column>
                 </p:dataTable>
 
