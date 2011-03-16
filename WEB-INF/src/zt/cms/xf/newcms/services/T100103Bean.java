@@ -1,5 +1,6 @@
 package zt.cms.xf.newcms.services;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,6 +17,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +38,7 @@ public class T100103Bean implements Serializable {
 
     private Log logger = LogFactory.getLog(this.getClass());
     private T100103ResponseRecord responseRecord = new T100103ResponseRecord();
-    List<T100103ResponseRecord> responseFDList;
+    List<UIT100103ResponseRecord> responseFDList;
     List<T100103ResponseRecord> responseXFList;
 
     T100103CTL t100103ctl = new T100103CTL();
@@ -55,7 +57,7 @@ public class T100103Bean implements Serializable {
         initFilters();
     }
 
-    private void initList() {
+    private void initList() throws InvocationTargetException, IllegalAccessException {
         FacesContext context = FacesContext.getCurrentInstance();
 
         List<T100103ResponseRecord> fdList = null;
@@ -68,7 +70,7 @@ public class T100103Bean implements Serializable {
         }
         totalcount = 0;
         initAmt();
-        responseFDList = new ArrayList<T100103ResponseRecord>();
+        responseFDList = new ArrayList<UIT100103ResponseRecord>();
 
         for (T100103ResponseRecord record : fdList) {
             String tmpStr = record.getStddqh();
@@ -81,8 +83,16 @@ public class T100103Bean implements Serializable {
                 record.setStddqh(code[0].trim());
                 record.setStdyhh(code[1].trim());
             }
-
-            responseFDList.add(record);
+            UIT100103ResponseRecord ui = new UIT100103ResponseRecord();
+            BeanUtils.copyProperties(ui,record);
+            if ("2".equals(record.getStdsfsd())) {
+                ui.setLocked("解锁");
+            }else if ("1".equals(record.getStdsfsd())){
+                ui.setLocked("锁定");
+            }else{
+                ui.setLocked("不确定");
+            }
+            responseFDList.add(ui);
             totalcount++;
             countAmt(record);
 
@@ -111,6 +121,7 @@ public class T100103Bean implements Serializable {
         try {
             initList();
         } catch (Exception e) {
+            //TODO
             return null;
         }
 
@@ -120,8 +131,8 @@ public class T100103Bean implements Serializable {
         khmc = responseRecord.getStdkhmc();
         totalcount = 0;
         initAmt();
-        List<T100103ResponseRecord> newResponseFDList = new ArrayList<T100103ResponseRecord>();
-        for (T100103ResponseRecord record : responseFDList) {
+        List<UIT100103ResponseRecord> newResponseFDList = new ArrayList<UIT100103ResponseRecord>();
+        for (UIT100103ResponseRecord record : responseFDList) {
             if (StringUtils.isNotEmpty(hth)) {
                 if (!record.getStdhth().equals(hth)) {
                     continue;
@@ -181,6 +192,7 @@ public class T100103Bean implements Serializable {
         T100103ResponseRecord[] records = new T100103ResponseRecord[this.responseFDList.size()];
         startWriteBack(this.responseFDList.toArray(records),"3");
         //init();
+        query();
         return null;
     }
 
@@ -196,6 +208,8 @@ public class T100103Bean implements Serializable {
 
         startWriteBack(selectedRecords,"3");
         //init();
+        query();
+
         return null;
 
     }
@@ -216,6 +230,8 @@ public class T100103Bean implements Serializable {
         T100103ResponseRecord[] records = new T100103ResponseRecord[this.responseFDList.size()];
         startWriteBack(this.responseFDList.toArray(records),"2");
         //init();
+        query();
+
         return null;
     }
 
@@ -231,6 +247,8 @@ public class T100103Bean implements Serializable {
 
         startWriteBack(selectedRecords,"2");
         //init();
+        query();
+        
         return null;
 
     }
@@ -331,11 +349,11 @@ public class T100103Bean implements Serializable {
         this.selectedRecord = selectedRecord;
     }
 
-    public List<T100103ResponseRecord> getResponseFDList() {
+    public List<UIT100103ResponseRecord> getResponseFDList() {
         return responseFDList;
     }
 
-    public void setResponseFDList(List<T100103ResponseRecord> responseFDList) {
+    public void setResponseFDList(List<UIT100103ResponseRecord> responseFDList) {
         this.responseFDList = responseFDList;
     }
 
