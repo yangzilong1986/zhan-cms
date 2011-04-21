@@ -199,7 +199,13 @@ public class XFIFCCBDetlPage extends FormActions {
         //20100813  zhanrui  加入查询失败情况下重置 本次批号下所有明细数据状态 的功能，便于重新发起代扣
         if (button != null && button.equals("RESETDETLSTATUSBTN")) {
 
-            int count = changeXFCutpayDetlRecordsStatus(XFBillStatus.BILLSTATUS_CHECKED);
+            int count = 0;
+            if ("1".equals(systemtype)) {     //消费信贷系统
+                count = changeXFCutpayDetlRecordsStatus(XFBillStatus.BILLSTATUS_CHECKED);
+            } else if ("2".equals(systemtype)) {
+                count = changeFDCutpayDetlRecordsStatus(FDBillStatus.SEND_PENDING);
+            }
+
             if (count > 0) {
                 msgs.add("状态已重置！共处理 " + count + "笔扣款记录，请查询结果。");
             } else {
@@ -308,12 +314,15 @@ public class XFIFCCBDetlPage extends FormActions {
                 } else if (formcode.equals("MB01")) { //连接银行超时,结果不明需要MPC查询确认
                     status = XFWithHoldStatus.SEND_FAILD;
                     log += "SBS返回FORM号：" + formcode + "  ";
+                    log += getLogFromReturnMessage(buffer);
                 } else if (formcode.equals("WB02")) {  //该笔业务不存在或已被银行拒绝    需查询原因，状态不变
                     status = XFWithHoldStatus.SEND_FAILD;
                     log += "SBS返回FORM号：" + formcode + "  该笔业务不存在或已被银行拒绝 ,请查询原因。";
+                    log += getLogFromReturnMessage(buffer);
                 } else {    //其他，置
                     status = XFWithHoldStatus.SEND_FAILD;
                     log += "SBS返回FORM号：" + formcode + ", 该笔业务处理失败，请根据FORM代号查询原因。";
+                    log += getLogFromReturnMessage(buffer);
                 }
             } else {      //报文发送成功
                 status = XFWithHoldStatus.SEND_SUCCESS;
@@ -584,7 +593,7 @@ public class XFIFCCBDetlPage extends FormActions {
 
         Fdcutpaydetl[] cutpaydetls = new Fdcutpaydetl[0];
         try {
-            String sqlwhere = " journalno = " + journalno;  //不管明细数据的状态是否已发送发送。
+            String sqlwhere = " journalno = " + journalno + " and preflag='1' ";  //不管明细数据的状态是否已发送发送。
             FdcutpaydetlDao detldao = FdcutpaydetlDaoFactory.create();
             cutpaydetls = detldao.findByDynamicWhere(sqlwhere, null);
             FdcutpaydetlPk detlpk = null;
