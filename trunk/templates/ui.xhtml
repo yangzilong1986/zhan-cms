@@ -12,8 +12,14 @@
     <h:head>
         <title>FBI Technology</title>
         <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-        <!--<link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/themes/hot-sneaks/skin.css"/>-->
-        <!--<link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/themes/aristo/skin.css"/>-->
+
+        <!--[if gt IE 6]>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/default.css"/>
+        <![endif]-->
+
+        <!--[if lte IE 6]>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/css/ie6.css"/>
+        <![endif]-->
 
 
         <script type="text/javascript">
